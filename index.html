@@ -3,37 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alex 的个人网站</title>
+    <title>Alex 的次元小站</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="bg-orb orb-a" aria-hidden="true"></div>
+    <div class="bg-orb orb-b" aria-hidden="true"></div>
+
     <header class="hero">
-      <h1>你好，我是 Alex 👋</h1>
-      <p>欢迎来到我的 GitHub Pages 个人网站。</p>
-      <a class="btn" href="https://github.com" target="_blank" rel="noreferrer">访问我的 GitHub</a>
+      <p class="chip">二次元浓度 120% · 欢乐模式 ON</p>
+      <h1>欢迎来到 Alex 的次元小站 ✨</h1>
+      <p class="hero-text">一个不太严肃、专门存放灵感、项目和日常热爱的轻量主页。</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="https://github.com" target="_blank" rel="noreferrer">看我 GitHub</a>
+        <a class="btn ghost" href="#projects">进入项目区</a>
+      </div>
     </header>
 
     <main class="content">
-      <section>
+      <section class="card">
         <h2>关于我</h2>
-        <p>这里可以写你的个人简介、技能栈和经历。</p>
+        <p>你好，我是 Alex。喜欢把代码写成有温度的小作品，也喜欢让页面有一点“番剧片头”感。</p>
       </section>
-      <section>
+
+      <section class="card" id="projects">
         <h2>我的项目</h2>
-        <ul>
-          <li>项目 A：一句话描述项目亮点</li>
-          <li>项目 B：一句话描述项目亮点</li>
-          <li>项目 C：一句话描述项目亮点</li>
+        <ul class="project-list">
+          <li><span>🌸</span> 项目 A：一个可爱的效率工具，主打“好看又好用”</li>
+          <li><span>⚡</span> 项目 B：前端实验田，记录交互和动效灵感</li>
+          <li><span>🎮</span> 项目 C：小型游戏化页面，轻松娱乐向</li>
         </ul>
       </section>
-      <section>
+
+      <section class="card">
+        <h2>最近状态</h2>
+        <p>正在补番、打磨作品集、学习更丝滑的前端动效。今天也要元气满满！</p>
+      </section>
+
+      <section class="card">
         <h2>联系方式</h2>
         <p>邮箱：you@example.com</p>
       </section>
     </main>
 
     <footer class="footer">
-      <small>© <span id="year"></span> Alex. All rights reserved.</small>
+      <small>© <span id="year"></span> Alex · Made with love, coffee & anime vibes.</small>
     </footer>
 
     <script src="./script.js"></script>

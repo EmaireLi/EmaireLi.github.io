@@ -1,10 +1,13 @@
 :root {
-  color-scheme: light dark;
-  --bg: #f7f8fa;
-  --card: #ffffff;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --primary: #2563eb;
+  --bg: #fff3fb;
+  --bg-alt: #eef6ff;
+  --card: rgba(255, 255, 255, 0.7);
+  --text: #42285a;
+  --muted: #7e5f99;
+  --primary: #ff4fa8;
+  --secondary: #6d6bff;
+  --line: rgba(255, 255, 255, 0.72);
+  --shadow: 0 12px 30px rgba(147, 90, 189, 0.18);
 }
 
 * {
@@ -12,52 +15,168 @@
 }
 
 body {
+  position: relative;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
-  background: var(--bg);
+  min-height: 100vh;
+  font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.7;
+  background:
+    radial-gradient(circle at 15% 12%, #ffd2ec 0, transparent 40%),
+    radial-gradient(circle at 86% 20%, #d9d8ff 0, transparent 34%),
+    linear-gradient(135deg, var(--bg), var(--bg-alt));
+  overflow-x: hidden;
+}
+
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(2px);
+  z-index: -1;
+  animation: float 5s ease-in-out infinite alternate;
+}
+
+.orb-a {
+  width: 170px;
+  height: 170px;
+  top: 8%;
+  right: -40px;
+  background: rgba(255, 122, 182, 0.35);
+}
+
+.orb-b {
+  width: 210px;
+  height: 210px;
+  left: -70px;
+  bottom: 8%;
+  background: rgba(114, 124, 255, 0.28);
 }
 
 .hero {
   text-align: center;
-  padding: 4rem 1rem 2rem;
+  padding: 4.4rem 1rem 2.4rem;
+}
+
+.chip {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+  color: var(--secondary);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
 }
 
 .hero h1 {
-  margin: 0 0 0.5rem;
-  font-size: 2rem;
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 3.05rem);
+  letter-spacing: 0.02em;
 }
 
-.hero p {
-  margin: 0 0 1rem;
+.hero-text {
+  max-width: 640px;
+  margin: 0.9rem auto 1.35rem;
   color: var(--muted);
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
 }
 
 .btn {
   display: inline-block;
-  background: var(--primary);
-  color: #fff;
-  padding: 0.65rem 1rem;
-  border-radius: 0.6rem;
   text-decoration: none;
+  padding: 0.66rem 1.15rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn.primary {
+  color: #fff;
+  background: linear-gradient(120deg, var(--primary), #ff7ab6);
+  box-shadow: 0 10px 24px rgba(255, 79, 168, 0.38);
+}
+
+.btn.ghost {
+  color: var(--secondary);
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--line);
 }
 
 .content {
-  max-width: 800px;
+  width: min(920px, 92vw);
   margin: 0 auto;
-  padding: 0 1rem 2rem;
+  padding-bottom: 2.2rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
 }
 
-section {
+.card {
+  margin: 0;
+  padding: 1.05rem 1.15rem;
+  border-radius: 1rem;
+  border: 1px solid var(--line);
   background: var(--card);
-  border-radius: 0.75rem;
-  padding: 1rem 1.2rem;
-  margin-bottom: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.project-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.2rem 0 0;
+}
+
+.project-list li {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+  margin-bottom: 0.45rem;
+  color: var(--muted);
+}
+
+.project-list span {
+  transform: translateY(2px);
 }
 
 .footer {
   text-align: center;
   color: var(--muted);
-  padding: 1rem;
+  padding: 0.8rem 1rem 1.5rem;
+}
+
+@media (max-width: 760px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(12px);
+  }
 }
