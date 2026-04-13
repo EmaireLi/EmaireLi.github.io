@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>让界面动得顺眼 | Alex 的次元博客</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="article-page">
+    <header class="hero reveal" data-delay="0">
+      <p class="chip">前端动效 · 2026-04-10</p>
+      <h1>让界面“动得顺眼”：我的三条动效小原则</h1>
+      <p class="hero-text">参考 ui-animation 的做法，优先稳定和可读性。</p>
+    </header>
+
+    <main class="article-shell">
+      <article class="card article-content reveal" data-delay="70">
+        <h2>1. 优先 transform + opacity</h2>
+        <p>按钮、卡片、弹层过渡尽量只动 transform 和 opacity，避免布局抖动。</p>
+
+        <h2>2. 动画要可中断</h2>
+        <p>快速切换状态时，过渡应该自然接续而不是“重新开播”。交互响应会更顺。</p>
+
+        <h2>3. 节奏不抢戏</h2>
+        <p>进入动画稍慢一点，退出更快一点。页面看起来会更灵动，也不拖沓。</p>
+
+        <div class="article-nav">
+          <a class="btn ghost" href="../index.html">返回首页</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <small>© <span id="year"></span> Alex · Blogging with anime vibes.</small>
+    </footer>
+
+    <script src="../script.js"></script>
+  </body>
+</html>

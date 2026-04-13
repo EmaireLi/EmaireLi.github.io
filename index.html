@@ -3,51 +3,82 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alex 的次元小站</title>
+    <title>Alex 的次元博客</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="bg-orb orb-a" aria-hidden="true"></div>
     <div class="bg-orb orb-b" aria-hidden="true"></div>
 
-    <header class="hero">
-      <p class="chip">二次元浓度 120% · 欢乐模式 ON</p>
-      <h1>欢迎来到 Alex 的次元小站 ✨</h1>
-      <p class="hero-text">一个不太严肃、专门存放灵感、项目和日常热爱的轻量主页。</p>
+    <header class="hero reveal" data-delay="0">
+      <p class="chip">次元博客模式 · 轻松更新中</p>
+      <h1>Alex 的二次元灵感博客 ✨</h1>
+      <p class="hero-text">在这里写前端、动效、日常脑洞和追番笔记。内容认真，语气不端着。</p>
       <div class="hero-actions">
-        <a class="btn primary" href="https://github.com" target="_blank" rel="noreferrer">看我 GitHub</a>
-        <a class="btn ghost" href="#projects">进入项目区</a>
+        <a class="btn primary" href="#latest">看最新文章</a>
+        <a class="btn ghost" href="./posts/new-post-template.html">打开写作模板</a>
       </div>
     </header>
 
-    <main class="content">
-      <section class="card">
-        <h2>关于我</h2>
-        <p>你好，我是 Alex。喜欢把代码写成有温度的小作品，也喜欢让页面有一点“番剧片头”感。</p>
+    <main class="layout">
+      <section class="main-column">
+        <article class="card feature-post reveal" data-delay="60">
+          <p class="post-meta">精选 · 2026-04-13 · 8 分钟</p>
+          <h2 class="post-title">把个人主页改成“可持续写作”的博客结构</h2>
+          <p class="post-excerpt">
+            记录从展示型首页到博客首页的完整改造：信息层级、文章卡片、标签、阅读路径，以及怎样让页面更像“会持续更新的站”。
+          </p>
+          <a class="read-more" href="./posts/start-here.html">阅读全文 →</a>
+        </article>
+
+        <section id="latest" class="post-list">
+          <article class="card post-item reveal" data-delay="100">
+            <p class="post-meta">前端动效 · 2026-04-10</p>
+            <h3 class="post-title">让界面“动得顺眼”：我的三条动效小原则</h3>
+            <p class="post-excerpt">
+              用 transform/opacity、可中断过渡和轻量节奏，做出存在感刚刚好的 UI 动画，不抢内容注意力。
+            </p>
+            <a class="read-more" href="./posts/motion-notes.html">阅读全文 →</a>
+          </article>
+
+          <article class="card post-item reveal" data-delay="140">
+            <p class="post-meta">站点维护 · 2026-04-06</p>
+            <h3 class="post-title">如何在这个博客里发布新文章（超简版）</h3>
+            <p class="post-excerpt">
+              复制模板文件、改标题和正文、在首页加一张文章卡片，push 后自动发布到 GitHub Pages。
+            </p>
+            <a class="read-more" href="./posts/new-post-template.html">查看模板 →</a>
+          </article>
+        </section>
       </section>
 
-      <section class="card" id="projects">
-        <h2>我的项目</h2>
-        <ul class="project-list">
-          <li><span>🌸</span> 项目 A：一个可爱的效率工具，主打“好看又好用”</li>
-          <li><span>⚡</span> 项目 B：前端实验田，记录交互和动效灵感</li>
-          <li><span>🎮</span> 项目 C：小型游戏化页面，轻松娱乐向</li>
-        </ul>
-      </section>
+      <aside class="side-column">
+        <section class="card reveal" data-delay="80">
+          <h2>关于作者</h2>
+          <p>我是 Alex，喜欢把“可读性 + 设计感 + 一点点中二感”混在同一个页面里。</p>
+        </section>
 
-      <section class="card">
-        <h2>最近状态</h2>
-        <p>正在补番、打磨作品集、学习更丝滑的前端动效。今天也要元气满满！</p>
-      </section>
+        <section class="card reveal" data-delay="120">
+          <h2>文章标签</h2>
+          <div class="tag-list">
+            <span>#Frontend</span>
+            <span>#UIAnimation</span>
+            <span>#GitHubPages</span>
+            <span>#博客搭建</span>
+            <span>#二次元审美</span>
+          </div>
+        </section>
 
-      <section class="card">
-        <h2>联系方式</h2>
-        <p>邮箱：you@example.com</p>
-      </section>
+        <section class="card reveal" data-delay="160">
+          <h2>联系我</h2>
+          <p>邮箱：you@example.com</p>
+          <p>GitHub：<a class="inline-link" href="https://github.com" target="_blank" rel="noreferrer">github.com/yourname</a></p>
+        </section>
+      </aside>
     </main>
 
     <footer class="footer">
-      <small>© <span id="year"></span> Alex · Made with love, coffee & anime vibes.</small>
+      <small>© <span id="year"></span> Alex · Blogging with anime vibes.</small>
     </footer>
 
     <script src="./script.js"></script>

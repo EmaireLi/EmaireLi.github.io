@@ -6,6 +6,13 @@
 
 直接双击 `index.html`，或在项目目录启动一个静态服务器。
 
+## 写文章（博客模式）
+
+1. 复制 `posts/new-post-template.html` 为新文件，例如 `posts/my-first-post.html`。
+2. 修改文章标题、导语和正文内容。
+3. 在 `index.html` 的“最新文章”区域新增一张文章卡片，并把链接改成新文件路径。
+4. `git add . && git commit -m "add new post" && git push`，GitHub Pages 会自动更新。
+
 ## 部署步骤
 
 1. 在 GitHub 新建仓库（例如：`my-site`）。
