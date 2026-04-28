@@ -8,10 +8,11 @@
 
 ## 写文章（博客模式）
 
-1. 复制 `posts/new-post-template.html` 为新文件，例如 `posts/my-first-post.html`。
-2. 修改文章标题、导语和正文内容。
-3. 在 `index.html` 的“最新文章”区域新增一张文章卡片，并把链接改成新文件路径。
-4. `git add . && git commit -m "add new post" && git push`，GitHub Pages 会自动更新。
+1. 在站点 `blog` 页点击 **编写 / 保存文章** 进入 `editor.html`。
+2. 写标题和正文，点击 **保存到本地**（会同时下载 `.md` 和 `.html` 文件）。
+3. 把下载的 `.html` 文件放入项目 `posts/` 目录。
+4. 在 `index.html` 的 blog 列表中新增文章链接。
+5. `git add . && git commit -m "add new post" && git push`，GitHub Pages 会自动更新。
 
 ## 部署步骤
 
