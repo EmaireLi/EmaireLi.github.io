@@ -3,37 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>让界面动得顺眼 | Alex 的次元博客</title>
+    <title>让界面动得顺眼 | Alex</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body class="article-page">
-    <header class="hero reveal" data-delay="0">
-      <p class="chip">前端动效 · 2026-04-10</p>
-      <h1>让界面“动得顺眼”：我的三条动效小原则</h1>
-      <p class="hero-text">参考 ui-animation 的做法，优先稳定和可读性。</p>
-    </header>
+  <body>
+    <div class="site-shell">
+      <aside class="sidebar">
+        <p class="site-name"><a href="../index.html">Alex</a></p>
+        <nav class="sidebar-nav" aria-label="Sidebar">
+          <a href="../index.html#about">1. 自我简介</a>
+          <a href="../index.html#projects">2. 个人项目</a>
+          <a href="../index.html#blog">3. blog</a>
+        </nav>
+      </aside>
 
-    <main class="article-shell">
-      <article class="card article-content reveal" data-delay="70">
-        <h2>1. 优先 transform + opacity</h2>
-        <p>按钮、卡片、弹层过渡尽量只动 transform 和 opacity，避免布局抖动。</p>
+      <main class="content">
+        <article class="section article-content">
+          <p class="meta">前端动效 · 2026-04-10</p>
+          <h1 class="article-title">让界面“动得顺眼”：我的三条动效小原则</h1>
+          <h2>1. 只动必要属性</h2>
+          <p>优先用 transform 和 opacity，减少布局抖动。</p>
 
-        <h2>2. 动画要可中断</h2>
-        <p>快速切换状态时，过渡应该自然接续而不是“重新开播”。交互响应会更顺。</p>
+          <h2>2. 动画可中断</h2>
+          <p>快速切换状态时，动画应自然接续，不要重置卡顿。</p>
 
-        <h2>3. 节奏不抢戏</h2>
-        <p>进入动画稍慢一点，退出更快一点。页面看起来会更灵动，也不拖沓。</p>
+          <h2>3. 节奏轻一点</h2>
+          <p>页面动效主要服务阅读，不抢内容本身的注意力。</p>
+        </article>
 
-        <div class="article-nav">
-          <a class="btn ghost" href="../index.html">返回首页</a>
-        </div>
-      </article>
-    </main>
-
-    <footer class="footer">
-      <small>© <span id="year"></span> Alex · Blogging with anime vibes.</small>
-    </footer>
-
+        <footer class="footer">
+          <small>© <span id="year"></span> Alex</small>
+        </footer>
+      </main>
+    </div>
     <script src="../script.js"></script>
   </body>
 </html>

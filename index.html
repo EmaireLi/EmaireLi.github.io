@@ -3,84 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alex 的次元博客</title>
+    <title>Alex</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="bg-orb orb-a" aria-hidden="true"></div>
-    <div class="bg-orb orb-b" aria-hidden="true"></div>
-
-    <header class="hero reveal" data-delay="0">
-      <p class="chip">次元博客模式 · 轻松更新中</p>
-      <h1>Alex 的二次元灵感博客 ✨</h1>
-      <p class="hero-text">在这里写前端、动效、日常脑洞和追番笔记。内容认真，语气不端着。</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#latest">看最新文章</a>
-        <a class="btn ghost" href="./posts/new-post-template.html">打开写作模板</a>
-      </div>
-    </header>
-
-    <main class="layout">
-      <section class="main-column">
-        <article class="card feature-post reveal" data-delay="60">
-          <p class="post-meta">精选 · 2026-04-13 · 8 分钟</p>
-          <h2 class="post-title">把个人主页改成“可持续写作”的博客结构</h2>
-          <p class="post-excerpt">
-            记录从展示型首页到博客首页的完整改造：信息层级、文章卡片、标签、阅读路径，以及怎样让页面更像“会持续更新的站”。
-          </p>
-          <a class="read-more" href="./posts/start-here.html">阅读全文 →</a>
-        </article>
-
-        <section id="latest" class="post-list">
-          <article class="card post-item reveal" data-delay="100">
-            <p class="post-meta">前端动效 · 2026-04-10</p>
-            <h3 class="post-title">让界面“动得顺眼”：我的三条动效小原则</h3>
-            <p class="post-excerpt">
-              用 transform/opacity、可中断过渡和轻量节奏，做出存在感刚刚好的 UI 动画，不抢内容注意力。
-            </p>
-            <a class="read-more" href="./posts/motion-notes.html">阅读全文 →</a>
-          </article>
-
-          <article class="card post-item reveal" data-delay="140">
-            <p class="post-meta">站点维护 · 2026-04-06</p>
-            <h3 class="post-title">如何在这个博客里发布新文章（超简版）</h3>
-            <p class="post-excerpt">
-              复制模板文件、改标题和正文、在首页加一张文章卡片，push 后自动发布到 GitHub Pages。
-            </p>
-            <a class="read-more" href="./posts/new-post-template.html">查看模板 →</a>
-          </article>
-        </section>
-      </section>
-
-      <aside class="side-column">
-        <section class="card reveal" data-delay="80">
-          <h2>关于作者</h2>
-          <p>我是 Alex，喜欢把“可读性 + 设计感 + 一点点中二感”混在同一个页面里。</p>
-        </section>
-
-        <section class="card reveal" data-delay="120">
-          <h2>文章标签</h2>
-          <div class="tag-list">
-            <span>#Frontend</span>
-            <span>#UIAnimation</span>
-            <span>#GitHubPages</span>
-            <span>#博客搭建</span>
-            <span>#二次元审美</span>
-          </div>
-        </section>
-
-        <section class="card reveal" data-delay="160">
-          <h2>联系我</h2>
-          <p>邮箱：you@example.com</p>
-          <p>GitHub：<a class="inline-link" href="https://github.com" target="_blank" rel="noreferrer">github.com/yourname</a></p>
-        </section>
+    <div class="site-shell">
+      <aside class="sidebar">
+        <p class="site-name">Alex</p>
+        <nav class="sidebar-nav" aria-label="Sidebar">
+          <a href="#about">1. 自我简介</a>
+          <a href="#projects">2. 个人项目</a>
+          <a href="#blog">3. blog</a>
+        </nav>
       </aside>
-    </main>
 
-    <footer class="footer">
-      <small>© <span id="year"></span> Alex · Blogging with anime vibes.</small>
-    </footer>
+      <main class="content">
+        <section id="about" class="section">
+          <h1>自我简介</h1>
+          <p>你好，我是 Alex。这个站点记录我的技术学习、项目实践和写作。</p>
+          <p>目前关注前端体验、交互细节和可持续的个人内容输出。</p>
+        </section>
 
+        <section id="projects" class="section">
+          <h2>个人项目</h2>
+          <ul class="project-list">
+            <li class="project-item">
+              <a class="item-title" href="https://github.com" target="_blank" rel="noreferrer">Project A</a>
+              <p class="meta">效率工具 / Web</p>
+              <p>一个轻量工具，用于整理日常任务与灵感记录。</p>
+            </li>
+            <li class="project-item">
+              <a class="item-title" href="https://github.com" target="_blank" rel="noreferrer">Project B</a>
+              <p class="meta">Frontend Lab</p>
+              <p>前端实验项目，记录交互和动效方案。</p>
+            </li>
+          </ul>
+        </section>
+
+        <section id="blog" class="section">
+          <h2>blog</h2>
+          <ul class="blog-list">
+            <li class="blog-item">
+              <a class="item-title" href="./posts/start-here.html">把个人主页改成“可持续写作”的博客结构</a>
+              <p class="meta">2026-04-13</p>
+            </li>
+            <li class="blog-item">
+              <a class="item-title" href="./posts/motion-notes.html">让界面“动得顺眼”：我的三条动效小原则</a>
+              <p class="meta">2026-04-10</p>
+            </li>
+            <li class="blog-item">
+              <a class="item-title" href="./posts/new-post-template.html">新文章模板</a>
+              <p class="meta">Template</p>
+            </li>
+          </ul>
+        </section>
+
+        <footer class="footer">
+          <small>© <span id="year"></span> Alex</small>
+        </footer>
+      </main>
+    </div>
     <script src="./script.js"></script>
   </body>
 </html>

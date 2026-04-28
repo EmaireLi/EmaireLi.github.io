@@ -3,43 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>把个人主页改成博客结构 | Alex 的次元博客</title>
+    <title>把个人主页改成博客结构 | Alex</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body class="article-page">
-    <header class="hero reveal" data-delay="0">
-      <p class="chip">站点维护 · 2026-04-13</p>
-      <h1>把个人主页改成“可持续写作”的博客结构</h1>
-      <p class="hero-text">这篇是第一篇置顶文章，记录站点升级思路。</p>
-    </header>
+  <body>
+    <div class="site-shell">
+      <aside class="sidebar">
+        <p class="site-name"><a href="../index.html">Alex</a></p>
+        <nav class="sidebar-nav" aria-label="Sidebar">
+          <a href="../index.html#about">1. 自我简介</a>
+          <a href="../index.html#projects">2. 个人项目</a>
+          <a href="../index.html#blog">3. blog</a>
+        </nav>
+      </aside>
 
-    <main class="article-shell">
-      <article class="card article-content reveal" data-delay="70">
-        <p>
-          我希望这个站点不仅是“名片式主页”，而是能持续发布内容的博客。所以首页改成了：精选文章 + 最新文章列表 + 侧边栏标签导航。
-        </p>
-        <h2>这次改造做了什么</h2>
-        <ul>
-          <li>首页信息层级从“自我介绍”切换为“文章优先”。</li>
-          <li>新增文章卡片结构，支持快速扩展更多内容。</li>
-          <li>补了写作模板，后续发文只要复制修改即可。</li>
-          <li>动效改为轻量、可读性优先，不喧宾夺主。</li>
-        </ul>
-        <h2>接下来怎么写新文章</h2>
-        <p>
-          复制 <code>posts/new-post-template.html</code> 为新文件，写正文后，在首页文章列表增加一张卡片并链接到新文章即可。
-        </p>
-        <div class="article-nav">
-          <a class="btn ghost" href="../index.html">返回首页</a>
-          <a class="btn primary" href="./new-post-template.html">打开写作模板</a>
-        </div>
-      </article>
-    </main>
+      <main class="content">
+        <article class="section article-content">
+          <p class="meta">站点维护 · 2026-04-13</p>
+          <h1 class="article-title">把个人主页改成“可持续写作”的博客结构</h1>
+          <p>这篇记录我把个人主页改成博客结构的思路。</p>
 
-    <footer class="footer">
-      <small>© <span id="year"></span> Alex · Blogging with anime vibes.</small>
-    </footer>
+          <h2>为什么改</h2>
+          <p>我希望这个站点不只是展示页，而是可以持续发布内容的个人博客。</p>
 
+          <h2>做了什么</h2>
+          <ul>
+            <li>首页结构改成：自我简介、个人项目、blog。</li>
+            <li>样式改为更简洁的文本导向页面。</li>
+            <li>保留独立文章页，方便后续持续写作。</li>
+          </ul>
+        </article>
+
+        <footer class="footer">
+          <small>© <span id="year"></span> Alex</small>
+        </footer>
+      </main>
+    </div>
     <script src="../script.js"></script>
   </body>
 </html>

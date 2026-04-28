@@ -3,43 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>新文章模板 | Alex 的次元博客</title>
+    <title>新文章模板 | Alex</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body class="article-page">
-    <header class="hero reveal" data-delay="0">
-      <p class="chip">模板 · 把这里改成分类和日期</p>
-      <h1>这里改成你的文章标题</h1>
-      <p class="hero-text">这里是一句导语，说明这篇文章要讲什么。</p>
-    </header>
+  <body>
+    <div class="site-shell">
+      <aside class="sidebar">
+        <p class="site-name"><a href="../index.html">Alex</a></p>
+        <nav class="sidebar-nav" aria-label="Sidebar">
+          <a href="../index.html#about">1. 自我简介</a>
+          <a href="../index.html#projects">2. 个人项目</a>
+          <a href="../index.html#blog">3. blog</a>
+        </nav>
+      </aside>
 
-    <main class="article-shell">
-      <article class="card article-content reveal" data-delay="70">
-        <p>第一段正文。建议先写你为什么想写这篇，再写核心观点。</p>
+      <main class="content">
+        <article class="section article-content">
+          <p class="meta">模板 · 填写分类和日期</p>
+          <h1 class="article-title">这里填写你的标题</h1>
+          <p>第一段正文：说明这篇文章为什么写、主要要讲什么。</p>
 
-        <h2>小节标题一</h2>
-        <p>在这里写具体内容。可以用列表、代码片段或截图说明。</p>
+          <h2>小节标题一</h2>
+          <p>写你的核心内容。</p>
 
-        <h2>小节标题二</h2>
-        <ul>
-          <li>要点 1</li>
-          <li>要点 2</li>
-          <li>要点 3</li>
-        </ul>
+          <h2>小节标题二</h2>
+          <ul>
+            <li>要点 1</li>
+            <li>要点 2</li>
+            <li>要点 3</li>
+          </ul>
+        </article>
 
-        <h2>结尾</h2>
-        <p>总结你的观点，或附上下一篇预告。</p>
-
-        <div class="article-nav">
-          <a class="btn ghost" href="../index.html">返回首页</a>
-        </div>
-      </article>
-    </main>
-
-    <footer class="footer">
-      <small>© <span id="year"></span> Alex · Blogging with anime vibes.</small>
-    </footer>
-
+        <footer class="footer">
+          <small>© <span id="year"></span> Alex</small>
+        </footer>
+      </main>
+    </div>
     <script src="../script.js"></script>
   </body>
 </html>
