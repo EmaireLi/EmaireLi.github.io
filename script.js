@@ -44,7 +44,7 @@ function decodeHtmlEntities(text) {
 }
 
 function normalizeMarkdownInputForRender(text) {
-  if (/&lt;\/?[a-zA-Z][^&]*&gt;/.test(text)) {
+  if (/&lt;\/?[a-zA-Z][\s\S]*?&gt;/.test(text)) {
     return decodeHtmlEntities(text);
   }
   return text;
@@ -108,7 +108,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js?v=20260428g"></script>
+    <script src="../script.js?v=20260428h"></script>
   </body>
 </html>`;
 }
