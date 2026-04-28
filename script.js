@@ -67,10 +67,7 @@ function decodeEscapedSpanTagsInDocument() {
 }
 
 function normalizeMarkdownInputForRender(text) {
-  if (/&lt;\/?[a-zA-Z][\s\S]*?&gt;/.test(text)) {
-    return decodeHtmlEntitiesDeep(text);
-  }
-  return text;
+  return decodeHtmlEntitiesDeep(text);
 }
 
 function renderWithoutMarkdownIt(normalized) {
@@ -138,7 +135,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js?v=20260428j"></script>
+    <script src="../script.js?v=20260428k"></script>
   </body>
 </html>`;
 }
