@@ -82,9 +82,85 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js"></script>
+    <script src="../script.js?v=20260428c"></script>
   </body>
 </html>`;
+}
+
+function inferGitHubRepoInfo() {
+  const host = window.location.hostname;
+  if (!host.endsWith(".github.io")) return null;
+
+  const owner = host.split(".")[0];
+  const segs = window.location.pathname.split("/").filter(Boolean);
+  const repo = segs.length > 0 ? segs[0] : `${owner}.github.io`;
+  return { owner, repo };
+}
+
+function parsePostMeta(name) {
+  const base = name.replace(/\.html$/i, "");
+  const match = base.match(/^(\d{4}-\d{2}-\d{2})(?:-\d{6})?-(.+)$/);
+  if (match) {
+    return {
+      date: match[1],
+      title: match[2].replace(/-/g, " "),
+    };
+  }
+  return {
+    date: "",
+    title: base.replace(/-/g, " "),
+  };
+}
+
+async function initBlogAutoList() {
+  const listEl = document.getElementById("blog-auto-list");
+  const statusEl = document.getElementById("blog-auto-status");
+  if (!listEl || !statusEl) return;
+
+  const repoInfo = inferGitHubRepoInfo();
+  if (!repoInfo) {
+    statusEl.textContent = "本地预览模式：请手动更新文章列表。";
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/posts`, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+    if (!res.ok) {
+      throw new Error(`GitHub API ${res.status}`);
+    }
+
+    const entries = await res.json();
+    const files = Array.isArray(entries)
+      ? entries.filter(
+          (item) => item && item.type === "file" && /\.html$/i.test(item.name) && item.name !== "new-post-template.html",
+        )
+      : [];
+
+    files.sort((a, b) => b.name.localeCompare(a.name));
+    listEl.innerHTML = "";
+
+    if (files.length === 0) {
+      statusEl.textContent = "posts/ 目录暂无可显示文章。";
+      return;
+    }
+
+    files.forEach((file) => {
+      const meta = parsePostMeta(file.name);
+      const li = document.createElement("li");
+      li.className = "blog-item";
+      li.innerHTML = `
+        <a class="item-title" href="./posts/${file.name}">${meta.title}</a>
+        <p class="meta">${meta.date || "已发布"}</p>
+      `;
+      listEl.appendChild(li);
+    });
+
+    statusEl.textContent = "自动读取 posts/ 目录：";
+  } catch (error) {
+    statusEl.textContent = `自动读取失败（${error.message}），请手动更新列表。`;
+  }
 }
 
 function initEditorPage() {
@@ -134,3 +210,4 @@ function initEditorPage() {
 }
 
 initEditorPage();
+initBlogAutoList();
