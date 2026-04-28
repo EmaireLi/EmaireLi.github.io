@@ -1,4 +1,24 @@
-document.getElementById("year").textContent = String(new Date().getFullYear());
+const yearEl = document.getElementById("year");
+if (yearEl) {
+  yearEl.textContent = String(new Date().getFullYear());
+}
+
+const storageKey = "alex-blog-published-posts";
+
+function getSavedPosts() {
+  try {
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function savePosts(posts) {
+  localStorage.setItem(storageKey, JSON.stringify(posts));
+}
 
 const panelLinks = document.querySelectorAll("[data-panel-link]");
 const panels = document.querySelectorAll("[data-panel]");
@@ -31,134 +51,100 @@ if (panelLinks.length > 0 && panels.length > 0) {
   });
 }
 
-const mdInput = document.getElementById("md-input");
-const mdPreview = document.getElementById("md-preview");
-const mdTitleInput = document.getElementById("md-title-input");
-const openEditorBtn = document.getElementById("open-editor-btn");
-const cancelEditorBtn = document.getElementById("cancel-editor-btn");
-const publishBtn = document.getElementById("publish-btn");
-const blogHome = document.getElementById("blog-home");
-const blogEditorMode = document.getElementById("blog-editor-mode");
-const editorActions = document.getElementById("editor-actions");
-const publishedPosts = document.getElementById("published-posts");
-const reader = document.getElementById("published-reader");
-const readerMeta = document.getElementById("reader-meta");
-const readerTitle = document.getElementById("reader-title");
-const readerContent = document.getElementById("reader-content");
-const storageKey = "alex-blog-published-posts";
+const md = typeof window.markdownit === "function" ? window.markdownit({ html: false, linkify: true, breaks: true }) : null;
 
-function setEditorMode(enabled) {
-  if (!blogHome || !blogEditorMode || !editorActions) {
+function initBlogHome() {
+  const publishedPosts = document.getElementById("published-posts");
+  const reader = document.getElementById("published-reader");
+  const readerMeta = document.getElementById("reader-meta");
+  const readerTitle = document.getElementById("reader-title");
+  const readerContent = document.getElementById("reader-content");
+
+  if (!publishedPosts || !reader || !readerMeta || !readerTitle || !readerContent) {
     return;
   }
-  blogHome.hidden = enabled;
-  blogEditorMode.hidden = !enabled;
-  editorActions.hidden = !enabled;
-}
-
-function getSavedPosts() {
-  try {
-    const raw = localStorage.getItem(storageKey);
-    if (!raw) {
-      return [];
-    }
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-function savePosts(posts) {
-  localStorage.setItem(storageKey, JSON.stringify(posts));
-}
-
-if (mdInput && mdPreview && typeof window.markdownit === "function") {
-  const md = window.markdownit({
-    html: false,
-    linkify: true,
-    breaks: true,
-  });
-
-  const renderMarkdown = () => {
-    mdPreview.innerHTML = md.render(mdInput.value);
-  };
 
   const renderReader = (post) => {
-    if (!reader || !readerMeta || !readerTitle || !readerContent) {
-      return;
-    }
-    readerMeta.textContent = post.date;
+    readerMeta.textContent = `${post.date} · 已发布`;
     readerTitle.textContent = post.title;
-    readerContent.innerHTML = md.render(post.markdown);
+    readerContent.innerHTML = md ? md.render(post.markdown) : post.markdown;
     reader.hidden = false;
   };
 
-  const renderPostList = () => {
-    if (!publishedPosts) {
-      return;
-    }
+  const renderList = () => {
     const posts = getSavedPosts();
     publishedPosts.innerHTML = "";
 
-    posts.forEach((post, idx) => {
+    posts.forEach((post) => {
       const item = document.createElement("li");
       item.className = "blog-item";
-      item.innerHTML = `
-        <a class="item-title" href="#blog">${post.title}</a>
-        <p class="meta">${post.date} · 已发布</p>
-      `;
-
+      item.innerHTML = `<a class="item-title" href="#blog">${post.title}</a><p class="meta">${post.date} · 已发布</p>`;
       const link = item.querySelector("a");
       if (link) {
         link.addEventListener("click", (event) => {
           event.preventDefault();
-          renderReader(posts[idx]);
+          renderReader(post);
         });
       }
       publishedPosts.appendChild(item);
     });
   };
 
-  mdInput.addEventListener("input", renderMarkdown);
-  renderMarkdown();
-  renderPostList();
+  renderList();
 
-  if (openEditorBtn) {
-    openEditorBtn.addEventListener("click", () => {
-      setEditorMode(true);
-      renderMarkdown();
-      if (mdTitleInput) {
-        mdTitleInput.focus();
-      }
-    });
-  }
-
-  if (cancelEditorBtn) {
-    cancelEditorBtn.addEventListener("click", () => {
-      setEditorMode(false);
-    });
-  }
-
-  if (publishBtn) {
-    publishBtn.addEventListener("click", () => {
-      const title = mdTitleInput ? mdTitleInput.value.trim() : "";
-      const markdown = mdInput.value.trim();
-      if (!title || !markdown) {
-        window.alert("请先填写标题和正文再发布。");
-        return;
-      }
-
-      const posts = getSavedPosts();
-      posts.unshift({
-        title,
-        markdown,
-        date: new Date().toISOString().slice(0, 10),
-      });
-      savePosts(posts);
-      renderPostList();
-      renderReader(posts[0]);
-      setEditorMode(false);
-    });
+  const url = new URL(window.location.href);
+  const postId = url.searchParams.get("post");
+  if (postId) {
+    const post = getSavedPosts().find((p) => p.id === postId);
+    if (post) {
+      renderReader(post);
+    }
   }
 }
+
+function initEditorPage() {
+  const mdInput = document.getElementById("md-input");
+  const mdPreview = document.getElementById("md-preview");
+  const mdTitleInput = document.getElementById("md-title-input");
+  const publishBtn = document.getElementById("publish-btn");
+  const cancelEditorBtn = document.getElementById("cancel-editor-btn");
+
+  if (!mdInput || !mdPreview || !mdTitleInput || !publishBtn || !cancelEditorBtn) {
+    return;
+  }
+
+  const renderMarkdown = () => {
+    mdPreview.innerHTML = md ? md.render(mdInput.value) : mdInput.value;
+  };
+
+  mdInput.addEventListener("input", renderMarkdown);
+  renderMarkdown();
+
+  publishBtn.addEventListener("click", () => {
+    const title = mdTitleInput.value.trim();
+    const markdown = mdInput.value.trim();
+    if (!title || !markdown) {
+      window.alert("请先填写标题和正文再发布。");
+      return;
+    }
+
+    const post = {
+      id: String(Date.now()),
+      title,
+      markdown,
+      date: new Date().toISOString().slice(0, 10),
+    };
+    const posts = getSavedPosts();
+    posts.unshift(post);
+    savePosts(posts);
+
+    window.location.href = `./index.html?post=${encodeURIComponent(post.id)}#blog`;
+  });
+
+  cancelEditorBtn.addEventListener("click", () => {
+    window.location.href = "./index.html#blog";
+  });
+}
+
+initBlogHome();
+initEditorPage();

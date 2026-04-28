@@ -159,9 +159,17 @@ a:hover {
   cursor: pointer;
 }
 
+.editor-btn:hover {
+  text-decoration: none;
+}
+
 .editor-btn.secondary {
   background: #fff;
   color: #111;
+}
+
+.editor-page-shell {
+  max-width: 1200px;
 }
 
 .blog-editor-mode {
@@ -272,6 +280,11 @@ a:hover {
   margin-top: 18px;
   border-top: 1px solid var(--line);
   padding-top: 14px;
+}
+
+.published-preview {
+  border: 1px solid var(--line);
+  padding: 12px;
 }
 
 @media (max-width: 860px) {

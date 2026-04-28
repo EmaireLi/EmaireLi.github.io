@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>发布文章 | Alex</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="editor-page-shell">
+      <div id="blog-editor-mode" class="blog-editor-mode">
+        <aside class="editor-pane editor-pane-left">
+          <p class="editor-pane-title">笔记</p>
+          <ul class="editor-note-list">
+            <li class="editor-note-item is-active">Untitled.md</li>
+          </ul>
+        </aside>
+
+        <section class="editor-pane">
+          <div class="editor-pane-head">
+            <input id="md-title-input" class="md-title-input" type="text" placeholder="输入文章标题..." />
+          </div>
+          <textarea id="md-input" class="md-input" spellcheck="false"># 新文章草稿
+
+今天写点什么？
+
+- 记录一个想法
+- 复盘一个项目
+- 发布一篇博客
+
+```js
+console.log("Hello Markdown");
+```
+</textarea>
+        </section>
+
+        <section class="editor-pane">
+          <p class="editor-pane-title">预览</p>
+          <div id="md-preview" class="md-preview" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <div class="editor-actions">
+        <button id="publish-btn" class="editor-btn" type="button">发布</button>
+        <button id="cancel-editor-btn" class="editor-btn secondary" type="button">返回 blog</button>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
