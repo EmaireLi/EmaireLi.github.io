@@ -42,24 +42,47 @@
 
         <section id="blog" class="section panel" data-panel="blog" hidden>
           <h2>blog</h2>
-          <ul class="blog-list">
-            <li class="blog-item">
-              <a class="item-title" href="./posts/start-here.html">把个人主页改成“可持续写作”的博客结构</a>
-              <p class="meta">2026-04-13</p>
-            </li>
-            <li class="blog-item">
-              <a class="item-title" href="./posts/motion-notes.html">让界面“动得顺眼”：我的三条动效小原则</a>
-              <p class="meta">2026-04-10</p>
-            </li>
-            <li class="blog-item">
-              <a class="item-title" href="./posts/new-post-template.html">新文章模板</a>
-              <p class="meta">Template</p>
-            </li>
-          </ul>
+          <div id="blog-home">
+            <div class="blog-toolbar">
+              <button id="open-editor-btn" class="editor-btn" type="button">编辑文章</button>
+            </div>
 
-          <div class="md-workbench" aria-label="Markdown editor with preview">
-            <div class="md-column">
-              <h3 class="md-title">Markdown 编辑区</h3>
+            <ul id="published-posts" class="blog-list"></ul>
+
+            <ul class="blog-list">
+              <li class="blog-item">
+                <a class="item-title" href="./posts/start-here.html">把个人主页改成“可持续写作”的博客结构</a>
+                <p class="meta">2026-04-13</p>
+              </li>
+              <li class="blog-item">
+                <a class="item-title" href="./posts/motion-notes.html">让界面“动得顺眼”：我的三条动效小原则</a>
+                <p class="meta">2026-04-10</p>
+              </li>
+              <li class="blog-item">
+                <a class="item-title" href="./posts/new-post-template.html">新文章模板</a>
+                <p class="meta">Template</p>
+              </li>
+            </ul>
+
+            <article id="published-reader" class="published-reader" hidden>
+              <p id="reader-meta" class="meta"></p>
+              <h3 id="reader-title" class="article-title"></h3>
+              <div id="reader-content" class="md-preview"></div>
+            </article>
+          </div>
+
+          <div id="blog-editor-mode" class="blog-editor-mode" hidden>
+            <aside class="editor-pane editor-pane-left">
+              <p class="editor-pane-title">笔记</p>
+              <ul class="editor-note-list">
+                <li class="editor-note-item is-active">Untitled.md</li>
+              </ul>
+            </aside>
+
+            <div class="editor-pane">
+              <div class="editor-pane-head">
+                <input id="md-title-input" class="md-title-input" type="text" placeholder="输入文章标题..." />
+              </div>
               <textarea id="md-input" class="md-input" spellcheck="false"># 新文章草稿
 
 今天写点什么？
@@ -73,10 +96,16 @@ console.log("Hello Markdown");
 ```
 </textarea>
             </div>
-            <div class="md-column">
-              <h3 class="md-title">实时预览</h3>
+
+            <div class="editor-pane">
+              <p class="editor-pane-title">预览</p>
               <div id="md-preview" class="md-preview" aria-live="polite"></div>
             </div>
+          </div>
+
+          <div id="editor-actions" class="editor-actions" hidden>
+            <button id="publish-btn" class="editor-btn" type="button">发布</button>
+            <button id="cancel-editor-btn" class="editor-btn secondary" type="button">返回 blog</button>
           </div>
         </section>
 
