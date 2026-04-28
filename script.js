@@ -53,6 +53,19 @@ function decodeHtmlEntitiesDeep(text) {
   return current;
 }
 
+function decodeEscapedSpanTagsInDocument() {
+  const nodes = document.querySelectorAll(".article-content, #md-preview");
+  nodes.forEach((node) => {
+    const before = node.innerHTML;
+    const after = before
+      .replace(/&lt;span\b([\s\S]*?)&gt;/gi, (_m, attrs) => `<span${decodeHtmlEntitiesDeep(attrs)}>` )
+      .replace(/&lt;\/span&gt;/gi, "</span>");
+    if (after !== before) {
+      node.innerHTML = after;
+    }
+  });
+}
+
 function normalizeMarkdownInputForRender(text) {
   if (/&lt;\/?[a-zA-Z][\s\S]*?&gt;/.test(text)) {
     return decodeHtmlEntitiesDeep(text);
@@ -125,7 +138,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js?v=20260428i"></script>
+    <script src="../script.js?v=20260428j"></script>
   </body>
 </html>`;
 }
@@ -207,5 +220,6 @@ function initEditorPage() {
   });
 }
 
+decodeEscapedSpanTagsInDocument();
 initBlogAutoList();
 initEditorPage();
