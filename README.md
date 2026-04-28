@@ -4,15 +4,14 @@
 
 ## 本地预览
 
-直接双击 `index.html`，或在项目目录启动一个静态服务器。
+建议在项目目录启动一个静态服务器预览（避免 `file://` 下无法读取 `posts/posts.json`）。
 
 ## 写文章（博客模式）
 
 1. 在站点 `blog` 页点击 **编写 / 保存文章** 进入 `editor.html`。
-2. 写标题和正文，点击 **保存到本地**（会同时下载 `.md` 和 `.html` 文件）。
+2. 写标题和正文，点击 **保存到本地**（会下载 `.html` 文件）。
 3. 把下载的 `.html` 文件放入项目 `posts/` 目录。
-4. 在 `index.html` 的 blog 列表中新增文章链接。
-5. `git add . && git commit -m "add new post" && git push`，GitHub Pages 会自动更新。
+4. `git add . && git commit -m "add new post" && git push`，GitHub Pages 部署流程会自动更新 `posts/posts.json` 并显示到 blog 列表。
 
 ## 部署步骤
 

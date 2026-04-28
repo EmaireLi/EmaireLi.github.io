@@ -10,7 +10,6 @@ function showPanel(name) {
   panels.forEach((panel) => {
     panel.hidden = panel.dataset.panel !== name;
   });
-
   panelLinks.forEach((link) => {
     link.classList.toggle("is-active", link.dataset.panelLink === name);
   });
@@ -34,14 +33,25 @@ if (panelLinks.length > 0 && panels.length > 0) {
 
 const md = typeof window.markdownit === "function" ? window.markdownit({ html: false, linkify: true, breaks: true }) : null;
 
+function escapeHtml(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function renderMarkdownToHtml(text) {
+  if (md) return md.render(text);
+  return `<pre>${escapeHtml(text)}</pre>`;
+}
+
 function slugify(value) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\u4e00-\u9fa5\- ]+/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "") || "post";
+  return (
+    value
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\u4e00-\u9fa5\- ]+/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "") || "post"
+  );
 }
 
 function downloadTextFile(filename, content, type) {
@@ -50,12 +60,14 @@ function downloadTextFile(filename, content, type) {
   const link = document.createElement("a");
   link.href = url;
   link.download = filename;
+  document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
 
 function renderPostHtml({ title, date, markdownHtml }) {
-  const safeTitle = title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const safeTitle = escapeHtml(title);
   return `<!doctype html>
 <html lang="zh-CN">
   <head>
@@ -82,79 +94,36 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js?v=20260428d"></script>
+    <script src="../script.js?v=20260428f"></script>
   </body>
 </html>`;
-}
-
-function inferGitHubRepoInfo() {
-  const host = window.location.hostname;
-  if (!host.endsWith(".github.io")) return null;
-
-  const owner = host.split(".")[0];
-  const segs = window.location.pathname.split("/").filter(Boolean);
-  const repo = segs.length > 0 ? segs[0] : `${owner}.github.io`;
-  return { owner, repo };
-}
-
-function parsePostMeta(name) {
-  const base = name.replace(/\.html$/i, "");
-  const match = base.match(/^(\d{4}-\d{2}-\d{2})(?:-\d{6})?-(.+)$/);
-  if (match) {
-    return {
-      date: match[1],
-      title: match[2].replace(/-/g, " "),
-    };
-  }
-  return {
-    date: "",
-    title: base.replace(/-/g, " "),
-  };
 }
 
 async function initBlogAutoList() {
   const listEl = document.getElementById("blog-auto-list");
   const statusEl = document.getElementById("blog-auto-status");
   if (!listEl || !statusEl) return;
+
   statusEl.hidden = true;
   statusEl.textContent = "";
 
-  const repoInfo = inferGitHubRepoInfo();
-  if (!repoInfo) {
-    return;
-  }
-
   try {
-    const res = await fetch(`https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/posts`, {
-      headers: { Accept: "application/vnd.github+json" },
-    });
-    if (!res.ok) {
-      throw new Error(`GitHub API ${res.status}`);
-    }
+    const res = await fetch("./posts/posts.json", { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const posts = Array.isArray(data) ? data : Array.isArray(data.posts) ? data.posts : [];
 
-    const entries = await res.json();
-    const files = Array.isArray(entries)
-      ? entries.filter(
-          (item) => item && item.type === "file" && /\.html$/i.test(item.name) && item.name !== "new-post-template.html",
-        )
-      : [];
-
-    files.sort((a, b) => b.name.localeCompare(a.name));
     listEl.innerHTML = "";
-
-    if (files.length === 0) return;
-
-    files.forEach((file) => {
-      const meta = parsePostMeta(file.name);
+    posts.forEach((post) => {
+      if (!post || !post.file) return;
       const li = document.createElement("li");
       li.className = "blog-item";
       li.innerHTML = `
-        <a class="item-title" href="./posts/${file.name}">${meta.title}</a>
-        <p class="meta">${meta.date || "已发布"}</p>
+        <a class="item-title" href="./posts/${post.file}">${post.title || post.file}</a>
+        <p class="meta">${post.date || ""}</p>
       `;
       listEl.appendChild(li);
     });
-
   } catch (error) {
     statusEl.hidden = false;
     statusEl.textContent = `文章列表加载失败：${error.message}`;
@@ -171,17 +140,15 @@ function initEditorPage() {
 
   if (!mdInput || !mdPreview || !mdTitleInput || !saveLocalBtn || !cancelEditorBtn) return;
 
-  const renderMarkdown = () => {
-    mdPreview.innerHTML = md ? md.render(mdInput.value) : mdInput.value;
+  const renderPreview = () => {
+    mdPreview.innerHTML = renderMarkdownToHtml(mdInput.value);
   };
-
-  mdInput.addEventListener("input", renderMarkdown);
-  renderMarkdown();
+  mdInput.addEventListener("input", renderPreview);
+  renderPreview();
 
   saveLocalBtn.addEventListener("click", () => {
     const title = mdTitleInput.value.trim();
     const markdown = mdInput.value.trim();
-
     if (!title || !markdown) {
       window.alert("请先填写标题和正文再保存。");
       return;
@@ -191,14 +158,16 @@ function initEditorPage() {
     const time = new Date().toISOString().slice(11, 19).replace(/:/g, "");
     const slug = slugify(title);
     const baseName = `${date}-${time}-${slug}`;
-    const markdownHtml = md ? md.render(markdown) : markdown;
-    const html = renderPostHtml({ title, date, markdownHtml });
+    const html = renderPostHtml({
+      title,
+      date,
+      markdownHtml: renderMarkdownToHtml(markdown),
+    });
 
-    downloadTextFile(`${baseName}.md`, markdown, "text/markdown;charset=utf-8");
     downloadTextFile(`${baseName}.html`, html, "text/html;charset=utf-8");
 
     if (statusEl) {
-      statusEl.textContent = `已保存 ${baseName}.md 和 ${baseName}.html。请把 HTML 文件放到项目 posts/ 目录后提交。`;
+      statusEl.textContent = `已保存 ${baseName}.html。把它放到 posts/ 后 push，部署流程会自动更新文章列表。`;
     }
   });
 
@@ -207,5 +176,5 @@ function initEditorPage() {
   });
 }
 
-initEditorPage();
 initBlogAutoList();
+initEditorPage();
