@@ -11,20 +11,20 @@
       <aside class="sidebar">
         <p class="site-name">Alex</p>
         <nav class="sidebar-nav" aria-label="Sidebar">
-          <a href="#about">1. 自我简介</a>
-          <a href="#projects">2. 个人项目</a>
-          <a href="#blog">3. blog</a>
+          <a class="sidebar-link is-active" href="#about" data-panel-link="about">1. 自我简介</a>
+          <a class="sidebar-link" href="#projects" data-panel-link="projects">2. 个人项目</a>
+          <a class="sidebar-link" href="#blog" data-panel-link="blog">3. blog</a>
         </nav>
       </aside>
 
       <main class="content">
-        <section id="about" class="section">
+        <section id="about" class="section panel" data-panel="about">
           <h1>自我简介</h1>
           <p>你好，我是 Alex。这个站点记录我的技术学习、项目实践和写作。</p>
           <p>目前关注前端体验、交互细节和可持续的个人内容输出。</p>
         </section>
 
-        <section id="projects" class="section">
+        <section id="projects" class="section panel" data-panel="projects" hidden>
           <h2>个人项目</h2>
           <ul class="project-list">
             <li class="project-item">
@@ -40,7 +40,7 @@
           </ul>
         </section>
 
-        <section id="blog" class="section">
+        <section id="blog" class="section panel" data-panel="blog" hidden>
           <h2>blog</h2>
           <ul class="blog-list">
             <li class="blog-item">

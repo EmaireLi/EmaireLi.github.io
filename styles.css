@@ -58,6 +58,18 @@ a:hover {
   display: inline-block;
 }
 
+.sidebar-link {
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  text-decoration: none;
+}
+
+.sidebar-link.is-active {
+  font-weight: 600;
+}
+
 .content {
   min-width: 0;
 }
