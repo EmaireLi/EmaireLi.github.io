@@ -43,17 +43,34 @@ function decodeHtmlEntities(text) {
   return textarea.value;
 }
 
+function decodeHtmlEntitiesDeep(text) {
+  let current = text;
+  for (let i = 0; i < 3; i += 1) {
+    const decoded = decodeHtmlEntities(current);
+    if (decoded === current) break;
+    current = decoded;
+  }
+  return current;
+}
+
 function normalizeMarkdownInputForRender(text) {
   if (/&lt;\/?[a-zA-Z][\s\S]*?&gt;/.test(text)) {
-    return decodeHtmlEntities(text);
+    return decodeHtmlEntitiesDeep(text);
   }
   return text;
+}
+
+function renderWithoutMarkdownIt(normalized) {
+  if (/<\/?[a-zA-Z][\s\S]*?>/.test(normalized)) {
+    return normalized;
+  }
+  return `<pre>${escapeHtml(normalized)}</pre>`;
 }
 
 function renderMarkdownToHtml(text) {
   const normalized = normalizeMarkdownInputForRender(text);
   if (md) return md.render(normalized);
-  return `<pre>${escapeHtml(normalized)}</pre>`;
+  return renderWithoutMarkdownIt(normalized);
 }
 
 function slugify(value) {
@@ -108,7 +125,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js?v=20260428h"></script>
+    <script src="../script.js?v=20260428i"></script>
   </body>
 </html>`;
 }
