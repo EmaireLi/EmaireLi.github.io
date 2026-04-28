@@ -82,7 +82,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js?v=20260428c"></script>
+    <script src="../script.js?v=20260428d"></script>
   </body>
 </html>`;
 }
@@ -116,10 +116,11 @@ async function initBlogAutoList() {
   const listEl = document.getElementById("blog-auto-list");
   const statusEl = document.getElementById("blog-auto-status");
   if (!listEl || !statusEl) return;
+  statusEl.hidden = true;
+  statusEl.textContent = "";
 
   const repoInfo = inferGitHubRepoInfo();
   if (!repoInfo) {
-    statusEl.textContent = "本地预览模式：请手动更新文章列表。";
     return;
   }
 
@@ -141,10 +142,7 @@ async function initBlogAutoList() {
     files.sort((a, b) => b.name.localeCompare(a.name));
     listEl.innerHTML = "";
 
-    if (files.length === 0) {
-      statusEl.textContent = "posts/ 目录暂无可显示文章。";
-      return;
-    }
+    if (files.length === 0) return;
 
     files.forEach((file) => {
       const meta = parsePostMeta(file.name);
@@ -157,9 +155,9 @@ async function initBlogAutoList() {
       listEl.appendChild(li);
     });
 
-    statusEl.textContent = "自动读取 posts/ 目录：";
   } catch (error) {
-    statusEl.textContent = `自动读取失败（${error.message}），请手动更新列表。`;
+    statusEl.hidden = false;
+    statusEl.textContent = `文章列表加载失败：${error.message}`;
   }
 }
 
