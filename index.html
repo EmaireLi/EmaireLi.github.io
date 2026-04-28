@@ -56,6 +56,28 @@
               <p class="meta">Template</p>
             </li>
           </ul>
+
+          <div class="md-workbench" aria-label="Markdown editor with preview">
+            <div class="md-column">
+              <h3 class="md-title">Markdown 编辑区</h3>
+              <textarea id="md-input" class="md-input" spellcheck="false"># 新文章草稿
+
+今天写点什么？
+
+- 记录一个想法
+- 复盘一个项目
+- 发布一篇博客
+
+```js
+console.log("Hello Markdown");
+```
+</textarea>
+            </div>
+            <div class="md-column">
+              <h3 class="md-title">实时预览</h3>
+              <div id="md-preview" class="md-preview" aria-live="polite"></div>
+            </div>
+          </div>
         </section>
 
         <footer class="footer">
@@ -63,6 +85,7 @@
         </footer>
       </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

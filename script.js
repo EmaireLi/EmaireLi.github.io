@@ -30,3 +30,21 @@ if (panelLinks.length > 0 && panels.length > 0) {
     showPanel(valid ? current : "about");
   });
 }
+
+const mdInput = document.getElementById("md-input");
+const mdPreview = document.getElementById("md-preview");
+
+if (mdInput && mdPreview && typeof window.markdownit === "function") {
+  const md = window.markdownit({
+    html: false,
+    linkify: true,
+    breaks: true,
+  });
+
+  const renderMarkdown = () => {
+    mdPreview.innerHTML = md.render(mdInput.value);
+  };
+
+  mdInput.addEventListener("input", renderMarkdown);
+  renderMarkdown();
+}

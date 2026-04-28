@@ -145,6 +145,46 @@ a:hover {
   padding-left: 18px;
 }
 
+.md-workbench {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.md-title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.md-input {
+  width: 100%;
+  min-height: 420px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--text);
+  resize: vertical;
+}
+
+.md-preview {
+  min-height: 420px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+
+.md-preview :first-child {
+  margin-top: 0;
+}
+
+.md-preview pre {
+  overflow-x: auto;
+  padding: 10px;
+  border: 1px solid var(--line);
+}
+
 @media (max-width: 860px) {
   body {
     margin: 24px;
@@ -162,5 +202,9 @@ a:hover {
   .sidebar-nav {
     grid-template-columns: repeat(3, minmax(0, max-content));
     gap: 14px;
+  }
+
+  .md-workbench {
+    grid-template-columns: 1fr;
   }
 }
