@@ -31,15 +31,29 @@ if (panelLinks.length > 0 && panels.length > 0) {
   });
 }
 
-const md = typeof window.markdownit === "function" ? window.markdownit({ html: false, linkify: true, breaks: true }) : null;
+const md = typeof window.markdownit === "function" ? window.markdownit({ html: true, linkify: true, breaks: true }) : null;
 
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+function decodeHtmlEntities(text) {
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = text;
+  return textarea.value;
+}
+
+function normalizeMarkdownInputForRender(text) {
+  if (/&lt;\/?[a-zA-Z][^&]*&gt;/.test(text)) {
+    return decodeHtmlEntities(text);
+  }
+  return text;
+}
+
 function renderMarkdownToHtml(text) {
-  if (md) return md.render(text);
-  return `<pre>${escapeHtml(text)}</pre>`;
+  const normalized = normalizeMarkdownInputForRender(text);
+  if (md) return md.render(normalized);
+  return `<pre>${escapeHtml(normalized)}</pre>`;
 }
 
 function slugify(value) {
@@ -94,7 +108,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </article>
       </main>
     </div>
-    <script src="../script.js?v=20260428f"></script>
+    <script src="../script.js?v=20260428g"></script>
   </body>
 </html>`;
 }
