@@ -3,42 +3,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#222222" />
     <title>新文章模板 | Alex</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
-    <div class="site-shell">
-      <aside class="sidebar">
-        <p class="site-name"><a href="../index.html">Alex</a></p>
-        <nav class="sidebar-nav" aria-label="Sidebar">
-          <a href="../index.html#about">1. 自我简介</a>
-          <a href="../index.html#projects">2. 个人项目</a>
-          <a href="../index.html#blog">3. blog</a>
-        </nav>
-      </aside>
+    <div class="headband"></div>
 
-      <main class="content">
-        <article class="section article-content">
-          <p class="meta">模板 · 填写分类和日期</p>
-          <h1 class="article-title">这里填写你的标题</h1>
-          <p>第一段正文：说明这篇文章为什么写、主要要讲什么。</p>
+    <main class="main">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="../index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">个人归档站</p>
+            </div>
+          </div>
 
-          <h2>小节标题一</h2>
-          <p>写你的核心内容。</p>
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="../index.html#about">About</a></li>
+              <li class="menu-item"><a href="../index.html#projects">Projects</a></li>
+              <li class="menu-item"><a href="../index.html#blog">Archives</a></li>
+              <li class="menu-item"><a href="../editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
 
-          <h2>小节标题二</h2>
-          <ul>
-            <li>要点 1</li>
-            <li>要点 2</li>
-            <li>要点 3</li>
-          </ul>
+        <aside class="sidebar" aria-label="Site overview">
+          <div class="sidebar-inner">
+            <div class="site-author">
+              <p class="site-author-name">Alex</p>
+              <p class="site-description">JavaBoy 转行引擎开发中</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="main-inner page posts-expand">
+        <article class="post-block">
+          <header class="post-header">
+            <h1 class="post-title">这里填写你的标题</h1>
+            <div class="post-meta-container">模板 · 填写分类和日期</div>
+          </header>
+
+          <div class="post-body article-content">
+            <p>第一段正文：说明这篇文章为什么写、主要要讲什么。</p>
+
+            <h2>小节标题一</h2>
+            <p>写你的核心内容。</p>
+
+            <h2>小节标题二</h2>
+            <ul>
+              <li>要点 1</li>
+              <li>要点 2</li>
+              <li>要点 3</li>
+            </ul>
+          </div>
         </article>
+      </div>
+    </main>
 
-        <footer class="footer">
-          <small>© <span id="year"></span> Alex</small>
-        </footer>
-      </main>
-    </div>
-    <script src="../script.js"></script>
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span><a href="../index.html#blog">Back to archive</a></span>
+      </div>
+    </footer>
+
+    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260521a"></script>
   </body>
 </html>

@@ -3,61 +3,127 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alex Emaire</title>
+    <meta name="theme-color" content="#222222" />
+    <title>Alex Emaire's Blog</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="site-shell">
-      <aside class="sidebar">
-        <p class="site-name">Alex</p>
-        <nav class="sidebar-nav" aria-label="Sidebar">
-          <a class="sidebar-link is-active" href="#about" data-panel-link="about">1. 自我简介</a>
-          <a class="sidebar-link" href="#projects" data-panel-link="projects">2. 个人项目</a>
-          <a class="sidebar-link" href="#blog" data-panel-link="blog">3. blog</a>
-        </nav>
-      </aside>
+    <div class="headband"></div>
 
-      <main class="content">
-        <section id="about" class="section panel" data-panel="about">
-          <h1>关于我</h1>
-          <p>你好，我是 Alex。这个地方记录我的技术学习、项目实践和一些碎碎念。</p>
-          <p>JavaBoy转行引擎开发中...</p>
-        </section>
-
-        <section id="projects" class="section panel" data-panel="projects" hidden>
-          <h2>个人项目</h2>
-          <ul class="project-list">
-            <li class="project-item">
-              <a class="item-title" href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">SmartLabeling</a>
-              <p class="meta">A data labeling tool</p>
-              <p>A data labeling tool with AI from Segment Anything and other models.</p>
-            </li>
-            <li class="project-item">
-              <a class="item-title" href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">Yomii - 日语学习助手</a>
-              <p class="meta">Learn Japanese naturally</p>
-              <p>一个现代化的日语词汇学习应用，集词汇查询、背诵、测试于一体。</p>
-            </li>
-          </ul>
-        </section>
-
-        <section id="blog" class="section panel" data-panel="blog" hidden>
-          <h2>blog</h2>
-          <div id="blog-home">
-            <div class="blog-toolbar">
-              <a class="editor-btn" href="./editor.html">编写 / 保存文章</a>
+    <main class="main">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="./index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">个人归档站</p>
             </div>
+          </div>
 
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="#about">About</a></li>
+              <li class="menu-item"><a href="#projects">Projects</a></li>
+              <li class="menu-item"><a href="#blog">Archives</a></li>
+              <li class="menu-item"><a href="./editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <aside class="sidebar" aria-label="Site overview">
+          <div class="sidebar-inner sidebar-overview-active">
+            <div class="site-overview-wrap sidebar-panel">
+              <div class="site-author">
+                <p class="site-author-name">Alex</p>
+                <p class="site-description">JavaBoy 转行引擎开发中</p>
+              </div>
+
+              <nav class="site-state" aria-label="Site stats">
+                <a class="site-state-item" href="#blog">
+                  <span class="site-state-item-count" id="post-count">0</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+                <a class="site-state-item" href="#projects">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">projects</span>
+                </a>
+              </nav>
+
+              <div class="links-of-author">
+                <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">GitHub</a>
+                <a href="./editor.html">Write</a>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="main-inner page posts-expand">
+        <article class="post-block">
+          <header class="post-header">
+            <h1 class="post-title">Alex Emaire's blog</h1>
+            <div class="post-meta-container">personal site · notes · projects</div>
+          </header>
+
+          <div class="post-body">
+            <h1 id="welcome">欢迎来到我的个人博客</h1>
+            <p>
+              这里记录我的技术学习、项目实践和一些碎碎念。现在的方向是从 JavaBoy 慢慢转向引擎开发，
+              也会把折腾工具、写代码、看动画之后留下来的想法放在这里。
+            </p>
+
+            <h2 id="about">关于我</h2>
+            <p>
+              我喜欢把正在学习的东西整理成可回看的材料。这个站点会更像一个长期归档：不追求精装修，
+              但希望每一篇都能留下当时真正关心的问题。
+            </p>
+
+            <h2 id="projects">个人项目</h2>
+            <ul class="project-list">
+              <li>
+                <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">SmartLabeling</a>
+                <br />
+                A data labeling tool with AI from Segment Anything and other models.
+              </li>
+              <li>
+                <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">Yomii - 日语学习助手</a>
+                <br />
+                一个现代化的日语词汇学习应用，集词汇查询、背诵、测试于一体。
+              </li>
+            </ul>
+
+            <h2 id="blog">近期更新</h2>
+            <div class="blog-toolbar">
+              <a class="btn" href="./editor.html">编写 / 保存文章</a>
+            </div>
             <p id="blog-auto-status" class="meta" hidden></p>
             <ul id="blog-auto-list" class="blog-list"></ul>
-          </div>
-        </section>
 
-        <footer class="footer">
-          <small>© <span id="year"></span> Alex</small>
-        </footer>
-      </main>
-    </div>
+            <h2 id="contact">联系我</h2>
+            <blockquote>
+              <p>这里是个记录旅程的地方，乐意与同行的你聊聊。</p>
+            </blockquote>
+            <p>感谢你的来访。</p>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span>Built as a small archive</span>
+      </div>
+    </footer>
+
+    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
+
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-    <script src="./script.js?v=20260428k"></script>
+    <script src="./script.js?v=20260521a"></script>
   </body>
 </html>

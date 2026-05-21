@@ -3,24 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#222222" />
     <title>发布文章 | Alex</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="editor-page-shell">
-      <div id="blog-editor-mode" class="blog-editor-mode">
-        <aside class="editor-pane editor-pane-left">
-          <p class="editor-pane-title">笔记</p>
-          <ul class="editor-note-list">
-            <li class="editor-note-item is-active">Untitled.md</li>
-          </ul>
-        </aside>
+    <div class="headband"></div>
 
-        <section class="editor-pane">
-          <div class="editor-pane-head">
-            <input id="md-title-input" class="md-title-input" type="text" placeholder="输入文章标题..." />
+    <main class="main editor-layout">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="./index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">Markdown editor</p>
+            </div>
           </div>
-          <textarea id="md-input" class="md-input" spellcheck="false"># 新文章草稿
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="./index.html#about">About</a></li>
+              <li class="menu-item"><a href="./index.html#projects">Projects</a></li>
+              <li class="menu-item"><a href="./index.html#blog">Archives</a></li>
+              <li class="menu-item"><a href="./editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
+      </div>
+
+      <div class="editor-main">
+        <div class="editor-page-shell">
+          <h1 class="editor-page-title">发布文章</h1>
+
+          <div id="blog-editor-mode" class="blog-editor-mode">
+            <aside class="editor-pane editor-pane-left">
+              <p class="editor-pane-title">笔记</p>
+              <ul class="editor-note-list">
+                <li class="editor-note-item is-active">Untitled.md</li>
+              </ul>
+            </aside>
+
+            <section class="editor-pane">
+              <div class="editor-pane-head">
+                <input id="md-title-input" class="md-title-input" type="text" placeholder="输入文章标题..." />
+              </div>
+              <textarea id="md-input" class="md-input" spellcheck="false"># 新文章草稿
 
 今天写点什么？
 
@@ -32,22 +63,32 @@
 console.log("Hello Markdown");
 ```
 </textarea>
-        </section>
+            </section>
 
-        <section class="editor-pane">
-          <p class="editor-pane-title">预览</p>
-          <div id="md-preview" class="md-preview" aria-live="polite"></div>
-        </section>
-      </div>
+            <section class="editor-pane">
+              <p class="editor-pane-title">预览</p>
+              <div id="md-preview" class="md-preview" aria-live="polite"></div>
+            </section>
+          </div>
 
-      <div class="editor-actions">
-        <button id="save-local-btn" class="editor-btn" type="button">保存到本地</button>
-        <a id="cancel-editor-btn" class="editor-btn secondary" href="./index.html#blog">返回 blog</a>
+          <div class="editor-actions">
+            <button id="save-local-btn" class="editor-btn" type="button">保存到本地</button>
+            <a id="cancel-editor-btn" class="editor-btn secondary" href="./index.html#blog">返回 blog</a>
+          </div>
+          <p id="save-status" class="publish-status" role="status" aria-live="polite"></p>
+        </div>
       </div>
-      <p id="save-status" class="publish-status" role="status" aria-live="polite"></p>
     </main>
 
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span>Markdown editor preserved</span>
+      </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-    <script src="./script.js?v=20260428k"></script>
+    <script src="./script.js?v=20260521a"></script>
   </body>
 </html>

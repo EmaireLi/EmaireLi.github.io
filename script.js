@@ -118,24 +118,65 @@ function renderPostHtml({ title, date, markdownHtml }) {
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
-    <div class="site-shell">
-      <aside class="sidebar">
-        <p class="site-name"><a href="../index.html">Alex</a></p>
-        <nav class="sidebar-nav" aria-label="Sidebar">
-          <a href="../index.html#about">1. 自我简介</a>
-          <a href="../index.html#projects">2. 个人项目</a>
-          <a href="../index.html#blog">3. blog</a>
-        </nav>
-      </aside>
-      <main class="content">
-        <article class="section article-content">
-          <p class="meta">${date}</p>
-          <h1 class="article-title">${safeTitle}</h1>
-          ${markdownHtml}
+    <div class="headband"></div>
+    <main class="main">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="../index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">个人归档站</p>
+            </div>
+          </div>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="../index.html#about">About</a></li>
+              <li class="menu-item"><a href="../index.html#projects">Projects</a></li>
+              <li class="menu-item"><a href="../index.html#blog">Archives</a></li>
+              <li class="menu-item"><a href="../editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <aside class="sidebar" aria-label="Site overview">
+          <div class="sidebar-inner">
+            <div class="site-author">
+              <p class="site-author-name">Alex</p>
+              <p class="site-description">JavaBoy 转行引擎开发中</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="main-inner page posts-expand">
+        <article class="post-block">
+          <header class="post-header">
+            <h1 class="post-title">${safeTitle}</h1>
+            <div class="post-meta-container">${date}</div>
+          </header>
+
+          <div class="post-body article-content">
+            ${markdownHtml}
+          </div>
         </article>
-      </main>
-    </div>
-    <script src="../script.js?v=20260428k"></script>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span><a href="../index.html#blog">Back to archive</a></span>
+      </div>
+    </footer>
+
+    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260521a"></script>
   </body>
 </html>`;
 }
@@ -153,6 +194,10 @@ async function initBlogAutoList() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     const posts = Array.isArray(data) ? data : Array.isArray(data.posts) ? data.posts : [];
+    const postCountEl = document.getElementById("post-count");
+    if (postCountEl) {
+      postCountEl.textContent = String(posts.length);
+    }
 
     listEl.innerHTML = "";
     posts.forEach((post) => {
@@ -217,6 +262,23 @@ function initEditorPage() {
   });
 }
 
+function initBackToTop() {
+  const link = document.querySelector(".back-to-top");
+  if (!link) return;
+
+  const sync = () => {
+    link.classList.toggle("is-visible", window.scrollY > 240);
+  };
+
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  window.addEventListener("scroll", sync, { passive: true });
+  sync();
+}
+
 decodeEscapedSpanTagsInDocument();
 initBlogAutoList();
 initEditorPage();
+initBackToTop();
