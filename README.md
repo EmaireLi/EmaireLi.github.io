@@ -17,6 +17,8 @@
 
 当前浏览器安全策略不允许 Codex 直接自动读取 `xiaohongshu.com` 页面。可以把自己的笔记内容复制到本地 JSON，再导入到 `posts/`。
 
+### 手动填写 JSON
+
 1. 复制 `imports/xhs-notes.example.json` 为 `imports/xhs-notes.json`。
 2. 按示例填写笔记标题、日期、原文链接、正文、标签和图片链接。
 3. 运行：
@@ -26,6 +28,17 @@
    ```
 
 脚本会生成 `posts/*.html`，并自动更新 `posts/posts.json`。
+
+### 从小红书页面导出 JSON
+
+1. 打开小红书主页或某篇笔记详情页。
+2. 打开浏览器开发者工具 Console。
+3. 复制 `scripts/xhs-export-console.js` 的全部内容粘贴运行。
+4. 页面右下角会出现导出面板：
+   - 在主页点击“收集当前页可见笔记链接”。
+   - 逐篇打开笔记后点击“收集当前笔记详情”。
+   - 完成后点击“下载 xhs-notes.json”。
+5. 把下载的 `xhs-notes.json` 放到 `imports/xhs-notes.json`，再运行导入命令。
 
 ## 部署步骤
 
