@@ -1,0 +1,10 @@
+[
+  {
+    "title": "这里填写小红书笔记标题",
+    "date": "2026-05-27",
+    "url": "https://www.xiaohongshu.com/explore/...",
+    "content": "这里粘贴笔记正文。\n\n空一行会生成新的段落。",
+    "tags": ["生活", "学习"],
+    "images": []
+  }
+]

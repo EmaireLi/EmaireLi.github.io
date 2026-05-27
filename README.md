@@ -13,6 +13,20 @@
 3. 把下载的 `.html` 文件放入项目 `posts/` 目录。
 4. `git add . && git commit -m "add new post" && git push`，GitHub Pages 部署流程会自动更新 `posts/posts.json` 并显示到 blog 列表。
 
+## 导入小红书笔记
+
+当前浏览器安全策略不允许 Codex 直接自动读取 `xiaohongshu.com` 页面。可以把自己的笔记内容复制到本地 JSON，再导入到 `posts/`。
+
+1. 复制 `imports/xhs-notes.example.json` 为 `imports/xhs-notes.json`。
+2. 按示例填写笔记标题、日期、原文链接、正文、标签和图片链接。
+3. 运行：
+
+   ```bash
+   node scripts/import-xhs-notes.js imports/xhs-notes.json
+   ```
+
+脚本会生成 `posts/*.html`，并自动更新 `posts/posts.json`。
+
 ## 部署步骤
 
 1. 在 GitHub 新建仓库（例如：`my-site`）。
