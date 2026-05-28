@@ -32,6 +32,7 @@ if (panelLinks.length > 0 && panels.length > 0) {
 }
 
 const md = typeof window.markdownit === "function" ? window.markdownit({ html: true, linkify: true, breaks: true }) : null;
+const postsCache = new Map();
 
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -107,6 +108,21 @@ function downloadTextFile(filename, content, type) {
   URL.revokeObjectURL(url);
 }
 
+async function fetchPosts(src = "./posts/posts.json") {
+  if (!postsCache.has(src)) {
+    postsCache.set(
+      src,
+      fetch(src, { cache: "no-store" })
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.json();
+        })
+        .then((data) => (Array.isArray(data) ? data : Array.isArray(data.posts) ? data.posts : []))
+    );
+  }
+  return postsCache.get(src);
+}
+
 function renderPostHtml({ title, date, markdownHtml }) {
   const safeTitle = escapeHtml(title);
   return `<!doctype html>
@@ -151,6 +167,16 @@ function renderPostHtml({ title, date, markdownHtml }) {
             </div>
           </div>
         </aside>
+
+        <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+          <label class="site-search-label" for="site-search-input">Search</label>
+          <div class="site-search-control">
+            <span class="site-search-icon" aria-hidden="true"></span>
+            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
+          </div>
+          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
+          <div class="site-search-results" data-search-results role="list"></div>
+        </section>
       </div>
 
       <div class="main-inner page posts-expand">
@@ -176,7 +202,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
     </footer>
 
     <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
-    <script src="../script.js?v=20260521a"></script>
+    <script src="../script.js?v=20260528b"></script>
   </body>
 </html>`;
 }
@@ -190,10 +216,7 @@ async function initBlogAutoList() {
   statusEl.textContent = "";
 
   try {
-    const res = await fetch("./posts/posts.json", { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    const posts = Array.isArray(data) ? data : Array.isArray(data.posts) ? data.posts : [];
+    const posts = await fetchPosts("./posts/posts.json");
     const postCountEl = document.getElementById("post-count");
     if (postCountEl) {
       postCountEl.textContent = String(posts.length);
@@ -214,6 +237,79 @@ async function initBlogAutoList() {
     statusEl.hidden = false;
     statusEl.textContent = `文章列表加载失败：${error.message}`;
   }
+}
+
+function normalizeSearchText(value) {
+  return String(value || "").toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function makeSearchExcerpt(post, query) {
+  const excerpt = String(post.excerpt || "");
+  const searchText = String(post.searchText || excerpt || post.title || "");
+  const normalized = normalizeSearchText(searchText);
+  const normalizedQuery = normalizeSearchText(query);
+  const index = normalized.indexOf(normalizedQuery);
+  if (index < 0) return excerpt || searchText.slice(0, 96);
+  const start = Math.max(0, index - 28);
+  const end = Math.min(searchText.length, index + normalizedQuery.length + 72);
+  return `${start > 0 ? "..." : ""}${searchText.slice(start, end)}${end < searchText.length ? "..." : ""}`;
+}
+
+function renderSearchResults(resultsEl, posts, query, basePath) {
+  const normalizedQuery = normalizeSearchText(query);
+  const matches = posts
+    .filter((post) => normalizeSearchText([post.title, post.date, post.excerpt, post.searchText].filter(Boolean).join(" ")).includes(normalizedQuery))
+    .slice(0, 8);
+
+  resultsEl.innerHTML = matches
+    .map((post) => {
+      const title = escapeHtml(post.title || post.file || "Untitled");
+      const date = escapeHtml(post.date || "");
+      const excerpt = escapeHtml(makeSearchExcerpt(post, query));
+      const href = `${basePath}${encodeURI(post.file)}`;
+      return `<a class="site-search-result" href="${href}" role="listitem">
+        <span class="site-search-result-title">${title}</span>
+        <span class="site-search-result-meta">${date}</span>
+        <span class="site-search-result-excerpt">${excerpt}</span>
+      </a>`;
+    })
+    .join("");
+
+  return matches.length;
+}
+
+function initSiteSearch() {
+  const search = document.querySelector("[data-site-search]");
+  if (!search) return;
+
+  const input = search.querySelector(".site-search-input");
+  const status = search.querySelector("[data-search-status]");
+  const results = search.querySelector("[data-search-results]");
+  const postsSrc = search.dataset.postsSrc || "./posts/posts.json";
+  const postBase = search.dataset.postBase || "./posts/";
+  if (!input || !status || !results) return;
+
+  let posts = [];
+  fetchPosts(postsSrc)
+    .then((items) => {
+      posts = items;
+      status.textContent = `可搜索 ${items.length} 篇文章`;
+    })
+    .catch((error) => {
+      status.textContent = `搜索索引加载失败：${error.message}`;
+    });
+
+  input.addEventListener("input", () => {
+    const query = input.value.trim();
+    results.innerHTML = "";
+    if (!query) {
+      status.textContent = posts.length ? `可搜索 ${posts.length} 篇文章` : "输入关键词搜索全站文章";
+      return;
+    }
+
+    const count = renderSearchResults(results, posts, query, postBase);
+    status.textContent = count ? `找到 ${count} 条结果` : "没有匹配结果";
+  });
 }
 
 function initEditorPage() {
@@ -253,7 +349,7 @@ function initEditorPage() {
     downloadTextFile(`${baseName}.html`, html, "text/html;charset=utf-8");
 
     if (statusEl) {
-      statusEl.textContent = `已保存 ${baseName}.html。把它放到 posts/ 后 push，部署流程会自动更新文章列表。`;
+      statusEl.textContent = `已保存 ${baseName}.html。`;
     }
   });
 
@@ -325,5 +421,6 @@ function initXhsGalleries() {
 decodeEscapedSpanTagsInDocument();
 initBlogAutoList();
 initEditorPage();
+initSiteSearch();
 initXhsGalleries();
 initBackToTop();

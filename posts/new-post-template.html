@@ -42,6 +42,16 @@
             </div>
           </div>
         </aside>
+
+        <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+          <label class="site-search-label" for="site-search-input">Search</label>
+          <div class="site-search-control">
+            <span class="site-search-icon" aria-hidden="true"></span>
+            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
+          </div>
+          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
+          <div class="site-search-results" data-search-results role="list"></div>
+        </section>
       </div>
 
       <div class="main-inner page posts-expand">
@@ -77,6 +87,6 @@
     </footer>
 
     <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
-    <script src="../script.js?v=20260528a"></script>
+    <script src="../script.js?v=20260528b"></script>
   </body>
 </html>

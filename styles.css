@@ -316,6 +316,117 @@ iframe {
   background: var(--body-bg-color);
 }
 
+.site-search-card {
+  margin-top: 12px;
+  padding: 14px 12px;
+  background: var(--content-bg-color);
+  box-shadow: var(--shadow);
+}
+
+.site-search-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-strong-color);
+  font-size: 0.875em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.site-search-control {
+  position: relative;
+}
+
+.site-search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--muted-color);
+  border-radius: 50%;
+  transform: translateY(-58%);
+}
+
+.site-search-icon::after {
+  position: absolute;
+  right: -6px;
+  bottom: -5px;
+  width: 7px;
+  height: 2px;
+  background: var(--muted-color);
+  content: "";
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.site-search-input {
+  width: 100%;
+  height: 34px;
+  border: 1px solid var(--line-color);
+  border-radius: 0;
+  background: #fff;
+  color: var(--text-color);
+  font: inherit;
+  font-size: 0.875em;
+  line-height: 1.4;
+  outline: none;
+  padding: 6px 8px 6px 32px;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.site-search-input:focus {
+  border-color: var(--theme-color);
+  box-shadow: inset 0 0 0 1px var(--theme-color);
+}
+
+.site-search-status {
+  margin: 8px 0 0;
+  color: var(--muted-color);
+  font-size: 0.75em;
+  line-height: 1.5;
+}
+
+.site-search-results {
+  display: grid;
+  gap: 8px;
+  max-height: 320px;
+  margin-top: 10px;
+  overflow-y: auto;
+}
+
+.site-search-result {
+  display: block;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--soft-line-color);
+}
+
+.site-search-result:last-child {
+  border-bottom: 0;
+}
+
+.site-search-result-title {
+  display: block;
+  color: var(--text-strong-color);
+  font-size: 0.875em;
+  line-height: 1.45;
+}
+
+.site-search-result-meta {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted-color);
+  font-size: 0.75em;
+  line-height: 1.4;
+}
+
+.site-search-result-excerpt {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-color);
+  font-size: 0.75em;
+  line-height: 1.5;
+}
+
 .main-inner {
   width: calc(100% - 252px);
   padding-left: 12px;
@@ -803,6 +914,10 @@ iframe {
 
   .sidebar-inner {
     max-height: none;
+  }
+
+  .site-search-card {
+    margin: 10px;
   }
 
   .site-nav .menu {
