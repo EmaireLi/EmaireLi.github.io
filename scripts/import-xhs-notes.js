@@ -75,6 +75,11 @@ function extensionFromContentType(contentType) {
 }
 
 function downloadImage(url, outputBase) {
+  const existingPath = [".webp", ".jpg", ".png", ".gif"].map((ext) => `${outputBase}${ext}`).find((file) => fs.existsSync(file));
+  if (existingPath) {
+    return path.relative(postsDir, existingPath).replace(/\\/g, "/");
+  }
+
   const tmpPath = `${outputBase}.download`;
   const result = childProcess.spawnSync(
     "curl",
@@ -243,13 +248,24 @@ function paragraphize(text) {
 
 function renderImages(images) {
   if (!Array.isArray(images) || images.length === 0) return "";
-  return images
+  const slides = images
     .filter(Boolean)
-    .map((src) => {
+    .map((src, index) => {
       const safeSrc = escapeHtml(src);
-      return `<figure class="xhs-image"><img src="${safeSrc}" alt="" loading="lazy" /></figure>`;
+      return `<figure class="xhs-image"><img src="${safeSrc}" alt="小红书图片 ${index + 1}" loading="lazy" /></figure>`;
     })
     .join("\n");
+  if (!slides) return "";
+
+  const count = images.filter(Boolean).length;
+  return `<div class="xhs-gallery" data-xhs-gallery data-count="${count}">
+  <button class="xhs-gallery-button xhs-gallery-prev" type="button" aria-label="上一张图片">‹</button>
+  <div class="xhs-gallery-track" tabindex="0">
+${slides}
+  </div>
+  <button class="xhs-gallery-button xhs-gallery-next" type="button" aria-label="下一张图片">›</button>
+  <p class="xhs-gallery-count" aria-live="polite">1 / ${count}</p>
+</div>`;
 }
 
 function renderTags(tags) {
@@ -345,7 +361,7 @@ function renderPostHtml(note, localImages = []) {
     </footer>
 
     <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
-    <script src="../script.js?v=20260521a"></script>
+    <script src="../script.js?v=20260528a"></script>
   </body>
 </html>`;
 }
@@ -382,7 +398,7 @@ function run() {
     const date = normalizeDate(extractEditedDate(note.content) || note.date || note.createdAt || note.publishedAt);
     const slug = slugify(note.slug || note.title || `xhs-note-${index + 1}`);
     const baseName = `${date}-xhs-${slug}`;
-    const file = uniqueFileName(baseName);
+    const file = `${baseName}.html`;
     const fileBaseName = file.replace(/\.html$/i, "");
     const localImages = syncImages(note, fileBaseName);
     fs.writeFileSync(path.join(postsDir, file), renderPostHtml(note, localImages), "utf8");

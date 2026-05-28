@@ -278,7 +278,52 @@ function initBackToTop() {
   sync();
 }
 
+function initXhsGalleries() {
+  const syncGallery = (gallery) => {
+    const track = gallery.querySelector(".xhs-gallery-track");
+    const slides = Array.from(gallery.querySelectorAll(".xhs-image"));
+    const prev = gallery.querySelector(".xhs-gallery-prev");
+    const next = gallery.querySelector(".xhs-gallery-next");
+    const count = gallery.querySelector(".xhs-gallery-count");
+    if (!track || slides.length === 0) return 0;
+
+    const index = Math.min(slides.length - 1, Math.max(0, Math.round(track.scrollLeft / Math.max(1, track.clientWidth))));
+    gallery.dataset.current = String(index + 1);
+    if (count) count.textContent = `${index + 1} / ${slides.length}`;
+    if (prev) prev.disabled = index === 0;
+    if (next) next.disabled = index === slides.length - 1;
+    return index;
+  };
+
+  const moveGallery = (gallery, direction) => {
+    const track = gallery.querySelector(".xhs-gallery-track");
+    if (!track) return;
+    track.scrollBy({ left: direction * track.clientWidth, behavior: "smooth" });
+  };
+
+  document.querySelectorAll("[data-xhs-gallery]").forEach((gallery) => {
+    const track = gallery.querySelector(".xhs-gallery-track");
+    if (!track) return;
+    gallery.dataset.ready = "true";
+    track.addEventListener("scroll", () => syncGallery(gallery), { passive: true });
+    window.addEventListener("resize", () => syncGallery(gallery));
+    syncGallery(gallery);
+  });
+
+  if (!window.xhsGalleryClickBound) {
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest(".xhs-gallery-button");
+      if (!button) return;
+      const gallery = button.closest("[data-xhs-gallery]");
+      if (!gallery) return;
+      moveGallery(gallery, button.classList.contains("xhs-gallery-prev") ? -1 : 1);
+    });
+    window.xhsGalleryClickBound = true;
+  }
+}
+
 decodeEscapedSpanTagsInDocument();
 initBlogAutoList();
 initEditorPage();
+initXhsGalleries();
 initBackToTop();
