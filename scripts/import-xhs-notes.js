@@ -5,6 +5,7 @@ const childProcess = require("node:child_process");
 const repoRoot = process.cwd();
 const inputPath = path.resolve(repoRoot, process.argv[2] || "imports/xhs-notes.json");
 const postsDir = path.join(repoRoot, "posts");
+const assetsDir = path.join(repoRoot, "assets", "xhs");
 
 function escapeHtml(value) {
   return String(value || "")
@@ -24,6 +25,106 @@ function slugify(value) {
       .replace(/-+/g, "-")
       .replace(/^-|-$/g, "") || "xhs-note"
   );
+}
+
+function noteImageCount(note) {
+  const title = String(note.title || "").trim();
+  const lines = String(note.content || note.body || note.text || "")
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const titleIndex = lines.findIndex((line) => line === title);
+  const searchLines = titleIndex >= 0 ? lines.slice(0, titleIndex) : lines;
+  const pageLine = searchLines.find((line) => /^1\/\d+$/.test(line));
+  const match = pageLine && pageLine.match(/^1\/(\d+)$/);
+  return match ? Number(match[1]) : 0;
+}
+
+function imageIdentity(src) {
+  const text = String(src || "");
+  const match = text.match(/\/([^/!]+)!/);
+  return match ? match[1] : text;
+}
+
+function selectNoteImages(note) {
+  const count = noteImageCount(note);
+  if (!count || !Array.isArray(note.images)) return [];
+
+  const seen = new Set();
+  const candidates = [];
+  for (const src of note.images) {
+    const text = String(src || "");
+    if (!text.includes("sns-webpic")) continue;
+    if (text.includes("/comment/")) continue;
+    if (text.includes("sns-avatar") || text.includes("/avatar/")) continue;
+    const key = imageIdentity(text);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    candidates.push(text);
+  }
+
+  return candidates.slice(-count);
+}
+
+function extensionFromContentType(contentType) {
+  if (/png/i.test(contentType)) return ".png";
+  if (/jpe?g/i.test(contentType)) return ".jpg";
+  if (/gif/i.test(contentType)) return ".gif";
+  return ".webp";
+}
+
+function downloadImage(url, outputBase) {
+  const tmpPath = `${outputBase}.download`;
+  const result = childProcess.spawnSync(
+    "curl",
+    [
+      "-L",
+      "--fail",
+      "--silent",
+      "--show-error",
+      "--max-time",
+      "30",
+      "-A",
+      "Mozilla/5.0",
+      "-e",
+      "https://www.xiaohongshu.com/",
+      "-D",
+      `${outputBase}.headers`,
+      "-o",
+      tmpPath,
+      url,
+    ],
+    { encoding: "utf8" }
+  );
+
+  if (result.status !== 0) {
+    if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
+    if (fs.existsSync(`${outputBase}.headers`)) fs.unlinkSync(`${outputBase}.headers`);
+    throw new Error(`Failed to download image: ${url}\n${result.stderr || result.stdout || ""}`.trim());
+  }
+
+  const headers = fs.existsSync(`${outputBase}.headers`) ? fs.readFileSync(`${outputBase}.headers`, "utf8") : "";
+  const contentType = (headers.match(/content-type:\s*([^\r\n]+)/i) || [])[1] || "";
+  const finalPath = `${outputBase}${extensionFromContentType(contentType)}`;
+  fs.renameSync(tmpPath, finalPath);
+  if (fs.existsSync(`${outputBase}.headers`)) fs.unlinkSync(`${outputBase}.headers`);
+  return path.relative(postsDir, finalPath).replace(/\\/g, "/");
+}
+
+function syncImages(note, baseName) {
+  const urls = selectNoteImages(note);
+  if (urls.length === 0) return [];
+
+  const noteAssetsDir = path.join(assetsDir, baseName);
+  fs.mkdirSync(noteAssetsDir, { recursive: true });
+
+  const localPaths = [];
+  urls.forEach((url, index) => {
+    const outputBase = path.join(noteAssetsDir, String(index + 1).padStart(2, "0"));
+    localPaths.push(downloadImage(url, outputBase));
+  });
+  return localPaths;
 }
 
 function normalizeDate(value) {
@@ -143,10 +244,7 @@ function paragraphize(text) {
 function renderImages(images) {
   if (!Array.isArray(images) || images.length === 0) return "";
   return images
-    .filter((src) => {
-      const text = String(src || "");
-      return text && !text.includes("sns-avatar") && !text.includes("avatar/");
-    })
+    .filter(Boolean)
     .map((src) => {
       const safeSrc = escapeHtml(src);
       return `<figure class="xhs-image"><img src="${safeSrc}" alt="" loading="lazy" /></figure>`;
@@ -163,7 +261,7 @@ function renderTags(tags) {
   return `<p class="xhs-tags">${items}</p>`;
 }
 
-function renderPostHtml(note) {
+function renderPostHtml(note, localImages = []) {
   const title = escapeHtml(note.title || "小红书笔记");
   const contentText = extractCleanContent(note);
   const date = normalizeDate(extractEditedDate(note.content) || note.date || note.createdAt || note.publishedAt);
@@ -172,7 +270,7 @@ function renderPostHtml(note) {
     ? `<p class="meta">小红书同步 · ${date} · <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">原文链接</a></p>`
     : `<p class="meta">小红书同步 · ${date}</p>`;
   const body = note.contentHtml || paragraphize(contentText);
-  const images = note.includeImages ? renderImages(note.images) : "";
+  const images = renderImages(localImages);
   const tags = renderTags(note.tags);
 
   return `<!doctype html>
@@ -283,8 +381,11 @@ function run() {
   const written = validNotes.map((note, index) => {
     const date = normalizeDate(extractEditedDate(note.content) || note.date || note.createdAt || note.publishedAt);
     const slug = slugify(note.slug || note.title || `xhs-note-${index + 1}`);
-    const file = uniqueFileName(`${date}-xhs-${slug}`);
-    fs.writeFileSync(path.join(postsDir, file), renderPostHtml(note), "utf8");
+    const baseName = `${date}-xhs-${slug}`;
+    const file = uniqueFileName(baseName);
+    const fileBaseName = file.replace(/\.html$/i, "");
+    const localImages = syncImages(note, fileBaseName);
+    fs.writeFileSync(path.join(postsDir, file), renderPostHtml(note, localImages), "utf8");
     return file;
   });
 
