@@ -343,6 +343,13 @@ function renderPostHtml(note, localImages = []) {
           <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
           <div class="site-search-results" data-search-results role="list"></div>
         </section>
+
+        <nav class="account-links-card" aria-label="Third-party accounts">
+          <a class="account-link account-link-bilibili" href="https://www.bilibili.com/" target="_blank" rel="noreferrer">Bilibili</a>
+          <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/" target="_blank" rel="noreferrer">小红书</a>
+          <a class="account-link account-link-github" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="account-link account-link-steam" href="https://store.steampowered.com/" target="_blank" rel="noreferrer">Steam</a>
+        </nav>
       </div>
 
       <div class="main-inner page posts-expand">

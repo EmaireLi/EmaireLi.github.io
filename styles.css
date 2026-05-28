@@ -434,6 +434,53 @@ iframe {
   padding: 0 2px;
 }
 
+.account-links-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 14px 12px;
+  background: var(--content-bg-color);
+  box-shadow: var(--shadow);
+}
+
+.account-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 12px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.8125em;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.account-link:hover,
+.account-link:focus-visible {
+  color: #fff;
+  opacity: 0.86;
+  transform: translateY(-1px);
+}
+
+.account-link-bilibili {
+  background: #2f95d8;
+}
+
+.account-link-xhs {
+  background: #d83d55;
+}
+
+.account-link-github {
+  background: #333;
+}
+
+.account-link-steam {
+  background: #1b2838;
+}
+
 .main-inner {
   width: calc(100% - 252px);
   padding-left: 12px;
@@ -924,6 +971,10 @@ iframe {
   }
 
   .site-search-card {
+    margin: 10px;
+  }
+
+  .account-links-card {
     margin: 10px;
   }
 
