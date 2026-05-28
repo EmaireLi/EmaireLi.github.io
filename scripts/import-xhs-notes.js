@@ -33,6 +33,103 @@ function normalizeDate(value) {
   return new Date().toISOString().slice(0, 10);
 }
 
+function normalizeDisplayDate(value) {
+  const text = String(value || "").trim();
+  const exact = text.match(/\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/);
+  if (exact) {
+    return exact[0]
+      .replace(/[/.]/g, "-")
+      .replace(/-(\d)(?=-|$)/g, "-0$1");
+  }
+
+  const short = text.match(/(\d{1,2})[-/.](\d{1,2})/);
+  if (short) {
+    const currentYear = new Date().getFullYear();
+    return `${currentYear}-${short[1].padStart(2, "0")}-${short[2].padStart(2, "0")}`;
+  }
+
+  return "";
+}
+
+function extractEditedDate(text) {
+  const line = String(text || "")
+    .split(/\r?\n/)
+    .find((item) => /^(编辑于|发布于)?\s*\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|^编辑于\s*\d{1,2}[-/.]\d{1,2}/.test(item.trim()));
+  return normalizeDisplayDate(line || "");
+}
+
+function isUiLine(line) {
+  return (
+    /^(点点|ai|RED|LIVE|直播|消息|我|更多|关于我们|活动)$/.test(line) ||
+    /^沪ICP备/.test(line) ||
+    /^©\s*2014-/.test(line) ||
+    /^行吟信息科技/.test(line) ||
+    /^地址：上海市/.test(line) ||
+    /^电话：/.test(line) ||
+    /^小红书号：/.test(line) ||
+    /^IP属地：/.test(line) ||
+    /^(粉丝|获赞与收藏|笔记|专辑・|文件・)/.test(line) ||
+    /^你还没有/.test(line) ||
+    /^共\s*\d+\s*条评论/.test(line) ||
+    /^(置顶评论|赞|回复|发送|取消|说点什么|这是一片荒地点击评论|- THE END -)$/.test(line) ||
+    /^\d+$/.test(line)
+  );
+}
+
+function extractCleanContent(note) {
+  const raw = String(note.content || note.body || note.text || "");
+  const title = String(note.title || "").trim();
+  let lines = raw
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !isUiLine(line));
+
+  const titleIndex = lines.findIndex((line) => line === title);
+  if (titleIndex >= 0) {
+    lines = lines.slice(titleIndex + 1);
+  }
+
+  while (lines[0] && (/^\d+\/\d+$/.test(lines[0]) || lines[0] === "河野华" || lines[0] === "作者")) {
+    lines.shift();
+  }
+
+  const stopIndex = lines.findIndex((line) => {
+    return (
+      /^编辑于/.test(line) ||
+      /^发布于/.test(line) ||
+      /^共\s*\d+\s*条评论/.test(line) ||
+      /^这是一片荒地/.test(line) ||
+      /^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(line)
+    );
+  });
+  if (stopIndex >= 0) {
+    lines = lines.slice(0, stopIndex);
+  }
+
+  lines = lines.filter((line) => line !== "河野华" && line !== "作者" && !isUiLine(line));
+  return lines.join("\n\n").trim();
+}
+
+function hasDetailPageSignal(note) {
+  const title = String(note.title || "").trim();
+  const lines = String(note.content || note.body || note.text || "")
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const titleIndex = lines.findIndex((line) => line === title);
+  if (titleIndex < 0) return false;
+
+  const beforeTitle = lines.slice(Math.max(0, titleIndex - 12), titleIndex);
+  const afterTitle = lines.slice(titleIndex + 1, titleIndex + 40);
+  return (
+    beforeTitle.some((line) => /^\d+\/\d+$/.test(line)) ||
+    afterTitle.some((line) => /^编辑于/.test(line) || /^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(line))
+  );
+}
+
 function paragraphize(text) {
   return String(text || "")
     .trim()
@@ -46,7 +143,10 @@ function paragraphize(text) {
 function renderImages(images) {
   if (!Array.isArray(images) || images.length === 0) return "";
   return images
-    .filter(Boolean)
+    .filter((src) => {
+      const text = String(src || "");
+      return text && !text.includes("sns-avatar") && !text.includes("avatar/");
+    })
     .map((src) => {
       const safeSrc = escapeHtml(src);
       return `<figure class="xhs-image"><img src="${safeSrc}" alt="" loading="lazy" /></figure>`;
@@ -65,13 +165,14 @@ function renderTags(tags) {
 
 function renderPostHtml(note) {
   const title = escapeHtml(note.title || "小红书笔记");
-  const date = normalizeDate(note.date || note.createdAt || note.publishedAt);
+  const contentText = extractCleanContent(note);
+  const date = normalizeDate(extractEditedDate(note.content) || note.date || note.createdAt || note.publishedAt);
   const sourceUrl = note.url || note.sourceUrl || "";
   const source = sourceUrl
     ? `<p class="meta">小红书同步 · ${date} · <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">原文链接</a></p>`
     : `<p class="meta">小红书同步 · ${date}</p>`;
-  const body = note.contentHtml || paragraphize(note.content || note.body || note.text || "");
-  const images = renderImages(note.images);
+  const body = note.contentHtml || paragraphize(contentText);
+  const images = note.includeImages ? renderImages(note.images) : "";
   const tags = renderTags(note.tags);
 
   return `<!doctype html>
@@ -177,9 +278,10 @@ function readNotes() {
 function run() {
   fs.mkdirSync(postsDir, { recursive: true });
   const notes = readNotes();
+  const validNotes = notes.filter((note) => hasDetailPageSignal(note) && extractCleanContent(note).length >= 20);
 
-  const written = notes.map((note, index) => {
-    const date = normalizeDate(note.date || note.createdAt || note.publishedAt);
+  const written = validNotes.map((note, index) => {
+    const date = normalizeDate(extractEditedDate(note.content) || note.date || note.createdAt || note.publishedAt);
     const slug = slugify(note.slug || note.title || `xhs-note-${index + 1}`);
     const file = uniqueFileName(`${date}-xhs-${slug}`);
     fs.writeFileSync(path.join(postsDir, file), renderPostHtml(note), "utf8");
@@ -191,7 +293,8 @@ function run() {
     stdio: "inherit",
   });
 
-  console.log(`Imported ${written.length} Xiaohongshu notes:`);
+  const skipped = notes.length - validNotes.length;
+  console.log(`Imported ${written.length} Xiaohongshu notes${skipped ? `, skipped ${skipped} notes without usable detail text` : ""}:`);
   written.forEach((file) => console.log(`- posts/${file}`));
 }
 
