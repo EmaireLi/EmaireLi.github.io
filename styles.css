@@ -481,6 +481,14 @@ iframe {
   background: #1b2838;
 }
 
+.account-link-bangumi {
+  background: #f09199;
+}
+
+.account-link-leetcode {
+  background: #f89f1b;
+}
+
 .main-inner {
   width: calc(100% - 252px);
   padding-left: 12px;
