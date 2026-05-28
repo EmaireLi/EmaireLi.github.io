@@ -427,6 +427,13 @@ iframe {
   line-height: 1.5;
 }
 
+.site-search-mark {
+  background: #fff1a8;
+  color: var(--text-strong-color);
+  font-weight: 700;
+  padding: 0 2px;
+}
+
 .main-inner {
   width: calc(100% - 252px);
   padding-left: 12px;

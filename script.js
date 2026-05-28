@@ -255,6 +255,20 @@ function makeSearchExcerpt(post, query) {
   return `${start > 0 ? "..." : ""}${searchText.slice(start, end)}${end < searchText.length ? "..." : ""}`;
 }
 
+function highlightSearchTerm(text, query) {
+  const safeText = escapeHtml(String(text || ""));
+  const safeQuery = escapeHtml(String(query || "").trim());
+  if (!safeQuery) return safeText;
+
+  const index = safeText.toLowerCase().indexOf(safeQuery.toLowerCase());
+  if (index < 0) return safeText;
+
+  const before = safeText.slice(0, index);
+  const match = safeText.slice(index, index + safeQuery.length);
+  const after = safeText.slice(index + safeQuery.length);
+  return `${before}<mark class="site-search-mark">${match}</mark>${after}`;
+}
+
 function renderSearchResults(resultsEl, posts, query, basePath) {
   const normalizedQuery = normalizeSearchText(query);
   const matches = posts
@@ -263,9 +277,9 @@ function renderSearchResults(resultsEl, posts, query, basePath) {
 
   resultsEl.innerHTML = matches
     .map((post) => {
-      const title = escapeHtml(post.title || post.file || "Untitled");
+      const title = highlightSearchTerm(post.title || post.file || "Untitled", query);
       const date = escapeHtml(post.date || "");
-      const excerpt = escapeHtml(makeSearchExcerpt(post, query));
+      const excerpt = highlightSearchTerm(makeSearchExcerpt(post, query), query);
       const href = `${basePath}${encodeURI(post.file)}`;
       return `<a class="site-search-result" href="${href}" role="listitem">
         <span class="site-search-result-title">${title}</span>
