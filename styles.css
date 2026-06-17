@@ -734,7 +734,7 @@ iframe {
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: transparent;
+  background: rgba(214, 216, 218, 0.86);
   color: #fff;
   cursor: pointer;
   font: inherit;
@@ -744,7 +744,7 @@ iframe {
   opacity: 0;
   pointer-events: none;
   transform: translateY(-50%) scale(0.92);
-  transition: opacity 180ms ease, transform 220ms var(--motion-enter);
+  transition: background-color 180ms ease, opacity 180ms ease, transform 220ms var(--motion-enter);
 }
 
 .xhs-gallery-button::before {
@@ -774,7 +774,7 @@ iframe {
 
 .xhs-gallery-button:hover,
 .xhs-gallery-button:focus-visible {
-  background: transparent;
+  background: rgba(190, 194, 198, 0.94);
 }
 
 .xhs-gallery-button:disabled {
@@ -864,6 +864,20 @@ iframe {
   font-size: 1.25em;
   font-weight: 700;
   line-height: 1.5;
+}
+
+.about {
+  max-width: 680px;
+}
+
+.about p {
+  margin: 0;
+  line-height: 1.75;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.about p + p {
+  margin-top: 10px;
 }
 
 .project-list,
