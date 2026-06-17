@@ -731,19 +731,37 @@ iframe {
   place-items: center;
   width: 56px;
   height: 56px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
   background: rgba(214, 216, 218, 0.86);
   color: #fff;
   cursor: pointer;
   font: inherit;
-  font-size: 42px;
   font-weight: 300;
-  line-height: 1;
+  font-size: 0;
+  line-height: 0;
   opacity: 0;
   pointer-events: none;
   transform: translateY(-50%) scale(0.92);
   transition: background-color 180ms ease, opacity 180ms ease, transform 220ms var(--motion-enter);
+}
+
+.xhs-gallery-button::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-top: 4px solid currentColor;
+  border-right: 4px solid currentColor;
+}
+
+.xhs-gallery-prev::before {
+  transform: translateY(-1px) rotate(-135deg);
+}
+
+.xhs-gallery-next::before {
+  transform: translateY(-1px) rotate(45deg);
 }
 
 .xhs-gallery:hover .xhs-gallery-button,
@@ -767,12 +785,10 @@ iframe {
 
 .xhs-gallery-prev {
   left: 18px;
-  padding-right: 4px;
 }
 
 .xhs-gallery-next {
   right: 18px;
-  padding-left: 4px;
 }
 
 .xhs-gallery-count {
@@ -1414,7 +1430,12 @@ iframe {
   .xhs-gallery-button {
     width: 48px;
     height: 48px;
-    font-size: 36px;
+  }
+
+  .xhs-gallery-button::before {
+    width: 10px;
+    height: 10px;
+    border-width: 3px 3px 0 0;
   }
 
   .blog-editor-mode {
