@@ -757,11 +757,11 @@ iframe {
 }
 
 .xhs-gallery-prev::before {
-  transform: translateY(-1px) rotate(-135deg);
+  transform: rotate(-135deg);
 }
 
 .xhs-gallery-next::before {
-  transform: translateY(-1px) rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .xhs-gallery:hover .xhs-gallery-button,
