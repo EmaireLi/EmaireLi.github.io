@@ -33,6 +33,7 @@ if (panelLinks.length > 0 && panels.length > 0) {
 
 const md = typeof window.markdownit === "function" ? window.markdownit({ html: true, linkify: true, breaks: true }) : null;
 const postsCache = new Map();
+let revealObserver = null;
 
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -242,10 +243,60 @@ async function initBlogAutoList() {
       `;
       listEl.appendChild(li);
     });
+    initRevealOnScroll();
   } catch (error) {
     statusEl.hidden = false;
     statusEl.textContent = `文章列表加载失败：${error.message}`;
+    initRevealOnScroll();
   }
+}
+
+function initRevealOnScroll() {
+  if (!document.body.classList.contains("home-page")) return;
+  if (revealObserver) {
+    revealObserver.disconnect();
+    revealObserver = null;
+  }
+
+  const targets = Array.from(
+    document.querySelectorAll(
+      ".home-page .post-body > h1, .home-page .post-body > h2, .home-page .project-list > li, .home-page .blog-list > .blog-item, .home-page blockquote"
+    )
+  );
+  if (targets.length === 0) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  targets.forEach((target, index) => {
+    target.dataset.reveal = "";
+    target.style.transitionDelay = reducedMotion ? "0ms" : `${Math.min(index * 35, 240)}ms`;
+  });
+
+  if (reducedMotion || !("IntersectionObserver" in window)) {
+    targets.forEach((target) => target.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px 28% 0px", threshold: 0.01 }
+  );
+  revealObserver = observer;
+
+  targets.forEach((target) => {
+    if (target.classList.contains("is-visible")) return;
+    const rect = target.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 1.15) {
+      target.classList.add("is-visible");
+      return;
+    }
+    observer.observe(target);
+  });
 }
 
 function normalizeSearchText(value) {
@@ -447,3 +498,4 @@ initEditorPage();
 initSiteSearch();
 initXhsGalleries();
 initBackToTop();
+initRevealOnScroll();
