@@ -3,24 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#222222" />
     <title>火在烧 —— 京吹3完结随笔 | Alex</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
-    <div class="site-shell">
-      <aside class="sidebar">
-        <p class="site-name"><a href="../index.html">Alex</a></p>
-        <nav class="sidebar-nav" aria-label="Sidebar">
-          <a href="../index.html#about">1. 自我简介</a>
-          <a href="../index.html#projects">2. 个人项目</a>
-          <a href="../index.html#blog">3. blog</a>
+    <div class="headband"></div>
+
+    <main class="main">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="../index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">个人归档站</p>
+            </div>
+          </div>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="../index.html#about">About</a></li>
+              <li class="menu-item"><a href="../index.html#projects">Projects</a></li>
+              <li class="menu-item"><a href="../index.html#blog">Archives</a></li>
+              <li class="menu-item"><a href="../editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <aside class="sidebar" aria-label="Site overview">
+          <div class="sidebar-inner">
+            <div class="site-author">
+              <p class="site-author-name">Alex</p>
+              <p class="site-description">JavaBoy 转行引擎开发中</p>
+            </div>
+          </div>
+        </aside>
+
+        <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+          <label class="site-search-label" for="site-search-input">Search</label>
+          <div class="site-search-control">
+            <span class="site-search-icon" aria-hidden="true"></span>
+            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
+          </div>
+          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
+          <div class="site-search-results" data-search-results role="list"></div>
+        </section>
+
+        <nav class="account-links-card" aria-label="Third-party accounts">
+          <a class="account-link account-link-bilibili" href="https://www.bilibili.com/" target="_blank" rel="noreferrer">Bilibili</a>
+          <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/" target="_blank" rel="noreferrer">小红书</a>
+          <a class="account-link account-link-github" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="account-link account-link-steam" href="https://store.steampowered.com/" target="_blank" rel="noreferrer">Steam</a>
+          <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
+          <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
         </nav>
-      </aside>
-      <main class="content">
-        <article class="section article-content">
-          <p class="meta">2026-04-28</p>
-          <h1 class="article-title">火在烧 —— 京吹3完结随笔</h1>
-          <p><em>从京吹Ep12播出到周日完结，不是忙于考试就是被琐事拖累。但一直在思考这一季京吹的问题，Ep12播出后的一天还没忍住写了点简要看法，还是抽空断断续续总结一下看法。</em></p>
+      </div>
+
+      <div class="main-inner page posts-expand">
+        <article class="post-block">
+          <header class="post-header">
+            <h1 class="post-title">火在烧 —— 京吹3完结随笔</h1>
+            <div class="post-meta-container">2026-04-28</div>
+          </header>
+
+          <div class="post-body article-content">
+            <p><em>从京吹Ep12播出到周日完结，不是忙于考试就是被琐事拖累。但一直在思考这一季京吹的问题，Ep12播出后的一天还没忍住写了点简要看法，还是抽空断断续续总结一下看法。</em></p>
 <p>首先解释一下标题，这个词是京阿尼语料7.1晚京吹杂谈回直播谈到的，本人认为所言极是。此词可以全面概括京吹这一季的所有，无论是脚本、制作还是讨论环境。</p>
 <p>再说明一下，本人是纯动画党，且很幸运的没有被剧透任何内容（包括Ep12），但本文涉及到的原作问题都咨询过原作党朋友。</p>
 <p>注：本文若提及久X年则是既指京吹也指武吹。</p>
@@ -90,10 +141,20 @@
 <blockquote>
 <p><span style="font-size: 25px">再见了，所有的上低音号。</span></p>
 </blockquote>
-
+          </div>
         </article>
-      </main>
-    </div>
-    <script src="../script.js?v=20260428k"></script>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span><a href="../index.html#blog">Back to archive</a></span>
+      </div>
+    </footer>
+
+    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260528b"></script>
   </body>
 </html>
