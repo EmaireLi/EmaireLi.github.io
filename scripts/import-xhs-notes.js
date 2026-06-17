@@ -283,8 +283,8 @@ function renderPostHtml(note, localImages = []) {
   const date = normalizeDate(extractEditedDate(note.content) || note.date || note.createdAt || note.publishedAt);
   const sourceUrl = note.url || note.sourceUrl || "";
   const source = sourceUrl
-    ? `<p class="meta">小红书同步 · ${date} · <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">原文链接</a></p>`
-    : `<p class="meta">小红书同步 · ${date}</p>`;
+    ? `小红书同步 · ${date} · <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">原文链接</a>`
+    : `小红书同步 · ${date}`;
   const body = note.contentHtml || paragraphize(contentText);
   const images = renderImages(localImages);
   const tags = renderTags(note.tags);
@@ -358,11 +358,10 @@ function renderPostHtml(note, localImages = []) {
         <article class="post-block">
           <header class="post-header">
             <h1 class="post-title">${title}</h1>
-            <div class="post-meta-container">小红书同步 · ${date}</div>
+            <div class="post-meta-container">${source}</div>
           </header>
 
           <div class="post-body article-content">
-            ${source}
             ${images}
             ${body}
             ${tags}

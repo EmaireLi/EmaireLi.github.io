@@ -653,6 +653,16 @@ iframe {
   letter-spacing: 0.04em;
 }
 
+.post-meta-container a {
+  border-bottom: 0;
+  color: inherit;
+}
+
+.post-meta-container a:hover {
+  color: var(--link-hover-color);
+  border-bottom-color: transparent;
+}
+
 .post-body,
 .article-content,
 .md-preview {
@@ -719,36 +729,50 @@ iframe {
   z-index: 2;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   border: 0;
-  border-radius: 0 var(--control-radius) var(--control-radius) 0;
-  background: rgba(23, 33, 46, 0.72);
+  border-radius: 50%;
+  background: rgba(214, 216, 218, 0.86);
   color: #fff;
   cursor: pointer;
   font: inherit;
-  font-size: 24px;
+  font-size: 42px;
+  font-weight: 300;
   line-height: 1;
-  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) scale(0.92);
+  transition: background-color 180ms ease, opacity 180ms ease, transform 220ms var(--motion-enter);
+}
+
+.xhs-gallery:hover .xhs-gallery-button,
+.xhs-gallery:focus-within .xhs-gallery-button,
+.xhs-gallery.is-controls-visible .xhs-gallery-button {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
 }
 
 .xhs-gallery-button:hover,
 .xhs-gallery-button:focus-visible {
-  background: rgba(23, 33, 46, 0.9);
+  background: rgba(190, 194, 198, 0.94);
 }
 
 .xhs-gallery-button:disabled {
   cursor: default;
-  opacity: 0.28;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .xhs-gallery-prev {
-  left: 0;
+  left: 18px;
+  padding-right: 4px;
 }
 
 .xhs-gallery-next {
-  right: 0;
-  border-radius: var(--control-radius) 0 0 var(--control-radius);
+  right: 18px;
+  padding-left: 4px;
 }
 
 .xhs-gallery-count {
@@ -762,6 +786,14 @@ iframe {
   color: #fff;
   font-size: 0.75em;
   line-height: 1.8;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.xhs-gallery:hover .xhs-gallery-count,
+.xhs-gallery:focus-within .xhs-gallery-count,
+.xhs-gallery.is-controls-visible .xhs-gallery-count {
+  opacity: 1;
 }
 
 .xhs-gallery[data-count="1"] .xhs-gallery-button,
@@ -1380,9 +1412,9 @@ iframe {
   }
 
   .xhs-gallery-button {
-    width: 30px;
-    height: 40px;
-    font-size: 22px;
+    width: 48px;
+    height: 48px;
+    font-size: 36px;
   }
 
   .blog-editor-mode {

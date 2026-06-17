@@ -475,6 +475,8 @@ function initXhsGalleries() {
     const track = gallery.querySelector(".xhs-gallery-track");
     if (!track) return;
     gallery.dataset.ready = "true";
+    gallery.addEventListener("pointerenter", () => gallery.classList.add("is-controls-visible"));
+    gallery.addEventListener("pointerleave", () => gallery.classList.remove("is-controls-visible"));
     track.addEventListener("scroll", () => syncGallery(gallery), { passive: true });
     window.addEventListener("resize", () => syncGallery(gallery));
     syncGallery(gallery);
