@@ -24,10 +24,16 @@ jobs:
         run: node scripts/generate-posts-manifest.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Prepare deployment files
+        shell: bash
+        run: |
+          mkdir -p _site
+          cp -r assets posts _site/
+          cp index.html editor.html styles.css script.js .nojekyll _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: _site
 
   deploy:
     environment:
