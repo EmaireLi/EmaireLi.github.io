@@ -577,6 +577,7 @@ iframe {
 
 .account-link:hover,
 .account-link:focus-visible {
+  border-color: rgba(255, 255, 255, 0.56);
   color: #fff;
   opacity: 0.86;
   transform: translateY(-1px);
@@ -623,7 +624,7 @@ iframe {
 }
 
 .post-header::after {
-  display: block;
+  display: none;
   width: min(180px, 52%);
   height: 1px;
   margin: 22px auto 0;
@@ -656,6 +657,20 @@ iframe {
 .article-content,
 .md-preview {
   overflow-wrap: break-word;
+}
+
+.post-body a,
+.article-content a,
+.md-preview a,
+.blog-list .item-title {
+  border-bottom: 0;
+}
+
+.post-body a:hover,
+.article-content a:hover,
+.md-preview a:hover,
+.blog-list .item-title:hover {
+  border-bottom-color: transparent;
 }
 
 .xhs-gallery {
@@ -762,8 +777,8 @@ iframe {
 .md-preview h2 {
   position: relative;
   margin: 36px 0 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--soft-line-color);
+  padding-bottom: 0;
+  border-bottom: 0;
   color: var(--text-strong-color);
   font-size: 1.375em;
   font-weight: 700;
@@ -779,7 +794,7 @@ iframe {
   position: absolute;
   bottom: -1px;
   left: 0;
-  width: 44px;
+  width: 0;
   height: 1px;
   background: var(--accent-color);
   content: "";
@@ -795,8 +810,8 @@ iframe {
 .article-content h3,
 .md-preview h3 {
   margin: 30px 0 15px;
-  padding-bottom: 4px;
-  border-bottom: 1px dotted var(--soft-line-color);
+  padding-bottom: 0;
+  border-bottom: 0;
   color: var(--text-strong-color);
   font-size: 1.25em;
   font-weight: 700;
@@ -1225,6 +1240,7 @@ iframe {
 
   .account-link:hover,
   .account-link:focus-visible {
+    border-color: rgba(255, 255, 255, 0.56);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 12px 24px rgba(37, 55, 72, 0.16);
     transform: translateY(-2px);
   }
