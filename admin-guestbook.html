@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#222222" />
+    <title>留言管理 | Alex</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="headband"></div>
+
+    <main class="main editor-layout">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="./index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">Guestbook admin</p>
+            </div>
+          </div>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="./index.html#about">About</a></li>
+              <li class="menu-item"><a href="./index.html#projects">Projects</a></li>
+              <li class="menu-item"><a href="./index.html#blog">Archives</a></li>
+              <li class="menu-item"><a href="./editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
+      </div>
+
+      <div class="editor-main">
+        <section class="editor-page-shell admin-guestbook" data-admin-guestbook>
+          <header class="admin-guestbook-head">
+            <h1 class="editor-page-title">留言管理</h1>
+            <a class="editor-btn secondary" href="./index.html#contact">返回留言板</a>
+          </header>
+
+          <form class="admin-token-form" data-admin-token-form>
+            <label class="guestbook-field">
+              <span>管理员 Token</span>
+              <input id="admin-token-input" type="password" autocomplete="off" required />
+            </label>
+            <div class="admin-actions">
+              <button class="editor-btn" type="submit">读取留言</button>
+              <button class="editor-btn secondary" type="button" data-admin-clear-token>清空</button>
+              <p class="guestbook-status" data-admin-status role="status" aria-live="polite"></p>
+            </div>
+          </form>
+
+          <div class="admin-message-list" data-admin-message-list aria-live="polite"></div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span>Guestbook admin</span>
+      </div>
+    </footer>
+
+    <script src="./guestbook-config.js?v=20260630"></script>
+    <script src="./script.js?v=20260630c"></script>
+  </body>
+</html>

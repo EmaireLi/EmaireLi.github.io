@@ -126,6 +126,13 @@ async function listMessages(request, env) {
   return jsonResponse(request, env, { messages: result.results || [] });
 }
 
+async function listAdminMessages(request, env) {
+  if (!requireAdmin(request, env)) {
+    return jsonResponse(request, env, { error: "Unauthorized." }, 401);
+  }
+  return listMessages(request, env);
+}
+
 async function enforceRateLimit(request, env) {
   const limitSeconds = Number(env.GUESTBOOK_POST_INTERVAL_SECONDS || DEFAULT_RATE_LIMIT_SECONDS) || DEFAULT_RATE_LIMIT_SECONDS;
   if (limitSeconds <= 0) return;
@@ -255,6 +262,7 @@ async function route(request, env) {
   const messageMatch = path.match(/^\/messages\/([^/]+)$/);
 
   if (request.method === "GET" && path === "/messages") return listMessages(request, env);
+  if (request.method === "GET" && path === "/admin/messages") return listAdminMessages(request, env);
   if (request.method === "POST" && path === "/messages") return createMessage(request, env);
   if (request.method === "PATCH" && messageMatch) return updateMessage(request, env, messageMatch[1]);
   if (request.method === "DELETE" && messageMatch) return deleteMessage(request, env, messageMatch[1]);

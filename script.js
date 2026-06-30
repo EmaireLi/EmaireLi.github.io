@@ -570,6 +570,46 @@ async function submitGuestbookMessage(apiUrl, payload) {
   return data;
 }
 
+async function fetchAdminGuestbookMessages(apiUrl, token) {
+  const response = await fetch(`${apiUrl}/admin/messages`, {
+    cache: "no-store",
+    headers: { "Authorization": `Bearer ${token}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `HTTP ${response.status}`);
+  }
+  return Array.isArray(data.messages) ? data.messages : [];
+}
+
+async function updateGuestbookMessage(apiUrl, id, token, payload) {
+  const response = await fetch(`${apiUrl}/messages/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `HTTP ${response.status}`);
+  }
+  return data;
+}
+
+async function deleteGuestbookMessage(apiUrl, id, token) {
+  const response = await fetch(`${apiUrl}/messages/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+    headers: { "Authorization": `Bearer ${token}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `HTTP ${response.status}`);
+  }
+  return data;
+}
+
 function getGuestbookIntervalWait() {
   let lastSentAt = 0;
   try {
@@ -676,11 +716,235 @@ function initGuestbook() {
   });
 }
 
+function formatGuestbookTime(value) {
+  const date = new Date(value || Date.now());
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function createAdminMessageCard(item, handlers) {
+  const card = document.createElement("article");
+  card.className = "admin-message-card";
+  card.dataset.messageId = item.id || "";
+
+  const meta = document.createElement("div");
+  meta.className = "admin-message-meta";
+
+  const idText = document.createElement("span");
+  idText.textContent = item.id || "";
+
+  const createdText = document.createElement("span");
+  createdText.textContent = `创建 ${formatGuestbookTime(item.created_at)}`;
+
+  const updatedText = document.createElement("span");
+  updatedText.textContent = `更新 ${formatGuestbookTime(item.updated_at)}`;
+
+  meta.append(idText, createdText, updatedText);
+
+  const grid = document.createElement("div");
+  grid.className = "admin-message-grid";
+
+  const signatureField = document.createElement("label");
+  signatureField.className = "guestbook-field";
+  const signatureLabel = document.createElement("span");
+  signatureLabel.textContent = "署名";
+  const signatureInput = document.createElement("input");
+  signatureInput.type = "text";
+  signatureInput.maxLength = 24;
+  signatureInput.value = item.signature || "";
+  signatureField.append(signatureLabel, signatureInput);
+
+  const messageField = document.createElement("label");
+  messageField.className = "guestbook-field";
+  const labelRow = document.createElement("span");
+  labelRow.className = "guestbook-label-row";
+  const messageLabel = document.createElement("span");
+  messageLabel.textContent = "留言";
+  const counter = document.createElement("span");
+  counter.className = "guestbook-counter";
+  labelRow.append(messageLabel, counter);
+  const messageInput = document.createElement("textarea");
+  messageInput.maxLength = guestbookMaxLength;
+  messageInput.rows = 3;
+  messageInput.value = item.message || "";
+  messageField.append(labelRow, messageInput);
+  grid.append(signatureField, messageField);
+
+  const actions = document.createElement("div");
+  actions.className = "admin-message-actions";
+
+  const saveButton = document.createElement("button");
+  saveButton.className = "editor-btn";
+  saveButton.type = "button";
+  saveButton.textContent = "保存";
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "editor-btn secondary admin-danger";
+  deleteButton.type = "button";
+  deleteButton.textContent = "删除";
+
+  const status = document.createElement("p");
+  status.className = "guestbook-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+
+  const syncCounter = () => {
+    const count = getGuestbookCharCount(messageInput.value);
+    counter.textContent = `${count} / ${guestbookMaxLength}`;
+    counter.dataset.tone = count > guestbookMaxLength ? "error" : "";
+  };
+
+  messageInput.addEventListener("input", syncCounter);
+  syncCounter();
+
+  saveButton.addEventListener("click", () => {
+    handlers.onSave({
+      id: item.id,
+      signature: signatureInput.value.trim(),
+      message: messageInput.value.trim(),
+      status,
+      saveButton,
+      deleteButton,
+    });
+  });
+
+  deleteButton.addEventListener("click", () => {
+    handlers.onDelete({
+      id: item.id,
+      signature: signatureInput.value.trim() || item.signature || item.id,
+      status,
+      saveButton,
+      deleteButton,
+    });
+  });
+
+  actions.append(saveButton, deleteButton, status);
+  card.append(meta, grid, actions);
+  return card;
+}
+
+function renderAdminGuestbookMessages(listEl, messages, handlers) {
+  if (!listEl) return;
+  listEl.innerHTML = "";
+
+  if (!messages.length) {
+    const empty = document.createElement("p");
+    empty.className = "guestbook-empty";
+    empty.textContent = "还没有留言。";
+    listEl.appendChild(empty);
+    return;
+  }
+
+  messages.forEach((item) => {
+    listEl.appendChild(createAdminMessageCard(item, handlers));
+  });
+}
+
+function initAdminGuestbook() {
+  const root = document.querySelector("[data-admin-guestbook]");
+  if (!root) return;
+
+  const form = root.querySelector("[data-admin-token-form]");
+  const tokenInput = root.querySelector("#admin-token-input");
+  const clearTokenButton = root.querySelector("[data-admin-clear-token]");
+  const status = root.querySelector("[data-admin-status]");
+  const list = root.querySelector("[data-admin-message-list]");
+  const apiUrl = getGuestbookApiUrl(root);
+
+  if (!form || !tokenInput || !clearTokenButton || !list) return;
+
+  if (!apiUrl) {
+    setGuestbookStatus(status, "留言服务未配置。", "error");
+    return;
+  }
+
+  const getToken = () => tokenInput.value.trim();
+
+  const loadMessages = async () => {
+    const token = getToken();
+    if (!token) {
+      setGuestbookStatus(status, "请输入管理员 Token。", "error");
+      tokenInput.focus();
+      return;
+    }
+
+    setGuestbookStatus(status, "正在读取...", "muted");
+    try {
+      const messages = await fetchAdminGuestbookMessages(apiUrl, token);
+      renderAdminGuestbookMessages(list, messages, {
+        onSave: async ({ id, signature, message, status: itemStatus, saveButton, deleteButton }) => {
+          if (!signature || !message) {
+            setGuestbookStatus(itemStatus, "署名和留言不能为空。", "error");
+            return;
+          }
+          if (getGuestbookCharCount(message) > guestbookMaxLength) {
+            setGuestbookStatus(itemStatus, `留言最多 ${guestbookMaxLength} 字。`, "error");
+            return;
+          }
+
+          saveButton.disabled = true;
+          deleteButton.disabled = true;
+          setGuestbookStatus(itemStatus, "正在保存...", "muted");
+          try {
+            await updateGuestbookMessage(apiUrl, id, getToken(), { signature, message });
+            setGuestbookStatus(itemStatus, "已保存。", "success");
+            await loadMessages();
+          } catch (error) {
+            setGuestbookStatus(itemStatus, error.message, "error");
+          } finally {
+            saveButton.disabled = false;
+            deleteButton.disabled = false;
+          }
+        },
+        onDelete: async ({ id, signature, status: itemStatus, saveButton, deleteButton }) => {
+          if (!window.confirm(`删除 ${signature} 的留言？`)) return;
+
+          saveButton.disabled = true;
+          deleteButton.disabled = true;
+          setGuestbookStatus(itemStatus, "正在删除...", "muted");
+          try {
+            await deleteGuestbookMessage(apiUrl, id, getToken());
+            setGuestbookStatus(status, "已删除。", "success");
+            await loadMessages();
+          } catch (error) {
+            setGuestbookStatus(itemStatus, error.message, "error");
+          } finally {
+            saveButton.disabled = false;
+            deleteButton.disabled = false;
+          }
+        },
+      });
+      setGuestbookStatus(status, `共 ${messages.length} 条留言。`, "success");
+    } catch (error) {
+      setGuestbookStatus(status, `读取失败：${error.message}`, "error");
+    }
+  };
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    loadMessages();
+  });
+
+  clearTokenButton.addEventListener("click", () => {
+    tokenInput.value = "";
+    list.innerHTML = "";
+    setGuestbookStatus(status, "");
+    tokenInput.focus();
+  });
+}
+
 decodeEscapedSpanTagsInDocument();
 initBlogAutoList();
 initEditorPage();
 initSiteSearch();
 initXhsGalleries();
 initGuestbook();
+initAdminGuestbook();
 initBackToTop();
 initRevealOnScroll();

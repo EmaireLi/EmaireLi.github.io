@@ -59,7 +59,8 @@
 - 访客可以 `POST /messages` 新增留言，请求体为 `{"signature":"署名","message":"留言"}`。
 - Worker 强制署名必填、留言最多 100 字、发送间隔限制、同一规范化署名只能有一条留言。
 - 访客端没有编辑和删除入口。
-- 仓库管理者可以用 Worker secret 中的 `ADMIN_TOKEN` 调用：
+- 仓库管理者可以访问 `admin-guestbook.html`，输入 Worker secret 中的 `ADMIN_TOKEN` 后编辑或删除留言。
+- 仓库管理者也可以用 API 调用：
 
    ```bash
    curl -X PATCH "$GUESTBOOK_API/messages/<id>" \
