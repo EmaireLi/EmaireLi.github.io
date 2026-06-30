@@ -122,12 +122,12 @@
             <section class="guestbook" data-guestbook aria-label="访客留言">
               <div class="guestbook-copy">
                 <p>这里是个记录旅程的地方，乐意与同行的你聊聊。</p>
-                <p class="meta">每个署名最多保留一条留言。</p>
+                <button class="btn guestbook-compose-button" type="button" data-guestbook-compose aria-expanded="false" aria-controls="guestbook-form">留言</button>
               </div>
 
-              <form class="guestbook-form" data-guestbook-form>
+              <form id="guestbook-form" class="guestbook-form" data-guestbook-form hidden>
                 <div class="guestbook-field">
-                  <label for="guestbook-signature">署名</label>
+                  <label for="guestbook-signature">From</label>
                   <input id="guestbook-signature" name="signature" type="text" maxlength="24" autocomplete="name" required />
                 </div>
                 <div class="guestbook-field">
@@ -162,6 +162,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
     <script src="./guestbook-config.js?v=20260630"></script>
-    <script src="./script.js?v=20260630c"></script>
+    <script src="./script.js?v=20260630d"></script>
   </body>
 </html>

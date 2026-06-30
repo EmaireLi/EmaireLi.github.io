@@ -626,6 +626,7 @@ function initGuestbook() {
   if (!root) return;
 
   const form = root.querySelector("[data-guestbook-form]");
+  const composeButton = root.querySelector("[data-guestbook-compose]");
   const signatureInput = root.querySelector("#guestbook-signature");
   const messageInput = root.querySelector("#guestbook-message");
   const counter = root.querySelector("[data-guestbook-counter]");
@@ -635,6 +636,20 @@ function initGuestbook() {
   const apiUrl = getGuestbookApiUrl(root);
 
   if (!form || !signatureInput || !messageInput || !counter || !submitButton || !list) return;
+
+  const expandForm = () => {
+    form.hidden = false;
+    form.classList.add("is-expanded");
+    if (composeButton) {
+      composeButton.hidden = true;
+      composeButton.setAttribute("aria-expanded", "true");
+    }
+    signatureInput.focus();
+  };
+
+  if (composeButton) {
+    composeButton.addEventListener("click", expandForm);
+  }
 
   const syncCounter = () => {
     const count = getGuestbookCharCount(messageInput.value);
@@ -646,6 +661,7 @@ function initGuestbook() {
   messageInput.addEventListener("input", syncCounter);
 
   if (!apiUrl) {
+    if (composeButton) composeButton.disabled = true;
     submitButton.disabled = true;
     setGuestbookStatus(status, "留言服务未配置。", "muted");
     renderGuestbookMessages(list, []);
@@ -709,6 +725,9 @@ function initGuestbook() {
       renderGuestbookMessages(list, messages);
       setGuestbookStatus(status, "已发送。", "success");
     } catch (error) {
+      if (String(error.message || "").includes("署名已经留过言")) {
+        window.alert("这个 From 已经留过言。");
+      }
       setGuestbookStatus(status, error.message, "error");
     } finally {
       submitButton.disabled = false;

@@ -929,11 +929,20 @@ iframe {
 }
 
 .guestbook-copy {
+  position: relative;
+  display: grid;
+  min-height: 132px;
   padding: 16px 18px;
   border: 1px solid var(--line-color);
   border-radius: var(--control-radius);
   background: var(--card-bg-color);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.guestbook-compose-button {
+  align-self: end;
+  justify-self: end;
+  margin-top: 18px;
 }
 
 .guestbook-copy p:last-child,
@@ -951,6 +960,10 @@ iframe {
   border-radius: var(--control-radius);
   background: rgba(255, 255, 255, 0.5);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+.guestbook-form.is-expanded {
+  animation: guestbook-form-enter 260ms var(--motion-enter) both;
 }
 
 .guestbook-field {
@@ -1071,6 +1084,18 @@ iframe {
   flex: 0 0 auto;
   color: var(--muted-color);
   font-size: 0.75em;
+}
+
+@keyframes guestbook-form-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .admin-guestbook {
