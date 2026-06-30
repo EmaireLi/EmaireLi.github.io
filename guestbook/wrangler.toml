@@ -1,0 +1,14 @@
+name = "emaire-guestbook"
+main = "worker.mjs"
+compatibility_date = "2026-06-30"
+workers_dev = true
+preview_urls = false
+
+[vars]
+ALLOWED_ORIGIN = "https://emaireli.github.io"
+GUESTBOOK_POST_INTERVAL_SECONDS = "60"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "emaire-guestbook"
+database_id = "e3894725-3185-4a0a-b458-204d62ab1b87"
