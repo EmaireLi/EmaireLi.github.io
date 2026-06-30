@@ -610,6 +610,15 @@ async function deleteGuestbookMessage(apiUrl, id, token) {
   return data;
 }
 
+async function recordSiteVisit(apiUrl) {
+  const response = await fetch(`${apiUrl}/stats/visit`, { method: "POST", cache: "no-store" });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `HTTP ${response.status}`);
+  }
+  return Number(data.visitors) || 0;
+}
+
 function getGuestbookIntervalWait() {
   let lastSentAt = 0;
   try {
@@ -958,6 +967,24 @@ function initAdminGuestbook() {
   });
 }
 
+function initVisitorCount() {
+  const root = document.querySelector("[data-visitor-count]");
+  if (!root) return;
+
+  const valueEl = root.querySelector("[data-visitor-count-value]");
+  const apiUrl = normalizeGuestbookApiUrl(window.GUESTBOOK_API_URL || "");
+  if (!valueEl || !apiUrl) return;
+
+  recordSiteVisit(apiUrl)
+    .then((visitors) => {
+      valueEl.textContent = String(visitors);
+      root.hidden = false;
+    })
+    .catch(() => {
+      root.hidden = true;
+    });
+}
+
 decodeEscapedSpanTagsInDocument();
 initBlogAutoList();
 initEditorPage();
@@ -965,5 +992,6 @@ initSiteSearch();
 initXhsGalleries();
 initGuestbook();
 initAdminGuestbook();
+initVisitorCount();
 initBackToTop();
 initRevealOnScroll();

@@ -69,6 +69,12 @@ async function sha256Hex(value) {
   return Array.from(new Uint8Array(buffer), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
+async function getVisitorHash(request, env) {
+  const salt = String(env.RATE_LIMIT_SALT || env.ADMIN_TOKEN || "visitor");
+  const userAgent = request.headers.get("User-Agent") || "unknown";
+  return sha256Hex(`${salt}:${getClientIp(request)}:${userAgent}`);
+}
+
 async function readJson(request) {
   const contentType = request.headers.get("Content-Type") || "";
   if (!contentType.includes("application/json")) {
@@ -248,6 +254,39 @@ async function deleteMessage(request, env, id) {
   return jsonResponse(request, env, { ok: true });
 }
 
+async function recordVisit(request, env) {
+  const visitorHash = await getVisitorHash(request, env);
+  const now = new Date().toISOString();
+
+  const insert = await env.DB.prepare(
+    `INSERT OR IGNORE INTO site_visitors (visitor_hash, first_seen_at, last_seen_at, visit_count)
+      VALUES (?, ?, ?, 0)`
+  )
+    .bind(visitorHash, now, now)
+    .run();
+
+  await env.DB.prepare(
+    `UPDATE site_visitors
+      SET last_seen_at = ?, visit_count = visit_count + 1
+      WHERE visitor_hash = ?`
+  )
+    .bind(now, visitorHash)
+    .run();
+
+  if (insert.meta && insert.meta.changes > 0) {
+    await env.DB.prepare(
+      `INSERT INTO site_stats (key, value, updated_at)
+        VALUES ('visitors', 1, ?)
+        ON CONFLICT(key) DO UPDATE SET value = value + 1, updated_at = excluded.updated_at`
+    )
+      .bind(now)
+      .run();
+  }
+
+  const stats = await env.DB.prepare("SELECT value FROM site_stats WHERE key = 'visitors'").first();
+  return jsonResponse(request, env, { visitors: Number(stats && stats.value) || 0 });
+}
+
 async function route(request, env) {
   if (!env.DB) {
     return jsonResponse(request, env, { error: "D1 database binding DB is missing." }, 500);
@@ -264,6 +303,7 @@ async function route(request, env) {
   if (request.method === "GET" && path === "/messages") return listMessages(request, env);
   if (request.method === "GET" && path === "/admin/messages") return listAdminMessages(request, env);
   if (request.method === "POST" && path === "/messages") return createMessage(request, env);
+  if (request.method === "POST" && path === "/stats/visit") return recordVisit(request, env);
   if (request.method === "PATCH" && messageMatch) return updateMessage(request, env, messageMatch[1]);
   if (request.method === "DELETE" && messageMatch) return deleteMessage(request, env, messageMatch[1]);
 
