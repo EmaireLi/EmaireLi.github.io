@@ -923,6 +923,156 @@ iframe {
   font-size: 1em;
 }
 
+.guestbook {
+  display: grid;
+  gap: 16px;
+}
+
+.guestbook-copy {
+  padding: 16px 18px;
+  border: 1px solid var(--line-color);
+  border-radius: var(--control-radius);
+  background: var(--card-bg-color);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.guestbook-copy p:last-child,
+.guestbook-status,
+.guestbook-empty,
+.guestbook-item p {
+  margin-bottom: 0;
+}
+
+.guestbook-form {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--soft-line-color);
+  border-radius: var(--control-radius);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+.guestbook-field {
+  display: grid;
+  gap: 6px;
+}
+
+.guestbook-field label,
+.guestbook-label-row {
+  color: var(--text-strong-color);
+  font-size: 0.875em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.guestbook-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.guestbook-counter {
+  color: var(--muted-color);
+  font-weight: 400;
+}
+
+.guestbook-counter[data-tone="error"],
+.guestbook-status[data-tone="error"] {
+  color: #a33a35;
+}
+
+.guestbook-field input,
+.guestbook-field textarea {
+  width: 100%;
+  border: 1px solid var(--line-color);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text-color);
+  font: inherit;
+  line-height: 1.6;
+  outline: none;
+  padding: 8px 10px;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.guestbook-field textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.guestbook-field input:focus,
+.guestbook-field textarea:focus {
+  border-color: rgba(54, 124, 147, 0.52);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 0 4px rgba(54, 124, 147, 0.1);
+}
+
+.guestbook-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.guestbook-status {
+  color: var(--muted-color);
+  font-size: 0.8125em;
+  line-height: 1.5;
+}
+
+.guestbook-status[data-tone="success"] {
+  color: #2f6f55;
+}
+
+.guestbook-list {
+  display: grid;
+  gap: 10px;
+}
+
+.guestbook-empty,
+.guestbook-item {
+  padding: 14px 16px;
+  border: 1px solid var(--soft-line-color);
+  border-radius: var(--control-radius);
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.guestbook-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.guestbook-item::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: var(--control-radius) 0 0 var(--control-radius);
+  background: linear-gradient(to bottom, rgba(54, 124, 147, 0.62), rgba(54, 124, 147, 0.06));
+  content: "";
+}
+
+.guestbook-item-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+.guestbook-item-head strong {
+  min-width: 0;
+  color: var(--text-strong-color);
+  overflow-wrap: anywhere;
+}
+
+.guestbook-item-head time {
+  flex: 0 0 auto;
+  color: var(--muted-color);
+  font-size: 0.75em;
+}
+
 .btn,
 .editor-btn {
   display: inline-flex;
@@ -958,6 +1108,13 @@ iframe {
 .btn:active,
 .editor-btn:active {
   transform: translateY(1px) scale(0.98);
+}
+
+.btn:disabled,
+.editor-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+  transform: none;
 }
 
 .editor-btn.secondary {
@@ -1313,6 +1470,12 @@ iframe {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 12px 26px rgba(54, 124, 147, 0.18);
     transform: translateY(-1px);
   }
+
+  .btn:disabled:hover,
+  .editor-btn:disabled:hover {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86), 0 8px 20px rgba(54, 124, 147, 0.12);
+    transform: none;
+  }
 }
 
 @media (min-width: 1600px) {
@@ -1433,8 +1596,18 @@ iframe {
   }
 
   .project-list li,
-  .blog-list .blog-item {
+  .blog-list .blog-item,
+  .guestbook-form,
+  .guestbook-empty,
+  .guestbook-item {
     padding: 14px 15px;
+  }
+
+  .guestbook-actions,
+  .guestbook-item-head {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
   }
 
   .xhs-image {

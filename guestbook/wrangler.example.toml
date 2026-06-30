@@ -1,0 +1,12 @@
+name = "personal-site-guestbook"
+main = "worker.mjs"
+compatibility_date = "2026-06-30"
+
+[vars]
+ALLOWED_ORIGIN = "https://emaireli.github.io"
+GUESTBOOK_POST_INTERVAL_SECONDS = "60"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "personal-site-guestbook"
+database_id = "<your-d1-database-id>"

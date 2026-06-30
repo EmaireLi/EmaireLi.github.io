@@ -119,10 +119,32 @@
             <ul id="blog-auto-list" class="blog-list"></ul>
 
             <h2 id="contact">联系我</h2>
-            <blockquote>
-              <p>这里是个记录旅程的地方，乐意与同行的你聊聊。</p>
-            </blockquote>
-            <p>感谢你的来访。</p>
+            <section class="guestbook" data-guestbook aria-label="访客留言">
+              <div class="guestbook-copy">
+                <p>这里是个记录旅程的地方，乐意与同行的你聊聊。</p>
+                <p class="meta">每个署名最多保留一条留言。</p>
+              </div>
+
+              <form class="guestbook-form" data-guestbook-form>
+                <div class="guestbook-field">
+                  <label for="guestbook-signature">署名</label>
+                  <input id="guestbook-signature" name="signature" type="text" maxlength="24" autocomplete="name" required />
+                </div>
+                <div class="guestbook-field">
+                  <div class="guestbook-label-row">
+                    <label for="guestbook-message">留言</label>
+                    <span class="guestbook-counter" data-guestbook-counter>0 / 100</span>
+                  </div>
+                  <textarea id="guestbook-message" name="message" maxlength="100" rows="4" required></textarea>
+                </div>
+                <div class="guestbook-actions">
+                  <button class="btn" type="submit" data-guestbook-submit>发送</button>
+                  <p class="guestbook-status" data-guestbook-status role="status" aria-live="polite"></p>
+                </div>
+              </form>
+
+              <div class="guestbook-list" data-guestbook-list aria-live="polite"></div>
+            </section>
           </div>
         </article>
       </div>
@@ -139,6 +161,7 @@
     <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
 
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-    <script src="./script.js?v=20260528b"></script>
+    <script src="./guestbook-config.js?v=20260630"></script>
+    <script src="./script.js?v=20260630"></script>
   </body>
 </html>

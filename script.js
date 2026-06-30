@@ -34,6 +34,8 @@ if (panelLinks.length > 0 && panels.length > 0) {
 const md = typeof window.markdownit === "function" ? window.markdownit({ html: true, linkify: true, breaks: true }) : null;
 const postsCache = new Map();
 let revealObserver = null;
+const guestbookMaxLength = 100;
+const guestbookPostIntervalMs = 60 * 1000;
 
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -260,7 +262,7 @@ function initRevealOnScroll() {
 
   const targets = Array.from(
     document.querySelectorAll(
-      ".home-page .post-body > h1, .home-page .post-body > h2, .home-page .project-list > li, .home-page .blog-list > .blog-item, .home-page blockquote"
+      ".home-page .post-body > h1, .home-page .post-body > h2, .home-page .project-list > li, .home-page .blog-list > .blog-item, .home-page blockquote, .home-page .guestbook"
     )
   );
   if (targets.length === 0) return;
@@ -494,10 +496,191 @@ function initXhsGalleries() {
   }
 }
 
+function normalizeGuestbookApiUrl(value) {
+  return String(value || "").trim().replace(/\/+$/g, "");
+}
+
+function getGuestbookApiUrl(root) {
+  return normalizeGuestbookApiUrl(root.dataset.guestbookApiUrl || window.GUESTBOOK_API_URL || "");
+}
+
+function setGuestbookStatus(statusEl, message, tone = "") {
+  if (!statusEl) return;
+  statusEl.textContent = message;
+  statusEl.dataset.tone = tone;
+}
+
+function getGuestbookCharCount(text) {
+  return Array.from(String(text || "")).length;
+}
+
+function renderGuestbookMessages(listEl, messages) {
+  if (!listEl) return;
+  listEl.innerHTML = "";
+
+  if (!messages.length) {
+    const empty = document.createElement("p");
+    empty.className = "guestbook-empty";
+    empty.textContent = "还没有留言。";
+    listEl.appendChild(empty);
+    return;
+  }
+
+  messages.forEach((item) => {
+    const entry = document.createElement("article");
+    entry.className = "guestbook-item";
+
+    const header = document.createElement("div");
+    header.className = "guestbook-item-head";
+
+    const signature = document.createElement("strong");
+    signature.textContent = item.signature || "访客";
+
+    const time = document.createElement("time");
+    const date = new Date(item.updated_at || item.created_at || Date.now());
+    time.dateTime = Number.isNaN(date.getTime()) ? "" : date.toISOString();
+    time.textContent = Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" });
+
+    const message = document.createElement("p");
+    message.textContent = item.message || "";
+
+    header.append(signature, time);
+    entry.append(header, message);
+    listEl.appendChild(entry);
+  });
+}
+
+async function fetchGuestbookMessages(apiUrl) {
+  const response = await fetch(`${apiUrl}/messages`, { cache: "no-store" });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const data = await response.json();
+  return Array.isArray(data.messages) ? data.messages : [];
+}
+
+async function submitGuestbookMessage(apiUrl, payload) {
+  const response = await fetch(`${apiUrl}/messages`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `HTTP ${response.status}`);
+  }
+  return data;
+}
+
+function getGuestbookIntervalWait() {
+  let lastSentAt = 0;
+  try {
+    lastSentAt = Number(window.localStorage.getItem("guestbook:lastSentAt") || 0);
+  } catch (_error) {
+    lastSentAt = 0;
+  }
+  const elapsed = Date.now() - lastSentAt;
+  return Math.max(0, guestbookPostIntervalMs - elapsed);
+}
+
+function initGuestbook() {
+  const root = document.querySelector("[data-guestbook]");
+  if (!root) return;
+
+  const form = root.querySelector("[data-guestbook-form]");
+  const signatureInput = root.querySelector("#guestbook-signature");
+  const messageInput = root.querySelector("#guestbook-message");
+  const counter = root.querySelector("[data-guestbook-counter]");
+  const submitButton = root.querySelector("[data-guestbook-submit]");
+  const status = root.querySelector("[data-guestbook-status]");
+  const list = root.querySelector("[data-guestbook-list]");
+  const apiUrl = getGuestbookApiUrl(root);
+
+  if (!form || !signatureInput || !messageInput || !counter || !submitButton || !list) return;
+
+  const syncCounter = () => {
+    const count = getGuestbookCharCount(messageInput.value);
+    counter.textContent = `${count} / ${guestbookMaxLength}`;
+    counter.dataset.tone = count > guestbookMaxLength ? "error" : "";
+  };
+
+  syncCounter();
+  messageInput.addEventListener("input", syncCounter);
+
+  if (!apiUrl) {
+    submitButton.disabled = true;
+    setGuestbookStatus(status, "留言服务未配置。", "muted");
+    renderGuestbookMessages(list, []);
+    return;
+  }
+
+  setGuestbookStatus(status, "正在加载留言...", "muted");
+  fetchGuestbookMessages(apiUrl)
+    .then((messages) => {
+      renderGuestbookMessages(list, messages);
+      setGuestbookStatus(status, "");
+    })
+    .catch((error) => {
+      renderGuestbookMessages(list, []);
+      setGuestbookStatus(status, `留言加载失败：${error.message}`, "error");
+    });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const signature = signatureInput.value.trim();
+    const message = messageInput.value.trim();
+    const count = getGuestbookCharCount(message);
+    const waitMs = getGuestbookIntervalWait();
+
+    if (!signature) {
+      setGuestbookStatus(status, "请填写署名。", "error");
+      signatureInput.focus();
+      return;
+    }
+
+    if (!message) {
+      setGuestbookStatus(status, "请填写留言。", "error");
+      messageInput.focus();
+      return;
+    }
+
+    if (count > guestbookMaxLength) {
+      setGuestbookStatus(status, `留言最多 ${guestbookMaxLength} 字。`, "error");
+      messageInput.focus();
+      return;
+    }
+
+    if (waitMs > 0) {
+      setGuestbookStatus(status, `请 ${Math.ceil(waitMs / 1000)} 秒后再发送。`, "error");
+      return;
+    }
+
+    submitButton.disabled = true;
+    setGuestbookStatus(status, "正在发送...", "muted");
+
+    try {
+      await submitGuestbookMessage(apiUrl, { signature, message });
+      try {
+        window.localStorage.setItem("guestbook:lastSentAt", String(Date.now()));
+      } catch (_error) {
+        // Ignore storage failures; the Worker still enforces rate limits.
+      }
+      messageInput.value = "";
+      syncCounter();
+      const messages = await fetchGuestbookMessages(apiUrl);
+      renderGuestbookMessages(list, messages);
+      setGuestbookStatus(status, "已发送。", "success");
+    } catch (error) {
+      setGuestbookStatus(status, error.message, "error");
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+}
+
 decodeEscapedSpanTagsInDocument();
 initBlogAutoList();
 initEditorPage();
 initSiteSearch();
 initXhsGalleries();
+initGuestbook();
 initBackToTop();
 initRevealOnScroll();

@@ -29,6 +29,48 @@
 
 脚本会生成 `posts/*.html`，并自动更新 `posts/posts.json`。
 
+## 访客留言板
+
+主页的“联系我”区域会从 `window.GUESTBOOK_API_URL` 读取留言 API 地址。公开站点只保存 Worker 地址，不保存管理员 token。
+
+### 部署 Cloudflare Worker + D1
+
+1. 创建 D1 数据库，并执行表结构：
+
+   ```bash
+   wrangler d1 execute <database-name> --file=guestbook/schema.sql
+   ```
+
+2. 部署 `guestbook/worker.mjs`，并给 Worker 绑定 D1，绑定名必须是 `DB`。
+3. 设置 Worker 环境变量：
+   - `ALLOWED_ORIGIN`：站点域名，例如 `https://emaireli.github.io`
+   - `ADMIN_TOKEN`：只保存在 Worker secret 中的管理员 token
+   - `RATE_LIMIT_SALT`：用于哈希访客 IP 的随机盐
+   - `GUESTBOOK_POST_INTERVAL_SECONDS`：发送间隔，默认 `60`
+4. 把 Worker URL 填进 `guestbook-config.js`：
+
+   ```js
+   window.GUESTBOOK_API_URL = "https://<your-worker>.<your-subdomain>.workers.dev";
+   ```
+
+### 留言规则
+
+- 访客可以 `GET /messages` 读取留言。
+- 访客可以 `POST /messages` 新增留言，请求体为 `{"signature":"署名","message":"留言"}`。
+- Worker 强制署名必填、留言最多 100 字、发送间隔限制、同一规范化署名只能有一条留言。
+- 访客端没有编辑和删除入口。
+- 仓库管理者可以用 Worker secret 中的 `ADMIN_TOKEN` 调用：
+
+   ```bash
+   curl -X PATCH "$GUESTBOOK_API/messages/<id>" \
+     -H "Authorization: Bearer $ADMIN_TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"message":"更新后的留言"}'
+
+   curl -X DELETE "$GUESTBOOK_API/messages/<id>" \
+     -H "Authorization: Bearer $ADMIN_TOKEN"
+   ```
+
 ### 从小红书页面导出 JSON
 
 1. 打开小红书主页或某篇笔记详情页。
