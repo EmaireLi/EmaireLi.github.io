@@ -98,16 +98,65 @@
             </div>
 
             <h2 id="projects">Projects</h2>
-            <ul class="project-list">
-              <li>
-                <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">SmartLabeling</a>
-                <br />
-                A data labeling tool with AI from Segment Anything and other models.
+            <p class="section-intro">这里优先放能被代码和文档验证的项目证据：我负责什么、系统怎么拆、哪些取舍值得继续追。</p>
+            <ul class="project-list project-case-list">
+              <li class="project-card">
+                <div class="project-card-head">
+                  <div>
+                    <p class="project-card-kicker">AI labeling · desktop tool</p>
+                    <h3><a href="./projects/smartlabeling.html">SmartLabeling</a></h3>
+                  </div>
+                  <span class="project-status">Case study</span>
+                </div>
+                <p class="project-card-summary">A data labeling tool with AI assistance from Segment Anything and CLIP-style classification workflows.</p>
+                <dl class="project-card-meta">
+                  <div>
+                    <dt>Role</dt>
+                    <dd>Frontend interaction, annotation workflow, model-service integration reading</dd>
+                  </div>
+                  <div>
+                    <dt>Stack</dt>
+                    <dd>Vue 3, TypeScript, Electron, FastAPI, SAM, CLIP</dd>
+                  </div>
+                </dl>
+                <ul class="project-proof-list">
+                  <li>Prompt-based mask generation with foreground/background points and boxes.</li>
+                  <li>Export flow for masks, YAML labels, and project cache.</li>
+                  <li>Desktop packaging path around a Python inference service.</li>
+                </ul>
+                <div class="project-card-actions">
+                  <a class="btn" href="./projects/smartlabeling.html">Read case study</a>
+                  <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">GitHub</a>
+                </div>
               </li>
-              <li>
-                <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">Yomii - 日语学习助手</a>
-                <br />
-                一个现代化的日语词汇学习应用，集词汇查询、背诵、测试于一体。
+              <li class="project-card">
+                <div class="project-card-head">
+                  <div>
+                    <p class="project-card-kicker">Japanese learning · full-stack app</p>
+                    <h3><a href="./projects/yomii.html">Yomii - 日语学习助手</a></h3>
+                  </div>
+                  <span class="project-status">Case study</span>
+                </div>
+                <p class="project-card-summary">一个桌面化日语学习应用，覆盖查词、背单词、分级测试和作文评测四条主链路。</p>
+                <dl class="project-card-meta">
+                  <div>
+                    <dt>Role</dt>
+                    <dd>Full-stack architecture, learning workflow, local model evaluation pipeline</dd>
+                  </div>
+                  <div>
+                    <dt>Stack</dt>
+                    <dd>Vue 3, TypeScript, Electron, FastAPI, SQLModel, SQLite, MySQL</dd>
+                  </div>
+                </dl>
+                <ul class="project-proof-list">
+                  <li>Separated static dictionary data from user behavior records.</li>
+                  <li>Supports web development mode and Electron desktop delivery.</li>
+                  <li>Uses local Qwen adapters with optional online fallback for essay evaluation.</li>
+                </ul>
+                <div class="project-card-actions">
+                  <a class="btn" href="./projects/yomii.html">Read case study</a>
+                  <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">GitHub</a>
+                </div>
               </li>
             </ul>
 

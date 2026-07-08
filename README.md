@@ -13,6 +13,20 @@
 3. 把下载的 `.html` 文件放入项目 `posts/` 目录。
 4. `git add . && git commit -m "add new post" && git push`，GitHub Pages 部署流程会自动更新 `posts/posts.json` 并显示到 blog 列表。
 
+## 维护项目案例
+
+首页 `Projects` 区展示简短项目卡片，深度说明放在 `projects/` 下的静态案例页：
+
+- `projects/smartlabeling.html`
+- `projects/yomii.html`
+
+维护原则：
+
+- 首页只放可快速扫描的信息：项目定位、角色、技术栈、关键证据和入口链接。
+- 案例页写清楚问题、架构、实现亮点、取舍、代码阅读入口和下一步证据。
+- 如果后续补项目截图或流程图，放在 `assets/projects/<project-name>/`，避免热链外部图片。
+- 不写无法从代码、文档或本地素材验证的夸张结论。
+
 ## 导入小红书笔记
 
 当前浏览器安全策略不允许 Codex 直接自动读取 `xiaohongshu.com` 页面。可以把自己的笔记内容复制到本地 JSON，再导入到 `posts/`。
