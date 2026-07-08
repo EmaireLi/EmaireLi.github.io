@@ -27,6 +27,7 @@
           <nav class="site-nav" aria-label="Main navigation">
             <ul class="main-menu menu">
               <li class="menu-item"><a href="#about">About</a></li>
+              <li class="menu-item"><a href="#proof">Proof</a></li>
               <li class="menu-item"><a href="#projects">Projects</a></li>
               <li class="menu-item"><a href="#blog">Archives</a></li>
               <li class="menu-item"><a href="./editor.html">Editor</a></li>
@@ -96,6 +97,99 @@
               <p>ACGN 爱好者</p>
               <p>喜欢把正在学习的东西整理成可回看的材料。这个站点会更像一个长期归档：不追求精装修，但希望每一篇都能留下当时真正关心的问题。</p>
             </div>
+
+            <h2 id="proof">Proof Map</h2>
+            <p class="section-intro">如果你是来快速判断我适合做什么，这里把方向、能力和可验证证据放在一起。</p>
+            <section class="proof-map" aria-label="Hiring snapshot and capability evidence">
+              <div class="hiring-snapshot">
+                <div>
+                  <p class="proof-kicker">Current direction</p>
+                  <h3>Full-stack product engineering with AI tooling and engine-learning direction.</h3>
+                  <p>
+                    我更适合需要把产品链路、前端交互、后端服务和 AI/数据工作流串起来的项目。
+                    当前作品优先展示可验证的实现、取舍和代码入口，而不是只列技术名词。
+                  </p>
+                </div>
+                <ul class="snapshot-points" aria-label="Fast facts">
+                  <li>
+                    <span>Role signal</span>
+                    <strong>Frontend / full-stack / AI tooling</strong>
+                  </li>
+                  <li>
+                    <span>Strongest proof</span>
+                    <strong><a href="./projects/smartlabeling.html">SmartLabeling</a> · <a href="./projects/yomii.html">Yomii</a></strong>
+                  </li>
+                  <li>
+                    <span>Review path</span>
+                    <strong><a href="#projects">case studies</a> → GitHub → code notes</strong>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="evidence-matrix" role="list" aria-label="Capability evidence matrix">
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">AI tooling</span>
+                    <h3>Model-assisted product workflows</h3>
+                  </div>
+                  <p>SmartLabeling covers prompt-based mask generation, annotation correction, export flow, and the boundary between UI and Python inference service.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> annotation workflow reading, frontend interaction surface, and model-service integration notes.</p>
+                  <div class="evidence-links">
+                    <a href="./projects/smartlabeling.html">case study</a>
+                    <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">repo</a>
+                  </div>
+                </article>
+
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">Full-stack app</span>
+                    <h3>Desktop learning product architecture</h3>
+                  </div>
+                  <p>Yomii connects Vue/Electron UI, FastAPI services, SQLModel data modeling, local dictionary data, and optional AI evaluation flow.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> full-stack architecture, learning workflow, local data model, and evaluation pipeline framing.</p>
+                  <div class="evidence-links">
+                    <a href="./projects/yomii.html">case study</a>
+                    <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">repo</a>
+                  </div>
+                </article>
+
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">Frontend systems</span>
+                    <h3>Static site UX with local content tooling</h3>
+                  </div>
+                  <p>This site keeps search, archives, editor, XHS import, generated manifests, and guestbook integration compatible with GitHub Pages constraints.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> static UX, content import workflow, manifest generation, and deployment-friendly structure.</p>
+                  <div class="evidence-links">
+                    <a href="./README.md">workflow</a>
+                    <a href="./scripts/import-xhs-notes.js">import script</a>
+                    <a href="./scripts/generate-posts-manifest.js">manifest script</a>
+                  </div>
+                </article>
+
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">Engineering process</span>
+                    <h3>Documented discovery, evaluation, QA, and release loop</h3>
+                  </div>
+                  <p>Feature ideas are evaluated by role-specific agents, recorded in docs, implemented with narrow scope, verified locally, then committed and pushed.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> planning loop, decision records, implementation scope, QA pass, and release handoff.</p>
+                  <div class="evidence-links">
+                    <a href="./docs/ai_team/feature_decision.md">decisions</a>
+                    <a href="./docs/ai_team/round-02-implementation_plan.md">plan</a>
+                  </div>
+                </article>
+              </div>
+
+              <div class="review-routes" aria-label="Recommended review routes">
+                <h3>Suggested review routes</h3>
+                <ul>
+                  <li><strong>Recruiter:</strong> read the snapshot, then scan <a href="#projects">Projects</a> and <a href="#contact">contact</a>.</li>
+                  <li><strong>Technical reviewer:</strong> start with SmartLabeling/Yomii case studies, then open the linked repositories.</li>
+                  <li><strong>Process reviewer:</strong> inspect the import scripts, manifest generation, and AI-team decision docs.</li>
+                </ul>
+              </div>
+            </section>
 
             <h2 id="projects">Projects</h2>
             <p class="section-intro">这里优先放能被代码和文档验证的项目证据：我负责什么、系统怎么拆、哪些取舍值得继续追。</p>
