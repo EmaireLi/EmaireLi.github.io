@@ -126,6 +126,115 @@ async function fetchPosts(src = "./posts/posts.json") {
   return postsCache.get(src);
 }
 
+function normalizePostTags(post) {
+  if (!post || !Array.isArray(post.tags)) return [];
+  const seen = new Set();
+  return post.tags
+    .map((tag) => String(tag || "").replace(/^#/, "").replace(/\s+/g, " ").trim())
+    .filter((tag) => {
+      const key = tag.toLowerCase();
+      if (!tag || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function getPostYear(post) {
+  const match = String((post && post.date) || "").match(/^(\d{4})/);
+  return match ? match[1] : "未归档";
+}
+
+function getArchiveTags(posts) {
+  const seen = new Set();
+  const tags = [];
+  posts.forEach((post) => {
+    normalizePostTags(post).forEach((tag) => {
+      const key = tag.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      tags.push(tag);
+    });
+  });
+  return tags.sort((a, b) => a.localeCompare(b, "zh-CN"));
+}
+
+function groupPostsByYear(posts) {
+  const groups = new Map();
+  posts.forEach((post) => {
+    const year = getPostYear(post);
+    if (!groups.has(year)) groups.set(year, []);
+    groups.get(year).push(post);
+  });
+
+  return Array.from(groups.entries()).sort(([yearA], [yearB]) => {
+    if (yearA === yearB) return 0;
+    if (yearA === "未归档") return 1;
+    if (yearB === "未归档") return -1;
+    return yearB.localeCompare(yearA);
+  });
+}
+
+function createArchiveFilters(listEl) {
+  let filterEl = document.querySelector("[data-archive-filters]");
+  if (!filterEl) {
+    filterEl = document.createElement("nav");
+    filterEl.className = "archive-filters";
+    filterEl.dataset.archiveFilters = "";
+    filterEl.setAttribute("aria-label", "文章标签筛选");
+    listEl.parentNode.insertBefore(filterEl, listEl);
+  }
+  return filterEl;
+}
+
+function renderArchiveFilters(filterEl, tags, activeTag) {
+  const options = ["全部"].concat(tags);
+  filterEl.innerHTML = options
+    .map((tag) => {
+      const isActive = tag === activeTag;
+      return `<button class="archive-filter${isActive ? " is-active" : ""}" type="button" data-archive-tag="${escapeHtml(tag)}" aria-pressed="${isActive ? "true" : "false"}">${escapeHtml(tag)}</button>`;
+    })
+    .join("");
+}
+
+function renderPostTags(tags) {
+  if (tags.length === 0) return "";
+  return `<div class="archive-entry-tags">${tags.map((tag) => `<span class="archive-entry-tag">${escapeHtml(tag)}</span>`).join("")}</div>`;
+}
+
+function renderTimelineArchive(listEl, posts, activeTag) {
+  const filteredPosts = activeTag === "全部" ? posts : posts.filter((post) => normalizePostTags(post).includes(activeTag));
+  if (filteredPosts.length === 0) {
+    listEl.innerHTML = `<li class="archive-empty">没有匹配这个标签的文章。</li>`;
+    return;
+  }
+
+  listEl.innerHTML = groupPostsByYear(filteredPosts)
+    .map(([year, yearPosts]) => {
+      const entries = yearPosts
+        .map((post) => {
+          const title = escapeHtml(post.title || post.file || "Untitled");
+          const date = escapeHtml(post.date || "");
+          const excerpt = escapeHtml(post.excerpt || "");
+          const href = `./posts/${encodeURI(post.file)}`;
+          const tags = normalizePostTags(post);
+          return `<li class="archive-entry blog-item">
+            <time class="archive-entry-date" datetime="${date}">${date || "未注明日期"}</time>
+            <div class="archive-entry-main">
+              <a class="item-title archive-entry-title" href="${href}">${title}</a>
+              ${excerpt ? `<p class="archive-entry-excerpt">${excerpt}</p>` : ""}
+              ${renderPostTags(tags)}
+            </div>
+          </li>`;
+        })
+        .join("");
+      return `<li class="archive-year-group">
+        <h3 class="archive-year">${escapeHtml(year)}</h3>
+        <ol class="archive-timeline">${entries}</ol>
+      </li>`;
+    })
+    .join("");
+}
+
 function renderPostHtml({ title, date, markdownHtml }) {
   const safeTitle = escapeHtml(title);
   return `<!doctype html>
@@ -226,6 +335,8 @@ async function initBlogAutoList() {
 
   statusEl.hidden = true;
   statusEl.textContent = "";
+  const filterEl = createArchiveFilters(listEl);
+  let activeTag = "全部";
 
   try {
     const posts = await fetchPosts("./posts/posts.json");
@@ -234,21 +345,24 @@ async function initBlogAutoList() {
       postCountEl.textContent = String(posts.length);
     }
 
-    listEl.innerHTML = "";
-    posts.forEach((post) => {
-      if (!post || !post.file) return;
-      const li = document.createElement("li");
-      li.className = "blog-item";
-      li.innerHTML = `
-        <a class="item-title" href="./posts/${post.file}">${post.title || post.file}</a>
-        <p class="meta">${post.date || ""}</p>
-      `;
-      listEl.appendChild(li);
+    const validPosts = posts.filter((post) => post && post.file);
+    const tags = getArchiveTags(validPosts);
+    renderArchiveFilters(filterEl, tags, activeTag);
+    renderTimelineArchive(listEl, validPosts, activeTag);
+
+    filterEl.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-archive-tag]");
+      if (!button) return;
+      activeTag = button.dataset.archiveTag || "全部";
+      renderArchiveFilters(filterEl, tags, activeTag);
+      renderTimelineArchive(listEl, validPosts, activeTag);
+      initRevealOnScroll();
     });
     initRevealOnScroll();
   } catch (error) {
     statusEl.hidden = false;
     statusEl.textContent = `文章列表加载失败：${error.message}`;
+    filterEl.innerHTML = "";
     initRevealOnScroll();
   }
 }
@@ -262,7 +376,7 @@ function initRevealOnScroll() {
 
   const targets = Array.from(
     document.querySelectorAll(
-      ".home-page .post-body > h1, .home-page .post-body > h2, .home-page .project-list > li, .home-page .blog-list > .blog-item, .home-page blockquote, .home-page .guestbook"
+      ".home-page .post-body > h1, .home-page .post-body > h2, .home-page .project-list > li, .home-page .archive-year-group, .home-page .archive-entry, .home-page blockquote, .home-page .guestbook"
     )
   );
   if (targets.length === 0) return;

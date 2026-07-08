@@ -24,6 +24,59 @@ function extractFirst(regex, text) {
   return match ? match[1] : "";
 }
 
+function extractTags(html) {
+  const tags = [];
+  const seen = new Set();
+  const tagRegex = /<span[^>]*class=["'][^"']*\bxhs-tag\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi;
+  let match = tagRegex.exec(html);
+
+  while (match) {
+    const tag = decodeHtmlEntities(stripTags(match[1]))
+      .replace(/^#/, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    const key = tag.toLowerCase();
+    if (tag && !seen.has(key)) {
+      seen.add(key);
+      tags.push(tag);
+    }
+    match = tagRegex.exec(html);
+  }
+
+  return tags;
+}
+
+function addTag(tags, tag) {
+  if (!tags.includes(tag)) tags.push(tag);
+}
+
+function inferTags({ file, title, text }) {
+  const haystack = [file, title, text].join(" ").toLowerCase();
+  const tags = [];
+
+  if (/xhs-|小红书/.test(haystack)) addTag(tags, "小红书");
+  if (/京吹|上低音号|京阿尼|动画|acgn|bangumi/.test(haystack)) addTag(tags, "ACGN");
+  if (/求职|实习|保研|就业|面试|转正|牛客|大厂|读研|java/.test(haystack)) addTag(tags, "求职");
+  if (/java|fastapi|算法|代码|编程|开发/.test(haystack)) addTag(tags, "技术");
+  if (/apple|gpt|plus|礼品卡|充值|账号|account|工具/.test(haystack)) addTag(tags, "工具");
+  if (/朋友|西湖|灵隐|川大|銀杏|银杏|杭州|高中|生活|失眠|焦虑|焦慮/.test(haystack)) addTag(tags, "生活");
+
+  return tags;
+}
+
+function mergeTags(primary, fallback) {
+  const tags = [];
+  const seen = new Set();
+  primary.concat(fallback).forEach((tag) => {
+    const normalized = String(tag || "").replace(/^#/, "").replace(/\s+/g, " ").trim();
+    const key = normalized.toLowerCase();
+    if (!normalized || seen.has(key)) return;
+    seen.add(key);
+    tags.push(normalized);
+  });
+  return tags;
+}
+
 function inferDateFromFilename(file) {
   const m = file.match(/^(\d{4}-\d{2}-\d{2})/);
   return m ? m[1] : "";
@@ -51,10 +104,11 @@ function buildManifestEntry(file) {
     " "
   );
   const text = decodeHtmlEntities(stripTags(searchableHtml));
-  const searchText = [title, date, text].filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
   const excerpt = text.replace(title, "").trim().slice(0, 160);
+  const tags = mergeTags(extractTags(html), inferTags({ file, title, text }));
+  const searchText = [title, date, tags.join(" "), text].filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
 
-  return { file, title, date, excerpt, searchText };
+  return { file, title, date, excerpt, searchText, tags };
 }
 
 function run() {
