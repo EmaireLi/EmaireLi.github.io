@@ -1258,18 +1258,18 @@ iframe {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 7px;
   color: #999;
-  font-size: 1.5rem;
+  font-size: 1em;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: 1.4;
 }
 
 .visitor-icon {
   position: relative;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
 }
 
 .visitor-icon::before,
@@ -1283,16 +1283,16 @@ iframe {
 
 .visitor-icon::before {
   top: 1px;
-  width: 13px;
-  height: 13px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
 }
 
 .visitor-icon::after {
   bottom: 1px;
-  width: 26px;
-  height: 13px;
-  border-radius: 14px 14px 4px 4px;
+  width: 15px;
+  height: 7px;
+  border-radius: 8px 8px 2px 2px;
   clip-path: polygon(23% 0, 77% 0, 100% 100%, 0 100%);
 }
 
