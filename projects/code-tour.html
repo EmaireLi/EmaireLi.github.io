@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#222222" />
+    <title>Code Tour | Alex</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="headband"></div>
+
+    <main class="main">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="../index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">个人归档站</p>
+            </div>
+          </div>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="../index.html#about">About</a></li>
+              <li class="menu-item"><a href="../index.html#proof">Proof</a></li>
+              <li class="menu-item"><a href="../index.html#projects">Projects</a></li>
+              <li class="menu-item"><a href="../index.html#blog">Archives</a></li>
+              <li class="menu-item"><a href="../editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <aside class="sidebar" aria-label="Code tour overview">
+          <div class="sidebar-inner">
+            <div class="site-author">
+              <p class="site-author-name">Code Tour</p>
+              <p class="site-description">Reviewer routes for project evidence</p>
+            </div>
+            <nav class="case-study-nav" aria-label="Code tour sections">
+              <a href="#smartlabeling">SmartLabeling</a>
+              <a href="#yomii">Yomii</a>
+              <a href="#site">This site</a>
+              <a href="#verify">Verification</a>
+            </nav>
+          </div>
+        </aside>
+
+        <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+          <label class="site-search-label" for="site-search-input">Search</label>
+          <div class="site-search-control">
+            <span class="site-search-icon" aria-hidden="true"></span>
+            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
+          </div>
+          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
+          <div class="site-search-results" data-search-results role="list"></div>
+        </section>
+      </div>
+
+      <div class="main-inner page posts-expand">
+        <article class="post-block">
+          <header class="post-header">
+            <h1 class="post-title">Guided Code Tour</h1>
+            <div class="post-meta-container">review routes · project proof · static site evidence</div>
+          </header>
+
+          <div class="post-body article-content case-study">
+            <p class="case-lead">
+              这页是给技术 reviewer 的快速路线：如果你只有 10-15 分钟，不需要先通读所有 case study，可以按下面的路径直接看最能验证系统边界、职责和工程取舍的代码区域。
+            </p>
+
+            <div class="case-facts" aria-label="Code tour facts">
+              <div>
+                <span>Purpose</span>
+                <strong>Turn portfolio claims into inspectable evidence</strong>
+              </div>
+              <div>
+                <span>Scope</span>
+                <strong>SmartLabeling, Yomii, and this site</strong>
+              </div>
+              <div>
+                <span>Constraint</span>
+                <strong>Broad links, no brittle line anchors</strong>
+              </div>
+            </div>
+
+            <h2 id="smartlabeling">SmartLabeling Review Route</h2>
+            <p>
+              SmartLabeling 的重点是 AI 标注工作流：前端如何表达 prompt，服务端如何承接模型和文件操作，最后如何把结果导出成可继续使用的训练资产。
+            </p>
+            <div class="code-tour-list" role="list">
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>01 · Interaction</span>
+                  <h3>Annotation UI components</h3>
+                </div>
+                <p>Inspect this first to understand where point/box tools, image content, labels, and user correction states live in the Vue/Electron surface.</p>
+                <ul class="case-link-list">
+                  <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/src/components" target="_blank" rel="noreferrer">SmartLabeling `src/components`</a></li>
+                  <li><a href="./smartlabeling.html#implementation">Implementation notes</a></li>
+                </ul>
+              </article>
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>02 · Service boundary</span>
+                  <h3>FastAPI routers</h3>
+                </div>
+                <p>Inspect the routers to verify that prompt, upload, image switching, project management, and export are service boundaries rather than hidden UI state.</p>
+                <ul class="case-link-list">
+                  <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/routers" target="_blank" rel="noreferrer">SmartLabeling `core/routers`</a></li>
+                  <li><a href="./smartlabeling.html#architecture">Architecture flow</a></li>
+                </ul>
+              </article>
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>03 · Model and artifact logic</span>
+                  <h3>Mask, CLIP, project, and export services</h3>
+                </div>
+                <p>Inspect the services to see how model-facing logic and export artifacts are separated from the desktop UI.</p>
+                <ul class="case-link-list">
+                  <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/services" target="_blank" rel="noreferrer">SmartLabeling `core/services`</a></li>
+                  <li><a href="https://github.com/sumikkys/SmartLabeling/blob/main/package.json" target="_blank" rel="noreferrer">Desktop build config</a></li>
+                </ul>
+              </article>
+            </div>
+
+            <h2 id="yomii">Yomii Review Route</h2>
+            <p>
+              Yomii 的重点是完整学习链路：查词、收藏、复习、测试和作文评测是否真的通过前端、后端、数据库和模型/评测逻辑连起来。
+            </p>
+            <div class="code-tour-list" role="list">
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>01 · Product surface</span>
+                  <h3>Vue views for learning flows</h3>
+                </div>
+                <p>Inspect the views to understand how dictionary search, review, quiz, essay evaluation, and collection workflows are separated in the UI.</p>
+                <ul class="case-link-list">
+                  <li><a href="https://github.com/EmaireLi/Yomii/tree/main/src/views" target="_blank" rel="noreferrer">Yomii `src/views`</a></li>
+                  <li><a href="./yomii.html#implementation">Implementation notes</a></li>
+                </ul>
+              </article>
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>02 · API and data boundary</span>
+                  <h3>FastAPI app and database design</h3>
+                </div>
+                <p>Inspect backend app structure and database docs to verify the split between static dictionary data and user behavior records.</p>
+                <ul class="case-link-list">
+                  <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/app" target="_blank" rel="noreferrer">Yomii `backend/app`</a></li>
+                  <li><a href="https://github.com/EmaireLi/Yomii/blob/main/docs/DATABASE_DESIGN.md" target="_blank" rel="noreferrer">Database design doc</a></li>
+                </ul>
+              </article>
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>03 · Evaluation and tests</span>
+                  <h3>Training scripts and backend tests</h3>
+                </div>
+                <p>Inspect these areas to verify AI evaluation workflow, local model service assumptions, and behavior covered by backend tests.</p>
+                <ul class="case-link-list">
+                  <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/training" target="_blank" rel="noreferrer">Yomii `backend/training`</a></li>
+                  <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/tests" target="_blank" rel="noreferrer">Yomii `backend/tests`</a></li>
+                </ul>
+              </article>
+            </div>
+
+            <h2 id="site">This Site Review Route</h2>
+            <p>
+              这个站点本身也保留了可检查的工程边界：静态内容生成、本地编辑器、XHS 导入、搜索、留言 Worker 和 AI-team 决策文档。
+            </p>
+            <div class="code-tour-list" role="list">
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>01 · Content pipeline</span>
+                  <h3>Post manifest and XHS import scripts</h3>
+                </div>
+                <p>Inspect the scripts to verify how local posts are generated, indexed, and kept GitHub Pages-compatible.</p>
+                <ul class="case-link-list">
+                  <li><a href="../scripts/generate-posts-manifest.js">`scripts/generate-posts-manifest.js`</a></li>
+                  <li><a href="../scripts/import-xhs-notes.js">`scripts/import-xhs-notes.js`</a></li>
+                </ul>
+              </article>
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>02 · Static UX</span>
+                  <h3>Homepage, styles, and client behavior</h3>
+                </div>
+                <p>Inspect these files to see how the archive, proof map, project cards, search, editor preservation, and guestbook UI stay in a plain static stack.</p>
+                <ul class="case-link-list">
+                  <li><a href="../index.html">`index.html`</a></li>
+                  <li><a href="../styles.css">`styles.css`</a></li>
+                  <li><a href="../script.js">`script.js`</a></li>
+                </ul>
+              </article>
+              <article class="code-tour-item" role="listitem">
+                <div>
+                  <span>03 · Process</span>
+                  <h3>AI-team decisions and verification loop</h3>
+                </div>
+                <p>Inspect the docs to see how features are proposed, evaluated, scoped, implemented, checked, committed, and pushed.</p>
+                <ul class="case-link-list">
+                  <li><a href="../docs/ai_team/feature_decision.md">Feature decisions</a></li>
+                  <li><a href="../docs/ai_team/evaluation/round-03-summary.md">Round 3 evaluation summary</a></li>
+                </ul>
+              </article>
+            </div>
+
+            <h2 id="verify">Verification Notes</h2>
+            <div class="verification-grid">
+              <div>
+                <span>Static site checks</span>
+                <strong><code>node --check script.js</code></strong>
+                <p>Protects shared homepage, archive, search, editor, and guestbook behavior from syntax regressions.</p>
+              </div>
+              <div>
+                <span>Import pipeline</span>
+                <strong><code>node --check scripts/import-xhs-notes.js</code></strong>
+                <p>Keeps the XHS import path compatible with local JSON input and generated post output.</p>
+              </div>
+              <div>
+                <span>Manifest</span>
+                <strong><code>node scripts/generate-posts-manifest.js</code></strong>
+                <p>Regenerates `posts/posts.json` so archive and search can discover local posts.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span><a href="../index.html#proof">Back to proof map</a></span>
+      </div>
+    </footer>
+
+    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260708c"></script>
+  </body>
+</html>

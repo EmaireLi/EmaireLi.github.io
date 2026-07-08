@@ -141,3 +141,60 @@ The second implementation target is:
 **Hiring Snapshot + Capability Evidence Matrix**
 
 This should include enough ownership and code-review cues to improve hiring value immediately without adding JavaScript complexity.
+
+## Round 3 Decision
+
+### Top 3 Features
+
+#### 1. Guided Code Tour / Review Routes
+
+**Reason:**
+Round 3 evaluators agreed that SmartLabeling visual proof would be valuable, but the repository currently has no real local project screenshots or mask artifacts. A guided code tour is the highest-value unconditional feature: it improves verification, stays honest, and avoids fake visual proof.
+
+**Expected impact:**
+
+- Technical reviewers can inspect the strongest code evidence faster.
+- The homepage Proof Map gets a concrete review route instead of broad repo links.
+- Project claims become easier to verify without running each app.
+
+**Implementation plan:**
+
+- Add a static `projects/code-tour.html` page.
+- Cover SmartLabeling, Yomii, and this site.
+- Link it from the homepage Proof Map and project case pages.
+- Keep links broad enough to avoid brittle deep-path drift.
+
+#### 2. SmartLabeling Visual Evidence Strip
+
+**Reason:**
+This remains the strongest technical-display candidate, but only if real screenshots, saved masks, or export artifacts are available.
+
+**Expected impact:**
+
+- Makes AI labeling workflow understandable in seconds.
+- Adds visual AI/frontend proof to the strongest project page.
+
+**Implementation plan:**
+
+- Defer until assets exist under `assets/projects/smartlabeling/`.
+- Do not imply live model inference or present generated placeholders as real product output.
+
+#### 3. Yomii Request-to-Result / Essay Evaluation Trace
+
+**Reason:**
+Good full-stack/AI proof candidate, especially if implemented as one concrete workflow with route/test links.
+
+**Expected impact:**
+
+- Helps reviewers understand Yomii's UI/API/data/model loop.
+
+**Implementation plan:**
+
+- Defer to a later round after the code tour.
+- Use sample payloads and code/test links rather than broad diagrams.
+
+### Round 3 Clear Highest Priority
+
+The third implementation target is:
+
+**Guided Code Tour / Review Routes**
