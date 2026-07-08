@@ -1137,18 +1137,104 @@ iframe {
   gap: 12px;
 }
 
+.admin-tabs {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px;
+  border: 1px solid var(--soft-line-color);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.admin-tab {
+  appearance: none;
+  min-height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-color);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125em;
+  line-height: 1.4;
+  padding: 5px 16px;
+}
+
+.admin-tab.is-active {
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text-strong-color);
+  box-shadow: 0 6px 16px rgba(54, 82, 104, 0.1);
+}
+
+.admin-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-visitor-summary {
+  color: var(--muted-color);
+  font-size: 0.875em;
+}
+
+.admin-visitor-list {
+  display: grid;
+  gap: 12px;
+}
+
 .admin-message-card {
   position: relative;
   overflow: hidden;
 }
 
-.admin-message-card::before {
+.admin-message-card::before,
+.admin-visitor-card::before {
   position: absolute;
   inset: 0 auto 0 0;
   width: 3px;
   border-radius: var(--control-radius) 0 0 var(--control-radius);
   background: linear-gradient(to bottom, rgba(54, 124, 147, 0.68), rgba(54, 124, 147, 0.08));
   content: "";
+}
+
+.admin-visitor-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1px solid var(--soft-line-color);
+  border-radius: var(--control-radius);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+.admin-visitor-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-visitor-head strong {
+  color: var(--text-strong-color);
+  font-family: var(--font-mono);
+  font-size: 0.9375em;
+  overflow-wrap: anywhere;
+}
+
+.admin-visitor-head span {
+  color: var(--muted-color);
+  font-size: 0.8125em;
+}
+
+.admin-visitor-ua {
+  margin: 0;
+  color: var(--text-color);
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .admin-message-meta {

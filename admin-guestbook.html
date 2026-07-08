@@ -54,7 +54,19 @@
             </div>
           </form>
 
-          <div class="admin-message-list" data-admin-message-list aria-live="polite"></div>
+          <div class="admin-tabs" role="tablist" aria-label="管理视图">
+            <button class="admin-tab is-active" type="button" data-admin-tab="messages" role="tab" aria-selected="true">留言</button>
+            <button class="admin-tab" type="button" data-admin-tab="visitors" role="tab" aria-selected="false">访客</button>
+          </div>
+
+          <div class="admin-panel" data-admin-panel="messages">
+            <div class="admin-message-list" data-admin-message-list aria-live="polite"></div>
+          </div>
+
+          <div class="admin-panel" data-admin-panel="visitors" hidden>
+            <div class="admin-visitor-summary" data-admin-visitor-summary></div>
+            <div class="admin-visitor-list" data-admin-visitor-list aria-live="polite"></div>
+          </div>
         </section>
       </div>
     </main>
@@ -68,6 +80,6 @@
     </footer>
 
     <script src="./guestbook-config.js?v=20260630"></script>
-    <script src="./script.js?v=20260630e"></script>
+    <script src="./script.js?v=20260708b"></script>
   </body>
 </html>

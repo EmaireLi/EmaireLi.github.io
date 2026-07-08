@@ -59,9 +59,11 @@ function jsonResponse(request, env, body, status = 200) {
 }
 
 function getClientIp(request) {
+  const cfIp = request.headers.get("CF-Connecting-IP");
+  if (cfIp) return cfIp;
   const forwarded = request.headers.get("X-Forwarded-For");
   if (forwarded) return forwarded.split(",")[0].trim();
-  return request.headers.get("CF-Connecting-IP") || "unknown";
+  return "unknown";
 }
 
 async function sha256Hex(value) {
@@ -256,21 +258,23 @@ async function deleteMessage(request, env, id) {
 
 async function recordVisit(request, env) {
   const visitorHash = await getVisitorHash(request, env);
+  const ipAddress = getClientIp(request).slice(0, 80);
+  const userAgent = String(request.headers.get("User-Agent") || "unknown").slice(0, 300);
   const now = new Date().toISOString();
 
   const insert = await env.DB.prepare(
-    `INSERT OR IGNORE INTO site_visitors (visitor_hash, first_seen_at, last_seen_at, visit_count)
-      VALUES (?, ?, ?, 0)`
+    `INSERT OR IGNORE INTO site_visitors (visitor_hash, first_seen_at, last_seen_at, visit_count, user_agent, ip_address)
+      VALUES (?, ?, ?, 0, ?, ?)`
   )
-    .bind(visitorHash, now, now)
+    .bind(visitorHash, now, now, userAgent, ipAddress)
     .run();
 
   await env.DB.prepare(
     `UPDATE site_visitors
-      SET last_seen_at = ?, visit_count = visit_count + 1
+      SET last_seen_at = ?, visit_count = visit_count + 1, user_agent = ?, ip_address = ?
       WHERE visitor_hash = ?`
   )
-    .bind(now, visitorHash)
+    .bind(now, userAgent, ipAddress, visitorHash)
     .run();
 
   if (insert.meta && insert.meta.changes > 0) {
@@ -285,6 +289,25 @@ async function recordVisit(request, env) {
 
   const stats = await env.DB.prepare("SELECT value FROM site_stats WHERE key = 'visitors'").first();
   return jsonResponse(request, env, { visitors: Number(stats && stats.value) || 0 });
+}
+
+async function listAdminVisitors(request, env) {
+  if (!requireAdmin(request, env)) {
+    return jsonResponse(request, env, { error: "Unauthorized." }, 401);
+  }
+
+  const result = await env.DB.prepare(
+    `SELECT visitor_hash, first_seen_at, last_seen_at, visit_count, user_agent, ip_address
+      FROM site_visitors
+      ORDER BY datetime(last_seen_at) DESC
+      LIMIT 100`
+  ).all();
+  const stats = await env.DB.prepare("SELECT value FROM site_stats WHERE key = 'visitors'").first();
+
+  return jsonResponse(request, env, {
+    total: Number(stats && stats.value) || 0,
+    visitors: result.results || [],
+  });
 }
 
 async function route(request, env) {
@@ -302,6 +325,7 @@ async function route(request, env) {
 
   if (request.method === "GET" && path === "/messages") return listMessages(request, env);
   if (request.method === "GET" && path === "/admin/messages") return listAdminMessages(request, env);
+  if (request.method === "GET" && path === "/admin/visitors") return listAdminVisitors(request, env);
   if (request.method === "POST" && path === "/messages") return createMessage(request, env);
   if (request.method === "POST" && path === "/stats/visit") return recordVisit(request, env);
   if (request.method === "PATCH" && messageMatch) return updateMessage(request, env, messageMatch[1]);

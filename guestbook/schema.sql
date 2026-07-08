@@ -19,7 +19,9 @@ CREATE TABLE IF NOT EXISTS site_visitors (
   visitor_hash TEXT PRIMARY KEY,
   first_seen_at TEXT NOT NULL,
   last_seen_at TEXT NOT NULL,
-  visit_count INTEGER NOT NULL DEFAULT 1
+  visit_count INTEGER NOT NULL DEFAULT 1,
+  user_agent TEXT NOT NULL DEFAULT '',
+  ip_address TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS site_stats (

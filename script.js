@@ -582,6 +582,21 @@ async function fetchAdminGuestbookMessages(apiUrl, token) {
   return Array.isArray(data.messages) ? data.messages : [];
 }
 
+async function fetchAdminVisitors(apiUrl, token) {
+  const response = await fetch(`${apiUrl}/admin/visitors`, {
+    cache: "no-store",
+    headers: { "Authorization": `Bearer ${token}` },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `HTTP ${response.status}`);
+  }
+  return {
+    total: Number(data.total) || 0,
+    visitors: Array.isArray(data.visitors) ? data.visitors : [],
+  };
+}
+
 async function updateGuestbookMessage(apiUrl, id, token, payload) {
   const response = await fetch(`${apiUrl}/messages/${encodeURIComponent(id)}`, {
     method: "PATCH",
@@ -874,6 +889,57 @@ function renderAdminGuestbookMessages(listEl, messages, handlers) {
   });
 }
 
+function renderAdminVisitors(listEl, summaryEl, data) {
+  if (!listEl || !summaryEl) return;
+  listEl.innerHTML = "";
+  summaryEl.textContent = `去重访客 ${data.total} 位，最近记录 ${data.visitors.length} 条。`;
+
+  if (!data.visitors.length) {
+    const empty = document.createElement("p");
+    empty.className = "guestbook-empty";
+    empty.textContent = "还没有访客记录。";
+    listEl.appendChild(empty);
+    return;
+  }
+
+  data.visitors.forEach((item) => {
+    const card = document.createElement("article");
+    card.className = "admin-visitor-card";
+
+    const head = document.createElement("div");
+    head.className = "admin-visitor-head";
+
+    const ip = document.createElement("strong");
+    ip.textContent = item.ip_address || "unknown";
+
+    const count = document.createElement("span");
+    count.textContent = `${Number(item.visit_count) || 0} 次`;
+
+    head.append(ip, count);
+
+    const meta = document.createElement("div");
+    meta.className = "admin-message-meta";
+
+    const hash = document.createElement("span");
+    hash.textContent = `hash ${String(item.visitor_hash || "").slice(0, 12)}`;
+
+    const firstSeen = document.createElement("span");
+    firstSeen.textContent = `首次 ${formatGuestbookTime(item.first_seen_at)}`;
+
+    const lastSeen = document.createElement("span");
+    lastSeen.textContent = `最近 ${formatGuestbookTime(item.last_seen_at)}`;
+
+    meta.append(hash, firstSeen, lastSeen);
+
+    const ua = document.createElement("p");
+    ua.className = "admin-visitor-ua";
+    ua.textContent = item.user_agent || "";
+
+    card.append(head, meta, ua);
+    listEl.appendChild(card);
+  });
+}
+
 function initAdminGuestbook() {
   const root = document.querySelector("[data-admin-guestbook]");
   if (!root) return;
@@ -883,9 +949,13 @@ function initAdminGuestbook() {
   const clearTokenButton = root.querySelector("[data-admin-clear-token]");
   const status = root.querySelector("[data-admin-status]");
   const list = root.querySelector("[data-admin-message-list]");
+  const visitorList = root.querySelector("[data-admin-visitor-list]");
+  const visitorSummary = root.querySelector("[data-admin-visitor-summary]");
+  const tabs = Array.from(root.querySelectorAll("[data-admin-tab]"));
+  const panels = Array.from(root.querySelectorAll("[data-admin-panel]"));
   const apiUrl = getGuestbookApiUrl(root);
 
-  if (!form || !tokenInput || !clearTokenButton || !list) return;
+  if (!form || !tokenInput || !clearTokenButton || !list || !visitorList || !visitorSummary) return;
 
   if (!apiUrl) {
     setGuestbookStatus(status, "留言服务未配置。", "error");
@@ -893,6 +963,21 @@ function initAdminGuestbook() {
   }
 
   const getToken = () => tokenInput.value.trim();
+
+  const showPanel = (name) => {
+    tabs.forEach((tab) => {
+      const active = tab.dataset.adminTab === name;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", active ? "true" : "false");
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.adminPanel !== name;
+    });
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => showPanel(tab.dataset.adminTab || "messages"));
+  });
 
   const loadMessages = async () => {
     const token = getToken();
@@ -904,7 +989,10 @@ function initAdminGuestbook() {
 
     setGuestbookStatus(status, "正在读取...", "muted");
     try {
-      const messages = await fetchAdminGuestbookMessages(apiUrl, token);
+      const [messages, visitors] = await Promise.all([
+        fetchAdminGuestbookMessages(apiUrl, token),
+        fetchAdminVisitors(apiUrl, token),
+      ]);
       renderAdminGuestbookMessages(list, messages, {
         onSave: async ({ id, signature, message, status: itemStatus, saveButton, deleteButton }) => {
           if (!signature || !message) {
@@ -948,7 +1036,8 @@ function initAdminGuestbook() {
           }
         },
       });
-      setGuestbookStatus(status, `共 ${messages.length} 条留言。`, "success");
+      renderAdminVisitors(visitorList, visitorSummary, visitors);
+      setGuestbookStatus(status, `共 ${messages.length} 条留言，${visitors.total} 位访客。`, "success");
     } catch (error) {
       setGuestbookStatus(status, `读取失败：${error.message}`, "error");
     }
@@ -962,7 +1051,10 @@ function initAdminGuestbook() {
   clearTokenButton.addEventListener("click", () => {
     tokenInput.value = "";
     list.innerHTML = "";
+    visitorList.innerHTML = "";
+    visitorSummary.textContent = "";
     setGuestbookStatus(status, "");
+    showPanel("messages");
     tokenInput.focus();
   });
 }
