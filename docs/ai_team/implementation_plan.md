@@ -1,19 +1,19 @@
 # Implementation Plan Index
 
-Current implementation focus: Round 05 Site Pipeline Lens.
+Current implementation focus: Round 06 Curated Reading Paths / First Reads.
 
 ## Latest Plan
 
-- Round: 05
-- Selected feature: Site Pipeline Lens
-- Detailed plan: [round-05-implementation_plan.md](./round-05-implementation_plan.md)
+- Round: 06
+- Selected feature: Curated Reading Paths / First Reads
+- Detailed plan: [round-06-implementation_plan.md](./round-06-implementation_plan.md)
 
 ## Files In Current Round
 
-- `index.html`: add the homepage Site Pipeline Lens section and adjust review routes toward the site itself.
-- `styles.css`: add responsive pipeline card and proof-strip styles.
-- `README.md`: document maintenance rules for the Site Pipeline Lens.
-- `docs/ai_team/*`: keep Round 05 brainstorm, evaluation, decision, implementation, and QA records.
+- `index.html`: add the homepage curated reading section between Site Pipeline Lens and Archive.
+- `styles.css`: add responsive reading-lane styles.
+- `README.md`: document maintenance rules for curated reading paths.
+- `docs/ai_team/*`: keep Round 06 brainstorm, evaluation, decision, implementation, and QA records.
 
 ## Current Constraints
 
@@ -24,6 +24,7 @@ Current implementation focus: Round 05 Site Pipeline Lens.
 
 ## Recent Plans
 
+- [Round 06 - Curated Reading Paths](./round-06-implementation_plan.md)
 - [Round 05 - Site Pipeline Lens](./round-05-implementation_plan.md)
 - [Round 04 - Homepage Evidence Routing](./round-04-implementation_plan.md)
 - [Round 03 - Guided Code Tour](./round-03-implementation_plan.md)

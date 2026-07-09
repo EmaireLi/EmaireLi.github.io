@@ -1,17 +1,18 @@
 # Feature Decision Index
 
-Current implementation focus: Round 05 Site Pipeline Lens.
+Current implementation focus: Round 06 Curated Reading Paths / First Reads.
 
 ## Latest Decision
 
-- Round: 05
-- Selected feature: Site Pipeline Lens
-- Reason: improves the personal website itself by making the static publishing, import, manifest, archive/search, guestbook, and deployment workflow visible to visitors.
-- Detailed decision: [round-05-feature_decision.md](./round-05-feature_decision.md)
+- Round: 06
+- Selected feature: Curated Reading Paths / First Reads
+- Reason: improves the personal website itself by giving first-time visitors a guided archive entry point instead of only chronology, tags, or search.
+- Detailed decision: [round-06-feature_decision.md](./round-06-feature_decision.md)
 - Implementation plan: [implementation_plan.md](./implementation_plan.md)
 
 ## Recent Decision History
 
+- [Round 06 - Curated Reading Paths](./round-06-feature_decision.md)
 - [Round 05 - Site Pipeline Lens](./round-05-feature_decision.md)
 - [Round 04 - Homepage Evidence Routing](./round-04-feature_decision.md)
 - [Round 03 - Guided Code Tour](./round-03-feature_decision.md)
