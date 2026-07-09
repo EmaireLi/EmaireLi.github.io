@@ -7,7 +7,7 @@
     <title>Alex Emaire's Blog</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body class="home-page">
+  <body id="top" class="home-page">
     <div class="headband"></div>
 
     <main class="main">
@@ -83,10 +83,10 @@
                   <strong>60 秒判断方向和证据</strong>
                   <em>角色信号、能力证据、项目入口</em>
                 </a>
-                <a class="route-card" href="./projects/code-tour.html">
+                <a class="route-card" href="#site-pipeline">
                   <span>Technical reviewer</span>
-                  <strong>按代码阅读路线检查</strong>
-                  <em>项目结构、脚本、文档、取舍</em>
+                  <strong>先看这个网站怎么维护</strong>
+                  <em>编辑、导入、索引、搜索、发布</em>
                 </a>
                 <a class="route-card" href="#blog">
                   <span>Reader</span>
@@ -131,7 +131,7 @@
                   </li>
                   <li>
                     <span>Review path</span>
-                    <strong><a href="#projects">case studies</a> → GitHub → code notes</strong>
+                    <strong><a href="#site-pipeline">site pipeline</a> → <a href="#blog">archive</a> → <a href="./projects/code-tour.html">code tour</a></strong>
                   </li>
                 </ul>
               </div>
@@ -196,7 +196,7 @@
                 <h3>Suggested review routes</h3>
                 <ul>
                   <li><strong>Recruiter:</strong> read the snapshot, then scan <a href="#projects">Projects</a> and <a href="#contact">contact</a>.</li>
-                  <li><strong>Technical reviewer:</strong> start with the <a href="./projects/code-tour.html">Code Tour</a>, then open SmartLabeling/Yomii case studies.</li>
+                  <li><strong>Technical reviewer:</strong> start with <a href="#site-pipeline">how this site works</a>, then open the <a href="./projects/code-tour.html">Code Tour</a> if more code context is needed.</li>
                   <li><strong>Process reviewer:</strong> inspect the import scripts, manifest generation, and AI-team decision docs.</li>
                 </ul>
               </div>
@@ -218,7 +218,7 @@
                 </div>
                 <div>
                   <dt>Site engineering</dt>
-                  <dd><a href="./projects/code-tour.html#site">Code Tour</a> and local scripts show the static content pipeline.</dd>
+                  <dd><a href="#site-pipeline">Site Pipeline Lens</a> and local scripts show how the static content system is maintained.</dd>
                 </div>
               </dl>
             </section>
@@ -313,6 +313,74 @@
                 </div>
               </li>
             </ul>
+
+            <section id="site-pipeline" class="site-pipeline" aria-labelledby="site-pipeline-title">
+              <div class="section-heading-row">
+                <div>
+                  <p class="proof-kicker">Site pipeline lens</p>
+                  <h2 id="site-pipeline-title">这个网站本身也是一个可检查的作品。</h2>
+                </div>
+                <p>从写作、导入、生成索引到搜索和发布，尽量用静态文件把内容系统做清楚。</p>
+              </div>
+
+              <ol class="pipeline-steps" aria-label="Personal site publishing pipeline">
+                <li class="pipeline-step">
+                  <span class="pipeline-index">01</span>
+                  <div>
+                    <h3>Write locally</h3>
+                    <p>文章可以从站内编辑器生成静态 HTML，保持 GitHub Pages 可部署。</p>
+                    <a href="./editor.html">Open editor</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">02</span>
+                  <div>
+                    <h3>Import notes</h3>
+                    <p>小红书笔记先转成本地 JSON，再生成本地文章和图片引用，避免热链和账号依赖。</p>
+                    <a href="./scripts/import-xhs-notes.js">Inspect importer</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">03</span>
+                  <div>
+                    <h3>Build the manifest</h3>
+                    <p>脚本扫描 <code>posts/</code>，生成归档和搜索共用的文章清单。</p>
+                    <a href="./posts/posts.json">View manifest</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">04</span>
+                  <div>
+                    <h3>Browse and search</h3>
+                    <p>首页归档和本地搜索共享同一份数据，读者不用离开静态站点也能找到内容。</p>
+                    <a href="#site-search-input">Try search</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">05</span>
+                  <div>
+                    <h3>Respond and publish</h3>
+                    <p>留言板独立于静态页面，站点主体仍保持轻量；迭代记录写入文档并随分支发布。</p>
+                    <a href="./docs/ai_team/feature_decision.md">Read decisions</a>
+                  </div>
+                </li>
+              </ol>
+
+              <div class="pipeline-proof" aria-label="Site pipeline proof points">
+                <div>
+                  <span>Constraint</span>
+                  <strong>No build framework required; plain HTML/CSS/JS stays deployable.</strong>
+                </div>
+                <div>
+                  <span>Trust</span>
+                  <strong>Content is local, generated artifacts are inspectable, and external accounts are optional.</strong>
+                </div>
+                <div>
+                  <span>Next review</span>
+                  <strong><a href="./README.md">maintenance notes</a> · <a href="./projects/code-tour.html#site">site code route</a></strong>
+                </div>
+              </div>
+            </section>
 
             <h2 id="blog">近期更新</h2>
             <div class="blog-toolbar">

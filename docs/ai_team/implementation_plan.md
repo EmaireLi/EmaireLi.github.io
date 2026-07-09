@@ -1,137 +1,30 @@
-# Implementation Plan
+# Implementation Plan Index
 
-Date: 2026-07-08
+Current implementation focus: Round 05 Site Pipeline Lens.
 
-## Selected Feature
+## Latest Plan
 
-Project Case Study Pages + Homepage Project Cards
+- Round: 05
+- Selected feature: Site Pipeline Lens
+- Detailed plan: [round-05-implementation_plan.md](./round-05-implementation_plan.md)
 
-## Files To Modify
+## Files In Current Round
 
-- `index.html`
-  - Replace the current simple Projects list with richer project cards.
-  - Link to new case study pages.
-  - Optionally add a small hiring-oriented intro for the project section, not a full resume page.
+- `index.html`: add the homepage Site Pipeline Lens section and adjust review routes toward the site itself.
+- `styles.css`: add responsive pipeline card and proof-strip styles.
+- `README.md`: document maintenance rules for the Site Pipeline Lens.
+- `docs/ai_team/*`: keep Round 05 brainstorm, evaluation, decision, implementation, and QA records.
 
-- `styles.css`
-  - Add reusable styles for project cards and case study pages.
-  - Preserve the existing glass/archive visual style.
-  - Keep mobile layout stable and readable.
+## Current Constraints
 
-- `README.md`
-  - Document the new project case study pages and the maintenance convention.
+- Keep the site compatible with plain HTML/CSS/JavaScript.
+- Do not change `script.js` or `editor.html` unless the selected feature explicitly requires it.
+- Do not add paid services or external-account dependencies.
+- Keep the personal website itself as the design subject; external projects remain supporting proof.
 
-## Files To Add
+## Recent Plans
 
-- `projects/smartlabeling.html`
-  - Static case study page for SmartLabeling.
-
-- `projects/yomii.html`
-  - Static case study page for Yomii.
-
-Potential later additions, not required in the first patch:
-
-- `assets/projects/smartlabeling/`
-- `assets/projects/yomii/`
-
-## Technical Approach
-
-- Keep the implementation plain HTML/CSS/JavaScript.
-- Do not add dependencies or a build step.
-- Use static HTML for the first version because there are only two projects.
-- Reuse existing page chrome: `headband`, `.main`, `.column`, `.post-block`, `.post-body`, footer.
-- Make project cards scan-friendly:
-  - project name;
-  - one-line positioning;
-  - role/ownership;
-  - technology tags;
-  - key proof points;
-  - links to case study and GitHub.
-- Make case studies evidence-first:
-  - problem;
-  - role;
-  - architecture/data flow;
-  - implementation highlights;
-  - tradeoffs;
-  - code reading links;
-  - outcomes and next steps.
-
-## Data Structure Changes
-
-None in the first implementation.
-
-Rationale:
-
-- A `projects.json` file is unnecessary until the project count grows or multiple pages need dynamic rendering.
-- Static HTML keeps the change compatible with GitHub Pages and the existing no-build workflow.
-
-## Risks
-
-- Project details may be incomplete without screenshots or exact metrics.
-  - Mitigation: use honest “current evidence / next proof to add” wording.
-- Homepage cards could become visually heavy.
-  - Mitigation: keep cards compact and let detail pages carry the deeper content.
-- External GitHub file links may drift over time.
-  - Mitigation: link to repository-level paths first, and use code-reading notes that remain useful even if files move.
-- This plan touches user-facing HTML/CSS.
-  - Mitigation: run syntax checks and local visual preview when possible.
-
-## Verification Plan
-
-- `node --check script.js`
-- `node --check scripts/import-xhs-notes.js`
-- `node scripts/generate-posts-manifest.js`
-- Start a local static server and preview:
-  - homepage Projects section;
-  - `projects/smartlabeling.html`;
-  - `projects/yomii.html`;
-  - mobile-width layout if browser tooling is available.
-
-## Implementation Gate
-
-The active goal continuation explicitly directed continued autonomous progress. Implementation proceeded on the documented highest-priority feature while preserving the original design and decision records.
-
-## Round 4 Implementation Plan
-
-Date: 2026-07-09
-
-### Selected Feature
-
-Homepage Evidence-Routing Pass
-
-### Files To Modify
-
-- `index.html`
-  - Replace the generic welcome opening with a positioning-first identity panel.
-  - Add Start Here route cards.
-  - Add a Proof-to-Project bridge.
-  - Add project evidence receipt rows.
-- `styles.css`
-  - Add responsive styles for the new homepage components.
-- `README.md`
-  - Document homepage evidence-routing maintenance.
-
-### Technical Approach
-
-- Keep the implementation static HTML/CSS.
-- Preserve `editor.html` and `script.js`.
-- Reuse existing visual tokens and project-card patterns.
-- Avoid hidden-content filters or new interaction state in this pass.
-
-### Data Structure Changes
-
-None.
-
-### Risks
-
-- The hero could feel too much like a resume.
-- Route cards could duplicate navigation.
-- Project receipts could increase page density.
-- New grids could overflow on mobile.
-
-### Verification Plan
-
-- Run the required JavaScript checks and manifest generation.
-- Run `git diff --check`.
-- Parse changed HTML files.
-- Preview the homepage locally on desktop and mobile widths.
+- [Round 05 - Site Pipeline Lens](./round-05-implementation_plan.md)
+- [Round 04 - Homepage Evidence Routing](./round-04-implementation_plan.md)
+- [Round 03 - Guided Code Tour](./round-03-implementation_plan.md)
+- [Round 02 - Project Case Study Pages](./round-02-implementation_plan.md)
