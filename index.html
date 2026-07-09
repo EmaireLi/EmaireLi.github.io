@@ -11,85 +11,95 @@
     <div class="headband"></div>
 
     <main class="main">
-      <div class="column">
-        <header class="header" aria-label="Site header">
-          <div class="site-brand-container">
-            <div class="site-meta">
-              <a class="brand" href="./index.html" rel="start">
-                <i class="logo-line" aria-hidden="true"></i>
-                <p class="site-title">Alex Emaire's Blog</p>
-                <i class="logo-line" aria-hidden="true"></i>
-              </a>
-              <p class="site-subtitle">个人归档站</p>
-            </div>
+      <header class="header" aria-label="Site header">
+        <div class="site-brand-container">
+          <div class="site-meta">
+            <a class="brand" href="./index.html" rel="start">
+              <i class="logo-line" aria-hidden="true"></i>
+              <p class="site-title">Alex Emaire's Blog</p>
+              <i class="logo-line" aria-hidden="true"></i>
+            </a>
+            <p class="site-subtitle">个人归档站</p>
           </div>
+        </div>
 
-          <nav class="site-nav" aria-label="Main navigation">
-            <ul class="main-menu menu">
-              <li class="menu-item"><a href="#about">About</a></li>
-              <li class="menu-item"><a href="#proof">Proof</a></li>
-              <li class="menu-item"><a href="#projects">Projects</a></li>
-              <li class="menu-item"><a href="#blog">Archives</a></li>
-              <li class="menu-item"><a href="./editor.html">Editor</a></li>
-            </ul>
-          </nav>
-        </header>
-
-        <aside class="sidebar" aria-label="Site overview">
-          <div class="sidebar-inner sidebar-overview-active">
-            <div class="site-overview-wrap sidebar-panel">
-              <div class="site-author">
-                <p class="site-author-name">Alex</p>
-                <p class="site-description">JavaBoy 转行引擎开发中</p>
-              </div>
-
-              <nav class="site-state" aria-label="Site stats">
-                <a class="site-state-item" href="#blog">
-                  <span class="site-state-item-count" id="post-count">0</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-                <a class="site-state-item" href="#projects">
-                  <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">projects</span>
-                </a>
-              </nav>
-            </div>
-          </div>
-        </aside>
-
-        <section class="site-search-card" data-site-search data-posts-src="./posts/posts.json" data-post-base="./posts/" aria-label="Site search">
-          <label class="site-search-label" for="site-search-input">Search</label>
-          <div class="site-search-control">
-            <span class="site-search-icon" aria-hidden="true"></span>
-            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
-          </div>
-          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
-          <div class="site-search-results" data-search-results role="list"></div>
-        </section>
-
-        <nav class="account-links-card" aria-label="Third-party accounts">
-          <a class="account-link account-link-bilibili" href="https://space.bilibili.com/436931264" target="_blank" rel="noreferrer">Bilibili</a>
-          <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/user/profile/60c21d80000000000101de0a" target="_blank" rel="noreferrer">小红书</a>
-          <a class="account-link account-link-github" href="https://github.com/EmaireLi" target="_blank" rel="noreferrer">GitHub</a>
-          <a class="account-link account-link-steam" href="https://steamcommunity.com/id/Muwii" target="_blank" rel="noreferrer">Steam</a>
-          <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
-          <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <ul class="main-menu menu">
+            <li class="menu-item"><a href="#about">About</a></li>
+            <li class="menu-item"><a href="#proof">Proof</a></li>
+            <li class="menu-item"><a href="#projects">Projects</a></li>
+            <li class="menu-item"><a href="#blog">Archives</a></li>
+            <li class="menu-item"><a href="./editor.html">Editor</a></li>
+          </ul>
         </nav>
-      </div>
+      </header>
 
       <div class="main-inner page posts-expand">
         <article class="post-block">
           <header class="post-header">
-            <h1 class="post-title">Alex Emaire's blog</h1>
-            <div class="post-meta-container">personal site · notes · projects</div>
+            <h1 class="post-title">Alex Emaire</h1>
+            <div class="post-meta-container">personal site · engineering archive · project proof</div>
           </header>
 
           <div class="post-body">
-            <h1 id="welcome">欢迎来到我的个人博客</h1>
-            <p>
-              这里记录我的技术学习、项目实践和一些随笔。现在的方向是从 JavaBoy 慢慢转向引擎开发，
-              也会把折腾工具、写代码、看动画之后留下来的想法放在这里。
-            </p>
+            <section class="identity-hero" aria-labelledby="welcome">
+              <div class="identity-copy">
+                <p class="identity-kicker">Building a personal archive into a proof-first portfolio</p>
+                <h2 id="welcome">把学习、项目和工具做成可检查的个人网站</h2>
+                <p>
+                  SCU 软件工程本科在读，从 JavaBoy 慢慢转向引擎开发。这个站点记录技术学习、项目实践和日常写作，
+                  也把我正在形成的工程能力整理成可以被快速浏览和验证的证据。
+                </p>
+              </div>
+              <div class="identity-panel" aria-label="Current direction">
+                <div>
+                  <span>Current direction</span>
+                  <strong>Frontend / full-stack / AI tooling, with engine-learning momentum.</strong>
+                </div>
+                <div>
+                  <span>Best first proof</span>
+                  <strong><a href="#proof">Proof Map</a> · <a href="#projects">Projects</a> · <a href="./projects/code-tour.html">Code Tour</a></strong>
+                </div>
+                <div>
+                  <span>Archive role</span>
+                  <strong>Not only a resume: posts and notes keep the learning trail visible.</strong>
+                </div>
+              </div>
+              <div class="identity-actions" aria-label="Primary routes">
+                <a class="btn" href="#proof">Review proof</a>
+                <a class="btn btn-quiet" href="#projects">View projects</a>
+                <a href="#blog">Read archive</a>
+              </div>
+            </section>
+
+            <section class="start-routes" aria-labelledby="start-here-title">
+              <div class="section-heading-row">
+                <h2 id="start-here-title">Start here</h2>
+                <p>按访问目的走，少翻页，直接看该看的内容。</p>
+              </div>
+              <div class="route-grid">
+                <a class="route-card" href="#proof">
+                  <span>Recruiter</span>
+                  <strong>60 秒判断方向和证据</strong>
+                  <em>角色信号、能力证据、项目入口</em>
+                </a>
+                <a class="route-card" href="./projects/code-tour.html">
+                  <span>Technical reviewer</span>
+                  <strong>按代码阅读路线检查</strong>
+                  <em>项目结构、脚本、文档、取舍</em>
+                </a>
+                <a class="route-card" href="#blog">
+                  <span>Reader</span>
+                  <strong>看近期文章和归档</strong>
+                  <em>技术笔记、生活碎片、ACGN 随笔</em>
+                </a>
+                <a class="route-card" href="#contact">
+                  <span>Contact</span>
+                  <strong>留言或打开外部账号</strong>
+                  <em>项目问题、阅读反馈、合作讨论</em>
+                </a>
+              </div>
+            </section>
 
             <h2 id="about">About</h2>
             <div class="about">
@@ -192,6 +202,27 @@
               </div>
             </section>
 
+            <section class="proof-bridge" aria-labelledby="proof-bridge-title">
+              <div>
+                <p class="proof-kicker">Claim to evidence</p>
+                <h3 id="proof-bridge-title">这不是技能清单，而是浏览路径。</h3>
+              </div>
+              <dl>
+                <div>
+                  <dt>AI tooling</dt>
+                  <dd><a href="./projects/smartlabeling.html">SmartLabeling case study</a> shows workflow framing and model-service boundaries.</dd>
+                </div>
+                <div>
+                  <dt>Full-stack product</dt>
+                  <dd><a href="./projects/yomii.html">Yomii case study</a> shows learning-product architecture and delivery tradeoffs.</dd>
+                </div>
+                <div>
+                  <dt>Site engineering</dt>
+                  <dd><a href="./projects/code-tour.html#site">Code Tour</a> and local scripts show the static content pipeline.</dd>
+                </div>
+              </dl>
+            </section>
+
             <h2 id="projects">Projects</h2>
             <p class="section-intro">这里优先放能被代码和文档验证的项目证据：我负责什么、系统怎么拆、哪些取舍值得继续追。</p>
             <ul class="project-list project-case-list">
@@ -214,6 +245,20 @@
                     <dd>Vue 3, TypeScript, Electron, FastAPI, SAM, CLIP</dd>
                   </div>
                 </dl>
+                <div class="project-receipts" aria-label="SmartLabeling evidence receipt">
+                  <div>
+                    <span>Problem</span>
+                    <strong>Make annotation workflows faster without hiding human correction.</strong>
+                  </div>
+                  <div>
+                    <span>Role</span>
+                    <strong>Interaction reading, workflow framing, and model-service boundary notes.</strong>
+                  </div>
+                  <div>
+                    <span>Evidence</span>
+                    <strong>Case study, repo route, export/cache workflow, and code tour entry.</strong>
+                  </div>
+                </div>
                 <ul class="project-proof-list">
                   <li>Prompt-based mask generation with foreground/background points and boxes.</li>
                   <li>Export flow for masks, YAML labels, and project cache.</li>
@@ -243,6 +288,20 @@
                     <dd>Vue 3, TypeScript, Electron, FastAPI, SQLModel, SQLite, MySQL</dd>
                   </div>
                 </dl>
+                <div class="project-receipts" aria-label="Yomii evidence receipt">
+                  <div>
+                    <span>Problem</span>
+                    <strong>Connect vocabulary, review, quiz, and writing feedback into one learning path.</strong>
+                  </div>
+                  <div>
+                    <span>Role</span>
+                    <strong>Full-stack architecture, learning workflow, local data model, and evaluation framing.</strong>
+                  </div>
+                  <div>
+                    <span>Evidence</span>
+                    <strong>Case study, backend/frontend boundaries, training scripts, and code tour entry.</strong>
+                  </div>
+                </div>
                 <ul class="project-proof-list">
                   <li>Separated static dictionary data from user behavior records.</li>
                   <li>Supports web development mode and Electron desktop delivery.</li>
@@ -292,6 +351,47 @@
           </div>
         </article>
       </div>
+
+      <aside class="sidebar" aria-label="Site overview">
+        <div class="sidebar-inner sidebar-overview-active">
+          <div class="site-overview-wrap sidebar-panel">
+            <div class="site-author">
+              <p class="site-author-name">Alex</p>
+              <p class="site-description">JavaBoy 转行引擎开发中</p>
+            </div>
+
+            <nav class="site-state" aria-label="Site stats">
+              <a class="site-state-item" href="#blog">
+                <span class="site-state-item-count" id="post-count">0</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+              <a class="site-state-item" href="#projects">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">projects</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </aside>
+
+      <section class="site-search-card" data-site-search data-posts-src="./posts/posts.json" data-post-base="./posts/" aria-label="Site search">
+        <label class="site-search-label" for="site-search-input">Search</label>
+        <div class="site-search-control">
+          <span class="site-search-icon" aria-hidden="true"></span>
+          <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
+        </div>
+        <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
+        <div class="site-search-results" data-search-results role="list"></div>
+      </section>
+
+      <nav class="account-links-card" aria-label="Third-party accounts">
+        <a class="account-link account-link-bilibili" href="https://space.bilibili.com/436931264" target="_blank" rel="noreferrer">Bilibili</a>
+        <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/user/profile/60c21d80000000000101de0a" target="_blank" rel="noreferrer">小红书</a>
+        <a class="account-link account-link-github" href="https://github.com/EmaireLi" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="account-link account-link-steam" href="https://steamcommunity.com/id/Muwii" target="_blank" rel="noreferrer">Steam</a>
+        <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
+        <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
+      </nav>
     </main>
 
     <footer class="footer">

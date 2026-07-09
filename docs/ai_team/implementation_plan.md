@@ -90,3 +90,48 @@ Rationale:
 ## Implementation Gate
 
 The active goal continuation explicitly directed continued autonomous progress. Implementation proceeded on the documented highest-priority feature while preserving the original design and decision records.
+
+## Round 4 Implementation Plan
+
+Date: 2026-07-09
+
+### Selected Feature
+
+Homepage Evidence-Routing Pass
+
+### Files To Modify
+
+- `index.html`
+  - Replace the generic welcome opening with a positioning-first identity panel.
+  - Add Start Here route cards.
+  - Add a Proof-to-Project bridge.
+  - Add project evidence receipt rows.
+- `styles.css`
+  - Add responsive styles for the new homepage components.
+- `README.md`
+  - Document homepage evidence-routing maintenance.
+
+### Technical Approach
+
+- Keep the implementation static HTML/CSS.
+- Preserve `editor.html` and `script.js`.
+- Reuse existing visual tokens and project-card patterns.
+- Avoid hidden-content filters or new interaction state in this pass.
+
+### Data Structure Changes
+
+None.
+
+### Risks
+
+- The hero could feel too much like a resume.
+- Route cards could duplicate navigation.
+- Project receipts could increase page density.
+- New grids could overflow on mobile.
+
+### Verification Plan
+
+- Run the required JavaScript checks and manifest generation.
+- Run `git diff --check`.
+- Parse changed HTML files.
+- Preview the homepage locally on desktop and mobile widths.

@@ -198,3 +198,63 @@ Good full-stack/AI proof candidate, especially if implemented as one concrete wo
 The third implementation target is:
 
 **Guided Code Tour / Review Routes**
+
+## Round 4 Decision
+
+### Top 3 Features
+
+#### 1. Homepage Evidence-Routing Pass
+
+**Reason:**
+Round 4 was corrected to focus only on the personal website itself: visual design, homepage structure, interaction, and content presentation. All evaluators agreed that the strongest improvement is to make the first viewport and homepage flow answer who Alex is, what to inspect, and where different visitors should go next.
+
+**Expected impact:**
+
+- Recruiters understand role direction and strongest evidence before scrolling deeply.
+- Technical reviewers get clear routes into Proof, Projects, and Code Tour.
+- Readers still see the archive identity without the page becoming a generic resume.
+- Existing stable functionality stays intact because the work is static HTML/CSS.
+
+**Implementation plan:**
+
+- Rework the top homepage content into a positioning-first identity panel.
+- Add static Start Here route cards for recruiter, technical reviewer, reader, and contact/collaboration intent.
+- Add a Proof-to-Project bridge that connects capability claims to inspectable destinations.
+- Add project evidence receipt rows to homepage project cards.
+- Add CSS using the existing glass/archive visual system.
+
+#### 2. Static Site Pipeline Lens
+
+**Reason:**
+This would make the website itself visible as an engineering artifact: editor, posts, XHS import, manifest generation, search, archive, guestbook, and GitHub Pages deployment.
+
+**Expected impact:**
+
+- Stronger engineering-process signal.
+- Clearer full-stack/static-site ownership without external services.
+
+**Implementation plan:**
+
+- Add a compact "how this site works" section in a later round.
+- Link to local scripts/docs and keep the treatment HTML/CSS-first.
+
+#### 3. Curated Archive Windows
+
+**Reason:**
+The archive is part of the site's personality, but the homepage currently shows it mostly as a recent-post list.
+
+**Expected impact:**
+
+- Better content discovery for readers.
+- Warmer personal-site impression after the professional route is clear.
+
+**Implementation plan:**
+
+- Add small curated lanes for technical notes, life fragments, and imported XHS notes in a later round.
+- Use local post data and avoid complex taxonomy until content volume grows.
+
+### Round 4 Clear Highest Priority
+
+The fourth implementation target is:
+
+**Homepage Evidence-Routing Pass**
