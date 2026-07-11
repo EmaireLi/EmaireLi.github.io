@@ -1,17 +1,18 @@
 # Feature Decision Index
 
-Current implementation focus: Round 07 Canonical Mobile Search Doorway.
+Current implementation focus: Round 08 Accessible Mobile Back-to-Top.
 
 ## Latest Decision
 
-- Round: 07
-- Selected feature: Canonical Mobile Search Doorway
-- Reason: fixes the measured homepage mobile defect that places the existing search input around 10,220px into the document, while reusing one canonical static search surface.
-- Detailed decision: [round-07-feature_decision.md](./round-07-feature_decision.md)
+- Round: 08
+- Selected feature: Accessible Mobile Back-to-Top
+- Reason: restores the existing universal escape path on a 10,615px mobile page while fixing touch size, missing native targets, and reduced-motion behavior.
+- Detailed decision: [round-08-feature_decision.md](./round-08-feature_decision.md)
 - Implementation plan: [implementation_plan.md](./implementation_plan.md)
 
 ## Recent Decision History
 
+- [Round 08 - Accessible Mobile Back-to-Top](./round-08-feature_decision.md)
 - [Round 07 - Canonical Mobile Search Doorway](./round-07-feature_decision.md)
 - [Round 06 - Curated Reading Paths](./round-06-feature_decision.md)
 - [Round 05 - Site Pipeline Lens](./round-05-feature_decision.md)
