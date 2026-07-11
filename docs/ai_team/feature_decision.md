@@ -1,17 +1,18 @@
 # Feature Decision Index
 
-Current implementation focus: Round 06 Curated Reading Paths / First Reads.
+Current implementation focus: Round 07 Canonical Mobile Search Doorway.
 
 ## Latest Decision
 
-- Round: 06
-- Selected feature: Curated Reading Paths / First Reads
-- Reason: improves the personal website itself by giving first-time visitors a guided archive entry point instead of only chronology, tags, or search.
-- Detailed decision: [round-06-feature_decision.md](./round-06-feature_decision.md)
+- Round: 07
+- Selected feature: Canonical Mobile Search Doorway
+- Reason: fixes the measured homepage mobile defect that places the existing search input around 10,220px into the document, while reusing one canonical static search surface.
+- Detailed decision: [round-07-feature_decision.md](./round-07-feature_decision.md)
 - Implementation plan: [implementation_plan.md](./implementation_plan.md)
 
 ## Recent Decision History
 
+- [Round 07 - Canonical Mobile Search Doorway](./round-07-feature_decision.md)
 - [Round 06 - Curated Reading Paths](./round-06-feature_decision.md)
 - [Round 05 - Site Pipeline Lens](./round-05-feature_decision.md)
 - [Round 04 - Homepage Evidence Routing](./round-04-feature_decision.md)
