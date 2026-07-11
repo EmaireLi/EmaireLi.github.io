@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
     <title>Alex Emaire's Blog</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260711a" />
   </head>
   <body id="top" class="home-page">
     <div class="headband"></div>
@@ -33,6 +33,27 @@
           </ul>
         </nav>
       </header>
+
+      <section id="site-search" class="site-search-card" data-site-search data-posts-src="./posts/posts.json" data-post-base="./posts/" aria-label="Site search">
+        <label class="site-search-label" for="site-search-input">Search</label>
+        <div class="site-search-control">
+          <span class="site-search-icon" aria-hidden="true"></span>
+          <input
+            id="site-search-input"
+            class="site-search-input"
+            type="search"
+            placeholder="搜索文章"
+            autocomplete="off"
+            aria-describedby="site-search-status"
+            aria-controls="site-search-results"
+          />
+        </div>
+        <p id="site-search-status" class="site-search-status" data-search-status role="status" aria-live="polite" aria-atomic="true">输入关键词搜索全站文章</p>
+        <div id="site-search-results" class="site-search-results" data-search-results role="list"></div>
+        <noscript>
+          <p class="site-search-status">搜索需要 JavaScript，可从 <a href="#featured-reading">First reads</a> 进入文章。</p>
+        </noscript>
+      </section>
 
       <div class="main-inner page posts-expand">
         <article class="post-block">
@@ -513,16 +534,6 @@
           </div>
         </div>
       </aside>
-
-      <section class="site-search-card" data-site-search data-posts-src="./posts/posts.json" data-post-base="./posts/" aria-label="Site search">
-        <label class="site-search-label" for="site-search-input">Search</label>
-        <div class="site-search-control">
-          <span class="site-search-icon" aria-hidden="true"></span>
-          <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
-        </div>
-        <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
-        <div class="site-search-results" data-search-results role="list"></div>
-      </section>
 
       <nav class="account-links-card" aria-label="Third-party accounts">
         <a class="account-link account-link-bilibili" href="https://space.bilibili.com/436931264" target="_blank" rel="noreferrer">Bilibili</a>

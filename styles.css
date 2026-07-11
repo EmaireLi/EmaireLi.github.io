@@ -2822,15 +2822,15 @@ iframe {
     order: 1;
   }
 
-  .home-page .main-inner {
+  .home-page .site-search-card {
     order: 2;
   }
 
-  .home-page .sidebar {
+  .home-page .main-inner {
     order: 3;
   }
 
-  .home-page .site-search-card {
+  .home-page .sidebar {
     order: 4;
   }
 
