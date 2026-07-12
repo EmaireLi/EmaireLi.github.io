@@ -191,3 +191,11 @@
 - JavaScript 只增强静态归档的标签筛选。manifest 请求失败时必须保留静态文章链接，不能清空列表。
 - 提交前连续运行两次生成命令；第二次应保持工作树不变。
 - 运行 `node scripts/check-static-archive.js` 校验条目一致性、链接、转义、标记失败保护与运行时降级契约。
+
+## 维护归档筛选 URL
+
+- 精确标签筛选使用 `?tag=<manifest 中的标签>#blog`；“全部”用缺少 `tag` 表示，不维护第二份标签词表。
+- 修改筛选状态时只删除/写入 `tag`，必须保留其他参数（包括重复值）与它们的顺序。
+- 只有真实的用户筛选变化可以 `pushState`；初始规范化最多 `replaceState` 一次，`popstate` 只重绘且不能移动焦点或滚动。
+- 空、未知、重复或值为“全部”的 `tag` 都降级到完整归档。无 JavaScript 或 manifest 失败时仍显示 Round 09 静态基线。
+- 运行 `node scripts/check-archive-filter-state.js` 验证 Unicode、编码、参数保留和 history 决策契约。

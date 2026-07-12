@@ -205,7 +205,7 @@ function renderTimelineArchive(listEl, posts, activeTag) {
   const filteredPosts = activeTag === "全部" ? posts : posts.filter((post) => normalizePostTags(post).includes(activeTag));
   if (filteredPosts.length === 0) {
     listEl.innerHTML = `<li class="archive-empty">没有匹配这个标签的文章。</li>`;
-    return;
+    return 0;
   }
 
   listEl.innerHTML = groupPostsByYear(filteredPosts)
@@ -233,6 +233,7 @@ function renderTimelineArchive(listEl, posts, activeTag) {
       </li>`;
     })
     .join("");
+  return filteredPosts.length;
 }
 
 function renderPostHtml({ title, date, markdownHtml }) {
@@ -347,18 +348,47 @@ async function initBlogAutoList() {
 
     const validPosts = posts.filter((post) => post && post.file);
     const tags = getArchiveTags(validPosts);
-    renderArchiveFilters(filterEl, tags, activeTag);
-    renderTimelineArchive(listEl, validPosts, activeTag);
+    const stateApi = window.ArchiveFilterState;
+    const renderState = (tag, { announce = false } = {}) => {
+      activeTag = tag;
+      renderArchiveFilters(filterEl, tags, activeTag);
+      const count = renderTimelineArchive(listEl, validPosts, activeTag);
+      if (announce || activeTag !== "全部") {
+        statusEl.hidden = false;
+        statusEl.textContent = activeTag === "全部" ? `全部文章 · ${count} 篇` : `标签“${activeTag}” · ${count} 篇文章`;
+      } else {
+        statusEl.hidden = true;
+        statusEl.textContent = "";
+      }
+      initRevealOnScroll();
+    };
+
+    if (!stateApi) throw new Error("归档 URL 状态模块未加载");
+    const initialState = stateApi.resolveArchiveState(window.location.href, tags);
+    const initialTransition = stateApi.planArchiveTransition(activeTag, initialState, "initial");
+    renderState(initialTransition.tag);
+    if (initialTransition.action === "replace") {
+      const ensureBlogHash = initialState.tag !== stateApi.ALL_TAG;
+      const canonicalUrl = stateApi.buildArchiveUrl(window.location.href, initialState.tag, { ensureBlogHash });
+      window.history.replaceState(window.history.state, "", canonicalUrl);
+    }
 
     filterEl.addEventListener("click", (event) => {
       const button = event.target.closest("[data-archive-tag]");
       if (!button) return;
-      activeTag = button.dataset.archiveTag || "全部";
-      renderArchiveFilters(filterEl, tags, activeTag);
-      renderTimelineArchive(listEl, validPosts, activeTag);
-      initRevealOnScroll();
+      const nextTag = button.dataset.archiveTag || stateApi.ALL_TAG;
+      const transition = stateApi.planArchiveTransition(activeTag, { tag: nextTag }, "user");
+      if (transition.action === "none") return;
+      renderState(transition.tag, { announce: true });
+      const nextUrl = stateApi.buildArchiveUrl(window.location.href, transition.tag);
+      window.history.pushState(window.history.state, "", nextUrl);
     });
-    initRevealOnScroll();
+
+    window.addEventListener("popstate", () => {
+      const nextState = stateApi.resolveArchiveState(window.location.href, tags);
+      const transition = stateApi.planArchiveTransition(activeTag, nextState, "popstate");
+      renderState(transition.tag, { announce: true });
+    });
   } catch (error) {
     statusEl.hidden = false;
     statusEl.textContent = `标签筛选暂不可用，以下为完整静态归档：${error.message}`;
