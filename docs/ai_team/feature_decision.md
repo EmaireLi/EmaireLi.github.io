@@ -1,17 +1,18 @@
 # Feature Decision Index
 
-Current implementation focus: Round 11 Informed Public Guestbook Entry.
+Current implementation focus: Round 12 stop decision; no product feature selected.
 
 ## Latest Decision
 
-- Round: 11
-- Selected feature: Informed Public Guestbook Entry
-- Reason: makes the public publishing consequence clear before a visitor types or submits personal text.
-- Detailed decision: [round-11-feature_decision.md](./round-11-feature_decision.md)
+- Round: 12
+- Selected decision: Stop the improvement loop
+- Reason: no remaining feature materially exceeds the stable current experience on evidence-backed net value.
+- Detailed decision: [round-12-feature_decision.md](./round-12-feature_decision.md)
 - Implementation plan: [implementation_plan.md](./implementation_plan.md)
 
 ## Recent Decision History
 
+- [Round 12 - Stop decision](./round-12-feature_decision.md)
 - [Round 11 - Informed Public Guestbook Entry](./round-11-feature_decision.md)
 - [Round 10 - Addressable Archive Filter State](./round-10-feature_decision.md)
 - [Round 09 - Static Archive Baseline](./round-09-feature_decision.md)
