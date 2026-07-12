@@ -361,8 +361,8 @@ async function initBlogAutoList() {
     initRevealOnScroll();
   } catch (error) {
     statusEl.hidden = false;
-    statusEl.textContent = `文章列表加载失败：${error.message}`;
-    filterEl.innerHTML = "";
+    statusEl.textContent = `标签筛选暂不可用，以下为完整静态归档：${error.message}`;
+    filterEl.remove();
     initRevealOnScroll();
   }
 }

@@ -182,3 +182,12 @@
 
 如果你使用仓库名 `username.github.io`（User Site），访问地址就是：
 `https://username.github.io/`
+
+## 维护静态文章归档
+
+- `index.html` 中 `ARCHIVE:START` 与 `ARCHIVE:END` 之间由 `scripts/generate-posts-manifest.js` 自动生成，不要手动编辑。
+- 运行 `node scripts/generate-posts-manifest.js` 会从同一份已排序文章数据同时更新 `posts/posts.json` 与首页静态归档。
+- 生成器要求恰好一对且顺序正确的标记；标记缺失、重复或颠倒时会在写文件前失败。
+- JavaScript 只增强静态归档的标签筛选。manifest 请求失败时必须保留静态文章链接，不能清空列表。
+- 提交前连续运行两次生成命令；第二次应保持工作树不变。
+- 运行 `node scripts/check-static-archive.js` 校验条目一致性、链接、转义、标记失败保护与运行时降级契约。
