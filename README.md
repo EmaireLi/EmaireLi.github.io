@@ -199,3 +199,10 @@
 - 只有真实的用户筛选变化可以 `pushState`；初始规范化最多 `replaceState` 一次，`popstate` 只重绘且不能移动焦点或滚动。
 - 空、未知、重复或值为“全部”的 `tag` 都降级到完整归档。无 JavaScript 或 manifest 失败时仍显示 Round 09 静态基线。
 - 运行 `node scripts/check-archive-filter-state.js` 验证 Unicode、编码、参数保留和 history 决策契约。
+
+## 维护公开留言说明
+
+- 公开说明必须在留言按钮之前始终可见，并由按钮和表单共同通过 `aria-describedby` 引用。
+- 文案只能陈述当前事实：署名和留言公开显示、不要填写私密信息、留言最多 100 字；不要承诺审核、隐私保护、删除、保留期限、回复或私密联系。
+- 修改长度限制时，同步更新说明、textarea `maxlength`、`script.js` 的 `guestbookMaxLength` 与 Worker 的 `MESSAGE_MAX_LENGTH`。
+- 运行 `node scripts/check-guestbook-disclosure.js` 验证顺序、语义引用、事实文案与四处长度一致性。
