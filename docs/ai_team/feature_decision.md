@@ -1,17 +1,18 @@
 # Feature Decision Index
 
-Current implementation focus: Round 10 Addressable Archive Filter State.
+Current implementation focus: Round 11 Informed Public Guestbook Entry.
 
 ## Latest Decision
 
-- Round: 10
-- Selected feature: Addressable Archive Filter State
-- Reason: makes the exact existing filter bookmarkable, shareable, reloadable, and history-aware on top of the resilient static baseline.
-- Detailed decision: [round-10-feature_decision.md](./round-10-feature_decision.md)
+- Round: 11
+- Selected feature: Informed Public Guestbook Entry
+- Reason: makes the public publishing consequence clear before a visitor types or submits personal text.
+- Detailed decision: [round-11-feature_decision.md](./round-11-feature_decision.md)
 - Implementation plan: [implementation_plan.md](./implementation_plan.md)
 
 ## Recent Decision History
 
+- [Round 11 - Informed Public Guestbook Entry](./round-11-feature_decision.md)
 - [Round 10 - Addressable Archive Filter State](./round-10-feature_decision.md)
 - [Round 09 - Static Archive Baseline](./round-09-feature_decision.md)
 - [Round 08 - Accessible Mobile Back-to-Top](./round-08-feature_decision.md)
