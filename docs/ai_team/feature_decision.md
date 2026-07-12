@@ -1,17 +1,18 @@
 # Feature Decision Index
 
-Current implementation focus: Round 09 Static Archive Baseline.
+Current implementation focus: Round 10 Addressable Archive Filter State.
 
 ## Latest Decision
 
-- Round: 09
-- Selected feature: Static Archive Baseline
-- Reason: keeps the complete archive present when JavaScript, manifest fetch, or enhancement initialization fails.
-- Detailed decision: [round-09-feature_decision.md](./round-09-feature_decision.md)
+- Round: 10
+- Selected feature: Addressable Archive Filter State
+- Reason: makes the exact existing filter bookmarkable, shareable, reloadable, and history-aware on top of the resilient static baseline.
+- Detailed decision: [round-10-feature_decision.md](./round-10-feature_decision.md)
 - Implementation plan: [implementation_plan.md](./implementation_plan.md)
 
 ## Recent Decision History
 
+- [Round 10 - Addressable Archive Filter State](./round-10-feature_decision.md)
 - [Round 09 - Static Archive Baseline](./round-09-feature_decision.md)
 - [Round 08 - Accessible Mobile Back-to-Top](./round-08-feature_decision.md)
 - [Round 07 - Canonical Mobile Search Doorway](./round-07-feature_decision.md)
