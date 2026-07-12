@@ -78,6 +78,17 @@
 - JavaScript 不可用时，保留指向静态 `First reads` 的本地阅读入口。
 - 修改首页搜索的响应式样式后，同步更新 `index.html` 中 `styles.css` 的版本参数，避免部署后继续命中旧缓存。
 
+## 维护移动端返回顶部
+
+首页、文章页和项目案例页复用同一个返回顶部控件；移动端滚动超过阈值后显示，输入时临时隐藏，避免遮挡软键盘和表单。
+
+维护原则：
+
+- 任何渲染 `.back-to-top` 的页面都必须在 `<body>` 上提供唯一的 `id="top"`，并保留普通 `href="#top"` 作为无 JavaScript 回退。
+- 控件标记默认带 `is-visible`；`script.js` 加载后立即同步滚动阈值和输入焦点状态，不要复制第二个移动端控件。
+- 移动端触控区域保持至少 44×44px，并保留 safe-area 偏移、可见键盘焦点和 `prefers-reduced-motion` 行为。
+- 同步维护 `script.js` 的编辑器导出模板、`scripts/import-xhs-notes.js` 的导入模板、现有文章/案例页及 CSS/脚本版本参数。
+
 ## 维护 Code Tour
 
 `projects/code-tour.html` 给技术 reviewer 提供 10-15 分钟的代码阅读路线。

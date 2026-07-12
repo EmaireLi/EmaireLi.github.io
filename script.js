@@ -243,9 +243,9 @@ function renderPostHtml({ title, date, markdownHtml }) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${safeTitle} | Alex</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../styles.css?v=20260711b" />
   </head>
-  <body>
+  <body id="top">
     <div class="headband"></div>
     <main class="main">
       <div class="column">
@@ -322,8 +322,8 @@ function renderPostHtml({ title, date, markdownHtml }) {
       </div>
     </footer>
 
-    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
-    <script src="../script.js?v=20260528b"></script>
+    <a class="back-to-top is-visible" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260711b"></script>
   </body>
 </html>`;
 }
@@ -552,15 +552,40 @@ function initBackToTop() {
   const link = document.querySelector(".back-to-top");
   if (!link) return;
 
+  const mobileQuery = window.matchMedia("(max-width: 767px)");
+  const textEntrySelector = 'input, textarea, select, [contenteditable="true"]';
+
+  const isTextEntryFocused = () => {
+    const activeElement = document.activeElement;
+    return Boolean(mobileQuery.matches && activeElement && typeof activeElement.matches === "function" && activeElement.matches(textEntrySelector));
+  };
+
   const sync = () => {
-    link.classList.toggle("is-visible", window.scrollY > 240);
+    const isVisible = window.scrollY > 240;
+    const isSuspended = isTextEntryFocused();
+    const isAvailable = isVisible && !isSuspended;
+    link.classList.toggle("is-visible", isVisible);
+    link.classList.toggle("is-suspended", isSuspended);
+    link.tabIndex = isAvailable ? 0 : -1;
+    if (isAvailable) {
+      link.removeAttribute("aria-hidden");
+    } else {
+      link.setAttribute("aria-hidden", "true");
+    }
   };
 
   link.addEventListener("click", (event) => {
     event.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    link.blur();
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
   });
   window.addEventListener("scroll", sync, { passive: true });
+  document.addEventListener("focusin", sync);
+  document.addEventListener("focusout", () => window.requestAnimationFrame(sync));
+  if (typeof mobileQuery.addEventListener === "function") {
+    mobileQuery.addEventListener("change", sync);
+  }
   sync();
 }
 

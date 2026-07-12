@@ -296,9 +296,9 @@ function renderPostHtml(note, localImages = []) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
     <title>${title} | Alex</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../styles.css?v=20260711b" />
   </head>
-  <body>
+  <body id="top">
     <div class="headband"></div>
 
     <main class="main">
@@ -378,8 +378,8 @@ function renderPostHtml(note, localImages = []) {
       </div>
     </footer>
 
-    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
-    <script src="../script.js?v=20260528b"></script>
+    <a class="back-to-top is-visible" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260711b"></script>
   </body>
 </html>`;
 }
