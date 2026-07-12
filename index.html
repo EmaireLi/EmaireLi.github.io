@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
     <title>Alex Emaire's Blog</title>
-    <link rel="stylesheet" href="./styles.css?v=20260711b" />
+    <link rel="stylesheet" href="./styles.css?v=20260712c" />
   </head>
   <body id="top" class="home-page">
     <div class="headband"></div>
@@ -540,10 +540,11 @@
             <section class="guestbook" data-guestbook aria-label="访客留言">
               <div class="guestbook-copy">
                 <p>这里是个记录旅程的地方，乐意与同行的你聊聊。</p>
-                <button class="btn guestbook-compose-button" type="button" data-guestbook-compose aria-expanded="false" aria-controls="guestbook-form">留言</button>
+                <p id="guestbook-public-note" class="guestbook-public-note">署名和留言会公开显示在本页；请勿填写手机号、邮箱或其他隐私信息。留言最多 100 字。</p>
+                <button class="btn guestbook-compose-button" type="button" data-guestbook-compose aria-expanded="false" aria-controls="guestbook-form" aria-describedby="guestbook-public-note">写公开留言</button>
               </div>
 
-              <form id="guestbook-form" class="guestbook-form" data-guestbook-form hidden>
+              <form id="guestbook-form" class="guestbook-form" data-guestbook-form aria-describedby="guestbook-public-note" hidden>
                 <div class="guestbook-field">
                   <label for="guestbook-signature">From</label>
                   <input id="guestbook-signature" name="signature" type="text" maxlength="24" autocomplete="name" required />

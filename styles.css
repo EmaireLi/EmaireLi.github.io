@@ -2011,6 +2011,15 @@ iframe {
   margin-top: 18px;
 }
 
+.guestbook-public-note {
+  margin: 12px 0 0;
+  border-left: 2px solid rgba(54, 124, 147, 0.28);
+  color: var(--muted-color);
+  font-size: 0.86em;
+  line-height: 1.7;
+  padding: 2px 0 2px 11px;
+}
+
 .guestbook-copy p:last-child,
 .guestbook-status,
 .guestbook-empty,
