@@ -205,7 +205,7 @@ function renderTimelineArchive(listEl, posts, activeTag) {
   const filteredPosts = activeTag === "全部" ? posts : posts.filter((post) => normalizePostTags(post).includes(activeTag));
   if (filteredPosts.length === 0) {
     listEl.innerHTML = `<li class="archive-empty">没有匹配这个标签的文章。</li>`;
-    return;
+    return 0;
   }
 
   listEl.innerHTML = groupPostsByYear(filteredPosts)
@@ -233,6 +233,7 @@ function renderTimelineArchive(listEl, posts, activeTag) {
       </li>`;
     })
     .join("");
+  return filteredPosts.length;
 }
 
 function renderPostHtml({ title, date, markdownHtml }) {
@@ -243,9 +244,9 @@ function renderPostHtml({ title, date, markdownHtml }) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${safeTitle} | Alex</title>
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../styles.css?v=20260711b" />
   </head>
-  <body>
+  <body id="top">
     <div class="headband"></div>
     <main class="main">
       <div class="column">
@@ -322,8 +323,8 @@ function renderPostHtml({ title, date, markdownHtml }) {
       </div>
     </footer>
 
-    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
-    <script src="../script.js?v=20260528b"></script>
+    <a class="back-to-top is-visible" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260711b"></script>
   </body>
 </html>`;
 }
@@ -347,22 +348,51 @@ async function initBlogAutoList() {
 
     const validPosts = posts.filter((post) => post && post.file);
     const tags = getArchiveTags(validPosts);
-    renderArchiveFilters(filterEl, tags, activeTag);
-    renderTimelineArchive(listEl, validPosts, activeTag);
+    const stateApi = window.ArchiveFilterState;
+    const renderState = (tag, { announce = false } = {}) => {
+      activeTag = tag;
+      renderArchiveFilters(filterEl, tags, activeTag);
+      const count = renderTimelineArchive(listEl, validPosts, activeTag);
+      if (announce || activeTag !== "全部") {
+        statusEl.hidden = false;
+        statusEl.textContent = activeTag === "全部" ? `全部文章 · ${count} 篇` : `标签“${activeTag}” · ${count} 篇文章`;
+      } else {
+        statusEl.hidden = true;
+        statusEl.textContent = "";
+      }
+      initRevealOnScroll();
+    };
+
+    if (!stateApi) throw new Error("归档 URL 状态模块未加载");
+    const initialState = stateApi.resolveArchiveState(window.location.href, tags);
+    const initialTransition = stateApi.planArchiveTransition(activeTag, initialState, "initial");
+    renderState(initialTransition.tag);
+    if (initialTransition.action === "replace") {
+      const ensureBlogHash = initialState.tag !== stateApi.ALL_TAG;
+      const canonicalUrl = stateApi.buildArchiveUrl(window.location.href, initialState.tag, { ensureBlogHash });
+      window.history.replaceState(window.history.state, "", canonicalUrl);
+    }
 
     filterEl.addEventListener("click", (event) => {
       const button = event.target.closest("[data-archive-tag]");
       if (!button) return;
-      activeTag = button.dataset.archiveTag || "全部";
-      renderArchiveFilters(filterEl, tags, activeTag);
-      renderTimelineArchive(listEl, validPosts, activeTag);
-      initRevealOnScroll();
+      const nextTag = button.dataset.archiveTag || stateApi.ALL_TAG;
+      const transition = stateApi.planArchiveTransition(activeTag, { tag: nextTag }, "user");
+      if (transition.action === "none") return;
+      renderState(transition.tag, { announce: true });
+      const nextUrl = stateApi.buildArchiveUrl(window.location.href, transition.tag);
+      window.history.pushState(window.history.state, "", nextUrl);
     });
-    initRevealOnScroll();
+
+    window.addEventListener("popstate", () => {
+      const nextState = stateApi.resolveArchiveState(window.location.href, tags);
+      const transition = stateApi.planArchiveTransition(activeTag, nextState, "popstate");
+      renderState(transition.tag, { announce: true });
+    });
   } catch (error) {
     statusEl.hidden = false;
-    statusEl.textContent = `文章列表加载失败：${error.message}`;
-    filterEl.innerHTML = "";
+    statusEl.textContent = `标签筛选暂不可用，以下为完整静态归档：${error.message}`;
+    filterEl.remove();
     initRevealOnScroll();
   }
 }
@@ -552,15 +582,40 @@ function initBackToTop() {
   const link = document.querySelector(".back-to-top");
   if (!link) return;
 
+  const mobileQuery = window.matchMedia("(max-width: 767px)");
+  const textEntrySelector = 'input, textarea, select, [contenteditable="true"]';
+
+  const isTextEntryFocused = () => {
+    const activeElement = document.activeElement;
+    return Boolean(mobileQuery.matches && activeElement && typeof activeElement.matches === "function" && activeElement.matches(textEntrySelector));
+  };
+
   const sync = () => {
-    link.classList.toggle("is-visible", window.scrollY > 240);
+    const isVisible = window.scrollY > 240;
+    const isSuspended = isTextEntryFocused();
+    const isAvailable = isVisible && !isSuspended;
+    link.classList.toggle("is-visible", isVisible);
+    link.classList.toggle("is-suspended", isSuspended);
+    link.tabIndex = isAvailable ? 0 : -1;
+    if (isAvailable) {
+      link.removeAttribute("aria-hidden");
+    } else {
+      link.setAttribute("aria-hidden", "true");
+    }
   };
 
   link.addEventListener("click", (event) => {
     event.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    link.blur();
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
   });
   window.addEventListener("scroll", sync, { passive: true });
+  document.addEventListener("focusin", sync);
+  document.addEventListener("focusout", () => window.requestAnimationFrame(sync));
+  if (typeof mobileQuery.addEventListener === "function") {
+    mobileQuery.addEventListener("change", sync);
+  }
   sync();
 }
 

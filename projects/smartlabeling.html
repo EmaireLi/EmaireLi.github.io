@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#222222" />
+    <title>SmartLabeling Case Study | Alex</title>
+    <link rel="stylesheet" href="../styles.css?v=20260711b" />
+  </head>
+  <body id="top">
+    <div class="headband"></div>
+
+    <main class="main">
+      <div class="column">
+        <header class="header" aria-label="Site header">
+          <div class="site-brand-container">
+            <div class="site-meta">
+              <a class="brand" href="../index.html" rel="start">
+                <i class="logo-line" aria-hidden="true"></i>
+                <p class="site-title">Alex Emaire's Blog</p>
+                <i class="logo-line" aria-hidden="true"></i>
+              </a>
+              <p class="site-subtitle">个人归档站</p>
+            </div>
+          </div>
+
+          <nav class="site-nav" aria-label="Main navigation">
+            <ul class="main-menu menu">
+              <li class="menu-item"><a href="../index.html#about">About</a></li>
+              <li class="menu-item"><a href="../index.html#projects">Projects</a></li>
+              <li class="menu-item"><a href="../index.html#blog">Archives</a></li>
+              <li class="menu-item"><a href="../editor.html">Editor</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <aside class="sidebar" aria-label="Project overview">
+          <div class="sidebar-inner">
+            <div class="site-author">
+              <p class="site-author-name">SmartLabeling</p>
+              <p class="site-description">AI-assisted annotation workflow</p>
+            </div>
+            <nav class="case-study-nav" aria-label="Case study sections">
+              <a href="#problem">Problem</a>
+              <a href="#architecture">Architecture</a>
+              <a href="#implementation">Implementation</a>
+              <a href="#code-reading">Code reading</a>
+              <a href="./code-tour.html#smartlabeling">Code tour</a>
+            </nav>
+          </div>
+        </aside>
+
+        <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+          <label class="site-search-label" for="site-search-input">Search</label>
+          <div class="site-search-control">
+            <span class="site-search-icon" aria-hidden="true"></span>
+            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
+          </div>
+          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
+          <div class="site-search-results" data-search-results role="list"></div>
+        </section>
+      </div>
+
+      <div class="main-inner page posts-expand">
+        <article class="post-block">
+          <header class="post-header">
+            <h1 class="post-title">SmartLabeling</h1>
+            <div class="post-meta-container">case study · AI labeling · Vue / Electron / FastAPI</div>
+          </header>
+
+          <div class="post-body article-content case-study">
+            <p class="case-lead">
+              SmartLabeling 是一个 AI 辅助数据标注工具。它把桌面端交互、Python 推理服务和标注导出流程连在一起，用于降低基于图像 mask 的标注成本。
+            </p>
+
+            <div class="case-facts" aria-label="Project facts">
+              <div>
+                <span>Role</span>
+                <strong>Annotation workflow and system integration analysis</strong>
+              </div>
+              <div>
+                <span>Stack</span>
+                <strong>Vue 3, TypeScript, Electron, FastAPI, SAM, CLIP</strong>
+              </div>
+              <div>
+                <span>Proof</span>
+                <strong>Prompt tools, mask generation, export pipeline</strong>
+              </div>
+            </div>
+
+            <h2 id="problem">Problem</h2>
+            <p>
+              传统图像标注需要大量手工描边。SmartLabeling 的核心问题是：如何让标注员用更少的点击表达意图，同时保留可撤销、可导出、可继续修正的工程流程。
+            </p>
+
+            <h2 id="architecture">Architecture</h2>
+            <div class="case-flow" aria-label="SmartLabeling data flow">
+              <div>
+                <span>01</span>
+                <strong>Desktop shell</strong>
+                <p>Electron 承载 Vue 前端，并把桌面分发与本地服务流程放进同一个产品形态。</p>
+              </div>
+              <div>
+                <span>02</span>
+                <strong>Annotation UI</strong>
+                <p>前端管理点、框、类别、mask 叠加和工具状态，让标注行为保持可解释。</p>
+              </div>
+              <div>
+                <span>03</span>
+                <strong>FastAPI service</strong>
+                <p>Python 服务暴露 prompt、upload、switch image、export 等路由，承接模型和文件操作。</p>
+              </div>
+              <div>
+                <span>04</span>
+                <strong>Model pipeline</strong>
+                <p>SAM 生成候选 mask，CLIP-style 分类流程辅助把视觉结果映射到类别语义。</p>
+              </div>
+              <div>
+                <span>05</span>
+                <strong>Export</strong>
+                <p>导出 mask、YAML label 映射和 cache，方便后续训练或检查。</p>
+              </div>
+            </div>
+
+            <h2 id="implementation">Implementation Highlights</h2>
+            <ul class="case-points">
+              <li><strong>Prompt operation state:</strong> foreground/background points and boxes are tracked with undo/redo history before regenerating masks.</li>
+              <li><strong>Async model orchestration:</strong> mask generation and class inference can run through Python service boundaries instead of blocking UI logic.</li>
+              <li><strong>Export discipline:</strong> generated masks and YAML label names are written as explicit project artifacts, not hidden UI state.</li>
+              <li><strong>Desktop packaging path:</strong> the repository includes Electron build configuration and keeps the Python `core/` service as part of the packaged file set.</li>
+            </ul>
+
+            <h2>Tradeoffs</h2>
+            <ul class="case-points">
+              <li>Local inference gives privacy and control, but increases installation and GPU-runtime complexity.</li>
+              <li>Electron lowers desktop delivery cost, but requires clear separation between renderer interaction and Python service responsibilities.</li>
+              <li>Mask quality should be presented honestly: the browser demo should show saved/static artifacts unless live inference is actually running.</li>
+            </ul>
+
+            <h2>Current Evidence</h2>
+            <ul class="case-points">
+              <li>The repository contains a Vue/Electron frontend, Python FastAPI service, SAM/CLIP model integration files, and desktop packaging configuration.</li>
+              <li>The service layer includes prompt, project, image, mask, CLIP, and export modules, giving the project an inspectable end-to-end annotation path.</li>
+              <li>The next missing proof is visual: representative screenshots or saved masks should be added before claiming product-quality output.</li>
+            </ul>
+
+            <h2 id="code-reading">Code Reading Guide</h2>
+            <p>这些入口最能说明系统如何工作：</p>
+            <ul class="case-link-list">
+              <li><a href="./code-tour.html#smartlabeling">Guided Code Tour</a> - 如果只有 10-15 分钟，按 reviewer 路线先看关键代码区域。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/src/components" target="_blank" rel="noreferrer">Vue annotation components</a> - 标注工具、内容区和提示输入的交互边界。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/routers" target="_blank" rel="noreferrer">FastAPI routers</a> - prompt、upload、export、project switching 等服务入口。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/services" target="_blank" rel="noreferrer">Python services</a> - mask、CLIP、project 和 export 的业务实现。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/blob/main/package.json" target="_blank" rel="noreferrer">Desktop build config</a> - Electron 打包和前端构建脚本。</li>
+            </ul>
+
+            <h2>Next Proof To Add</h2>
+            <p>
+              下一步适合补本地截图或 mask 示例到 `assets/projects/smartlabeling/`，再在本页加入静态 before/after 对比。这样能展示视觉结果，同时不误导访客以为页面正在实时运行模型。
+            </p>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© <span id="year"></span> Alex</span>
+        <span class="footer-dot">•</span>
+        <span><a href="../index.html#projects">Back to projects</a></span>
+      </div>
+    </footer>
+
+    <a class="back-to-top is-visible" href="#top" aria-label="Back to top">↑</a>
+    <script src="../script.js?v=20260711b"></script>
+  </body>
+</html>

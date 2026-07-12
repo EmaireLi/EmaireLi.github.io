@@ -4,6 +4,18 @@ const path = require("node:path");
 const repoRoot = process.cwd();
 const postsDir = path.join(repoRoot, "posts");
 const manifestPath = path.join(postsDir, "posts.json");
+const indexPath = path.join(repoRoot, "index.html");
+const archiveStartMarker = "<!-- ARCHIVE:START -->";
+const archiveEndMarker = "<!-- ARCHIVE:END -->";
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 function stripTags(html) {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -111,6 +123,78 @@ function buildManifestEntry(file) {
   return { file, title, date, excerpt, searchText, tags };
 }
 
+function getPostYear(post) {
+  const match = String(post.date || "").match(/^(\d{4})/);
+  return match ? match[1] : "未归档";
+}
+
+function groupPostsByYear(posts) {
+  const groups = new Map();
+  posts.forEach((post) => {
+    const year = getPostYear(post);
+    if (!groups.has(year)) groups.set(year, []);
+    groups.get(year).push(post);
+  });
+  return Array.from(groups.entries()).sort(([yearA], [yearB]) => {
+    if (yearA === yearB) return 0;
+    if (yearA === "未归档") return 1;
+    if (yearB === "未归档") return -1;
+    return yearB.localeCompare(yearA);
+  });
+}
+
+function renderPostTags(tags) {
+  if (!Array.isArray(tags) || tags.length === 0) return "";
+  return `<div class="archive-entry-tags">${tags.map((tag) => `<span class="archive-entry-tag">${escapeHtml(tag)}</span>`).join("")}</div>`;
+}
+
+function renderArchive(posts) {
+  return groupPostsByYear(posts)
+    .map(([year, yearPosts]) => {
+      const entries = yearPosts
+        .map((post) => {
+          const title = escapeHtml(post.title || post.file || "Untitled");
+          const date = escapeHtml(post.date || "");
+          const excerpt = escapeHtml(post.excerpt || "");
+          const href = escapeHtml(`./posts/${encodeURI(post.file)}`);
+          return `                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="${date}">${date || "未注明日期"}</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="${href}">${title}</a>
+                      ${excerpt ? `<p class="archive-entry-excerpt">${excerpt}</p>` : ""}
+                      ${renderPostTags(post.tags)}
+                    </div>
+                  </li>`;
+        })
+        .join("\n");
+      return `              <li class="archive-year-group">
+                <h3 class="archive-year">${escapeHtml(year)}</h3>
+                <ol class="archive-timeline">
+${entries}
+                </ol>
+              </li>`;
+    })
+    .join("\n");
+}
+
+function replaceArchiveBlock(indexHtml, archiveHtml) {
+  const startMatches = indexHtml.match(/<!-- ARCHIVE:START -->/g) || [];
+  const endMatches = indexHtml.match(/<!-- ARCHIVE:END -->/g) || [];
+  if (startMatches.length !== 1 || endMatches.length !== 1) {
+    throw new Error(`Expected exactly one archive marker pair; found ${startMatches.length} start and ${endMatches.length} end markers`);
+  }
+
+  const startIndex = indexHtml.indexOf(archiveStartMarker);
+  const endIndex = indexHtml.indexOf(archiveEndMarker);
+  if (startIndex >= endIndex) {
+    throw new Error("Archive markers are reversed");
+  }
+
+  const before = indexHtml.slice(0, startIndex + archiveStartMarker.length);
+  const after = indexHtml.slice(endIndex);
+  return `${before}\n${archiveHtml}\n              ${after}`;
+}
+
 function run() {
   if (!fs.existsSync(postsDir)) {
     throw new Error(`posts directory not found: ${postsDir}`);
@@ -126,8 +210,16 @@ function run() {
     return (b.date || "").localeCompare(a.date || "");
   });
 
+  const indexHtml = fs.readFileSync(indexPath, "utf8");
+  const nextIndexHtml = replaceArchiveBlock(indexHtml, renderArchive(manifest));
   fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+  fs.writeFileSync(indexPath, nextIndexHtml, "utf8");
   console.log(`Generated ${path.relative(repoRoot, manifestPath)} (${manifest.length} posts)`);
+  console.log(`Updated static archive in ${path.relative(repoRoot, indexPath)}`);
 }
 
-run();
+if (require.main === module) {
+  run();
+}
+
+module.exports = { escapeHtml, renderArchive, replaceArchiveBlock };

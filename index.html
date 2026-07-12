@@ -5,90 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
     <title>Alex Emaire's Blog</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260711b" />
   </head>
-  <body class="home-page">
+  <body id="top" class="home-page">
     <div class="headband"></div>
 
     <main class="main">
-      <div class="column">
-        <header class="header" aria-label="Site header">
-          <div class="site-brand-container">
-            <div class="site-meta">
-              <a class="brand" href="./index.html" rel="start">
-                <i class="logo-line" aria-hidden="true"></i>
-                <p class="site-title">Alex Emaire's Blog</p>
-                <i class="logo-line" aria-hidden="true"></i>
-              </a>
-              <p class="site-subtitle">个人归档站</p>
-            </div>
+      <header class="header" aria-label="Site header">
+        <div class="site-brand-container">
+          <div class="site-meta">
+            <a class="brand" href="./index.html" rel="start">
+              <i class="logo-line" aria-hidden="true"></i>
+              <p class="site-title">Alex Emaire's Blog</p>
+              <i class="logo-line" aria-hidden="true"></i>
+            </a>
+            <p class="site-subtitle">个人归档站</p>
           </div>
+        </div>
 
-          <nav class="site-nav" aria-label="Main navigation">
-            <ul class="main-menu menu">
-              <li class="menu-item"><a href="#about">About</a></li>
-              <li class="menu-item"><a href="#projects">Projects</a></li>
-              <li class="menu-item"><a href="#blog">Archives</a></li>
-              <li class="menu-item"><a href="./editor.html">Editor</a></li>
-            </ul>
-          </nav>
-        </header>
-
-        <aside class="sidebar" aria-label="Site overview">
-          <div class="sidebar-inner sidebar-overview-active">
-            <div class="site-overview-wrap sidebar-panel">
-              <div class="site-author">
-                <p class="site-author-name">Alex</p>
-                <p class="site-description">JavaBoy 转行引擎开发中</p>
-              </div>
-
-              <nav class="site-state" aria-label="Site stats">
-                <a class="site-state-item" href="#blog">
-                  <span class="site-state-item-count" id="post-count">0</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-                <a class="site-state-item" href="#projects">
-                  <span class="site-state-item-count">2</span>
-                  <span class="site-state-item-name">projects</span>
-                </a>
-              </nav>
-            </div>
-          </div>
-        </aside>
-
-        <section class="site-search-card" data-site-search data-posts-src="./posts/posts.json" data-post-base="./posts/" aria-label="Site search">
-          <label class="site-search-label" for="site-search-input">Search</label>
-          <div class="site-search-control">
-            <span class="site-search-icon" aria-hidden="true"></span>
-            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
-          </div>
-          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
-          <div class="site-search-results" data-search-results role="list"></div>
-        </section>
-
-        <nav class="account-links-card" aria-label="Third-party accounts">
-          <a class="account-link account-link-bilibili" href="https://space.bilibili.com/436931264" target="_blank" rel="noreferrer">Bilibili</a>
-          <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/user/profile/60c21d80000000000101de0a" target="_blank" rel="noreferrer">小红书</a>
-          <a class="account-link account-link-github" href="https://github.com/EmaireLi" target="_blank" rel="noreferrer">GitHub</a>
-          <a class="account-link account-link-steam" href="https://steamcommunity.com/id/Muwii" target="_blank" rel="noreferrer">Steam</a>
-          <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
-          <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <ul class="main-menu menu">
+            <li class="menu-item"><a href="#about">About</a></li>
+            <li class="menu-item"><a href="#proof">Proof</a></li>
+            <li class="menu-item"><a href="#projects">Projects</a></li>
+            <li class="menu-item"><a href="#blog">Archives</a></li>
+            <li class="menu-item"><a href="./editor.html">Editor</a></li>
+          </ul>
         </nav>
-      </div>
+      </header>
+
+      <section id="site-search" class="site-search-card" data-site-search data-posts-src="./posts/posts.json" data-post-base="./posts/" aria-label="Site search">
+        <label class="site-search-label" for="site-search-input">Search</label>
+        <div class="site-search-control">
+          <span class="site-search-icon" aria-hidden="true"></span>
+          <input
+            id="site-search-input"
+            class="site-search-input"
+            type="search"
+            placeholder="搜索文章"
+            autocomplete="off"
+            aria-describedby="site-search-status"
+            aria-controls="site-search-results"
+          />
+        </div>
+        <p id="site-search-status" class="site-search-status" data-search-status role="status" aria-live="polite" aria-atomic="true">输入关键词搜索全站文章</p>
+        <div id="site-search-results" class="site-search-results" data-search-results role="list"></div>
+        <noscript>
+          <p class="site-search-status">搜索需要 JavaScript，可从 <a href="#featured-reading">First reads</a> 进入文章。</p>
+        </noscript>
+      </section>
 
       <div class="main-inner page posts-expand">
         <article class="post-block">
           <header class="post-header">
-            <h1 class="post-title">Alex Emaire's blog</h1>
-            <div class="post-meta-container">personal site · notes · projects</div>
+            <h1 class="post-title">Alex Emaire</h1>
+            <div class="post-meta-container">personal site · engineering archive · project proof</div>
           </header>
 
           <div class="post-body">
-            <h1 id="welcome">欢迎来到我的个人博客</h1>
-            <p>
-              这里记录我的技术学习、项目实践和一些随笔。现在的方向是从 JavaBoy 慢慢转向引擎开发，
-              也会把折腾工具、写代码、看动画之后留下来的想法放在这里。
-            </p>
+            <section class="identity-hero" aria-labelledby="welcome">
+              <div class="identity-copy">
+                <p class="identity-kicker">Building a personal archive into a proof-first portfolio</p>
+                <h2 id="welcome">把学习、项目和工具做成可检查的个人网站</h2>
+                <p>
+                  SCU 软件工程本科在读，从 JavaBoy 慢慢转向引擎开发。这个站点记录技术学习、项目实践和日常写作，
+                  也把我正在形成的工程能力整理成可以被快速浏览和验证的证据。
+                </p>
+              </div>
+              <div class="identity-panel" aria-label="Current direction">
+                <div>
+                  <span>Current direction</span>
+                  <strong>Frontend / full-stack / AI tooling, with engine-learning momentum.</strong>
+                </div>
+                <div>
+                  <span>Best first proof</span>
+                  <strong><a href="#proof">Proof Map</a> · <a href="#projects">Projects</a> · <a href="./projects/code-tour.html">Code Tour</a></strong>
+                </div>
+                <div>
+                  <span>Archive role</span>
+                  <strong>Not only a resume: posts and notes keep the learning trail visible.</strong>
+                </div>
+              </div>
+              <div class="identity-actions" aria-label="Primary routes">
+                <a class="btn" href="#proof">Review proof</a>
+                <a class="btn btn-quiet" href="#projects">View projects</a>
+                <a href="#featured-reading">Read first</a>
+              </div>
+            </section>
+
+            <section class="start-routes" aria-labelledby="start-here-title">
+              <div class="section-heading-row">
+                <h2 id="start-here-title">Start here</h2>
+                <p>按访问目的走，少翻页，直接看该看的内容。</p>
+              </div>
+              <div class="route-grid">
+                <a class="route-card" href="#proof">
+                  <span>Recruiter</span>
+                  <strong>60 秒判断方向和证据</strong>
+                  <em>角色信号、能力证据、项目入口</em>
+                </a>
+                <a class="route-card" href="#site-pipeline">
+                  <span>Technical reviewer</span>
+                  <strong>先看这个网站怎么维护</strong>
+                  <em>编辑、导入、索引、搜索、发布</em>
+                </a>
+                <a class="route-card" href="#featured-reading">
+                  <span>Reader</span>
+                  <strong>先看精选阅读路径</strong>
+                  <em>求职、工具、生活、ACGN 随笔</em>
+                </a>
+                <a class="route-card" href="#contact">
+                  <span>Contact</span>
+                  <strong>留言或打开外部账号</strong>
+                  <em>项目问题、阅读反馈、合作讨论</em>
+                </a>
+              </div>
+            </section>
 
             <h2 id="about">About</h2>
             <div class="about">
@@ -97,26 +129,412 @@
               <p>喜欢把正在学习的东西整理成可回看的材料。这个站点会更像一个长期归档：不追求精装修，但希望每一篇都能留下当时真正关心的问题。</p>
             </div>
 
+            <h2 id="proof">Proof Map</h2>
+            <p class="section-intro">如果你是来快速判断我适合做什么，这里把方向、能力和可验证证据放在一起。</p>
+            <section class="proof-map" aria-label="Hiring snapshot and capability evidence">
+              <div class="hiring-snapshot">
+                <div>
+                  <p class="proof-kicker">Current direction</p>
+                  <h3>Full-stack product engineering with AI tooling and engine-learning direction.</h3>
+                  <p>
+                    我更适合需要把产品链路、前端交互、后端服务和 AI/数据工作流串起来的项目。
+                    当前作品优先展示可验证的实现、取舍和代码入口，而不是只列技术名词。
+                  </p>
+                </div>
+                <ul class="snapshot-points" aria-label="Fast facts">
+                  <li>
+                    <span>Role signal</span>
+                    <strong>Frontend / full-stack / AI tooling</strong>
+                  </li>
+                  <li>
+                    <span>Strongest proof</span>
+                    <strong><a href="./projects/smartlabeling.html">SmartLabeling</a> · <a href="./projects/yomii.html">Yomii</a></strong>
+                  </li>
+                  <li>
+                    <span>Review path</span>
+                    <strong><a href="#site-pipeline">site pipeline</a> → <a href="#blog">archive</a> → <a href="./projects/code-tour.html">code tour</a></strong>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="evidence-matrix" role="list" aria-label="Capability evidence matrix">
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">AI tooling</span>
+                    <h3>Model-assisted product workflows</h3>
+                  </div>
+                  <p>SmartLabeling covers prompt-based mask generation, annotation correction, export flow, and the boundary between UI and Python inference service.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> annotation workflow reading, frontend interaction surface, and model-service integration notes.</p>
+                  <div class="evidence-links">
+                    <a href="./projects/smartlabeling.html">case study</a>
+                    <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">repo</a>
+                  </div>
+                </article>
+
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">Full-stack app</span>
+                    <h3>Desktop learning product architecture</h3>
+                  </div>
+                  <p>Yomii connects Vue/Electron UI, FastAPI services, SQLModel data modeling, local dictionary data, and optional AI evaluation flow.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> full-stack architecture, learning workflow, local data model, and evaluation pipeline framing.</p>
+                  <div class="evidence-links">
+                    <a href="./projects/yomii.html">case study</a>
+                    <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">repo</a>
+                  </div>
+                </article>
+
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">Frontend systems</span>
+                    <h3>Static site UX with local content tooling</h3>
+                  </div>
+                  <p>This site keeps search, archives, editor, XHS import, generated manifests, and guestbook integration compatible with GitHub Pages constraints.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> static UX, content import workflow, manifest generation, and deployment-friendly structure.</p>
+                  <div class="evidence-links">
+                    <a href="./README.md">workflow</a>
+                    <a href="./scripts/import-xhs-notes.js">import script</a>
+                    <a href="./scripts/generate-posts-manifest.js">manifest script</a>
+                  </div>
+                </article>
+
+                <article class="evidence-row" role="listitem">
+                  <div class="evidence-capability">
+                    <span class="evidence-label">Engineering process</span>
+                    <h3>Documented discovery, evaluation, QA, and release loop</h3>
+                  </div>
+                  <p>Feature ideas are evaluated by role-specific agents, recorded in docs, implemented with narrow scope, verified locally, then committed and pushed.</p>
+                  <p class="ownership-note"><strong>Owned:</strong> planning loop, decision records, implementation scope, QA pass, and release handoff.</p>
+                  <div class="evidence-links">
+                    <a href="./docs/ai_team/feature_decision.md">decisions</a>
+                    <a href="./docs/ai_team/round-02-implementation_plan.md">plan</a>
+                    <a href="./projects/code-tour.html">code tour</a>
+                  </div>
+                </article>
+              </div>
+
+              <div class="review-routes" aria-label="Recommended review routes">
+                <h3>Suggested review routes</h3>
+                <ul>
+                  <li><strong>Recruiter:</strong> read the snapshot, then scan <a href="#projects">Projects</a> and <a href="#contact">contact</a>.</li>
+                  <li><strong>Technical reviewer:</strong> start with <a href="#site-pipeline">how this site works</a>, then open the <a href="./projects/code-tour.html">Code Tour</a> if more code context is needed.</li>
+                  <li><strong>Process reviewer:</strong> inspect the import scripts, manifest generation, and AI-team decision docs.</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="proof-bridge" aria-labelledby="proof-bridge-title">
+              <div>
+                <p class="proof-kicker">Claim to evidence</p>
+                <h3 id="proof-bridge-title">这不是技能清单，而是浏览路径。</h3>
+              </div>
+              <dl>
+                <div>
+                  <dt>AI tooling</dt>
+                  <dd><a href="./projects/smartlabeling.html">SmartLabeling case study</a> shows workflow framing and model-service boundaries.</dd>
+                </div>
+                <div>
+                  <dt>Full-stack product</dt>
+                  <dd><a href="./projects/yomii.html">Yomii case study</a> shows learning-product architecture and delivery tradeoffs.</dd>
+                </div>
+                <div>
+                  <dt>Site engineering</dt>
+                  <dd><a href="#site-pipeline">Site Pipeline Lens</a> and local scripts show how the static content system is maintained.</dd>
+                </div>
+              </dl>
+            </section>
+
             <h2 id="projects">Projects</h2>
-            <ul class="project-list">
-              <li>
-                <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">SmartLabeling</a>
-                <br />
-                A data labeling tool with AI from Segment Anything and other models.
+            <p class="section-intro">这里优先放能被代码和文档验证的项目证据：我负责什么、系统怎么拆、哪些取舍值得继续追。</p>
+            <ul class="project-list project-case-list">
+              <li class="project-card">
+                <div class="project-card-head">
+                  <div>
+                    <p class="project-card-kicker">AI labeling · desktop tool</p>
+                    <h3><a href="./projects/smartlabeling.html">SmartLabeling</a></h3>
+                  </div>
+                  <span class="project-status">Case study</span>
+                </div>
+                <p class="project-card-summary">A data labeling tool with AI assistance from Segment Anything and CLIP-style classification workflows.</p>
+                <dl class="project-card-meta">
+                  <div>
+                    <dt>Role</dt>
+                    <dd>Frontend interaction, annotation workflow, model-service integration reading</dd>
+                  </div>
+                  <div>
+                    <dt>Stack</dt>
+                    <dd>Vue 3, TypeScript, Electron, FastAPI, SAM, CLIP</dd>
+                  </div>
+                </dl>
+                <div class="project-receipts" aria-label="SmartLabeling evidence receipt">
+                  <div>
+                    <span>Problem</span>
+                    <strong>Make annotation workflows faster without hiding human correction.</strong>
+                  </div>
+                  <div>
+                    <span>Role</span>
+                    <strong>Interaction reading, workflow framing, and model-service boundary notes.</strong>
+                  </div>
+                  <div>
+                    <span>Evidence</span>
+                    <strong>Case study, repo route, export/cache workflow, and code tour entry.</strong>
+                  </div>
+                </div>
+                <ul class="project-proof-list">
+                  <li>Prompt-based mask generation with foreground/background points and boxes.</li>
+                  <li>Export flow for masks, YAML labels, and project cache.</li>
+                  <li>Desktop packaging path around a Python inference service.</li>
+                </ul>
+                <div class="project-card-actions">
+                  <a class="btn" href="./projects/smartlabeling.html">Read case study</a>
+                  <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">GitHub</a>
+                </div>
               </li>
-              <li>
-                <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">Yomii - 日语学习助手</a>
-                <br />
-                一个现代化的日语词汇学习应用，集词汇查询、背诵、测试于一体。
+              <li class="project-card">
+                <div class="project-card-head">
+                  <div>
+                    <p class="project-card-kicker">Japanese learning · full-stack app</p>
+                    <h3><a href="./projects/yomii.html">Yomii - 日语学习助手</a></h3>
+                  </div>
+                  <span class="project-status">Case study</span>
+                </div>
+                <p class="project-card-summary">一个桌面化日语学习应用，覆盖查词、背单词、分级测试和作文评测四条主链路。</p>
+                <dl class="project-card-meta">
+                  <div>
+                    <dt>Role</dt>
+                    <dd>Full-stack architecture, learning workflow, local model evaluation pipeline</dd>
+                  </div>
+                  <div>
+                    <dt>Stack</dt>
+                    <dd>Vue 3, TypeScript, Electron, FastAPI, SQLModel, SQLite, MySQL</dd>
+                  </div>
+                </dl>
+                <div class="project-receipts" aria-label="Yomii evidence receipt">
+                  <div>
+                    <span>Problem</span>
+                    <strong>Connect vocabulary, review, quiz, and writing feedback into one learning path.</strong>
+                  </div>
+                  <div>
+                    <span>Role</span>
+                    <strong>Full-stack architecture, learning workflow, local data model, and evaluation framing.</strong>
+                  </div>
+                  <div>
+                    <span>Evidence</span>
+                    <strong>Case study, backend/frontend boundaries, training scripts, and code tour entry.</strong>
+                  </div>
+                </div>
+                <ul class="project-proof-list">
+                  <li>Separated static dictionary data from user behavior records.</li>
+                  <li>Supports web development mode and Electron desktop delivery.</li>
+                  <li>Uses local Qwen adapters with optional online fallback for essay evaluation.</li>
+                </ul>
+                <div class="project-card-actions">
+                  <a class="btn" href="./projects/yomii.html">Read case study</a>
+                  <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">GitHub</a>
+                </div>
               </li>
             </ul>
+
+            <section id="site-pipeline" class="site-pipeline" aria-labelledby="site-pipeline-title">
+              <div class="section-heading-row">
+                <div>
+                  <p class="proof-kicker">Site pipeline lens</p>
+                  <h2 id="site-pipeline-title">这个网站本身也是一个可检查的作品。</h2>
+                </div>
+                <p>从写作、导入、生成索引到搜索和发布，尽量用静态文件把内容系统做清楚。</p>
+              </div>
+
+              <ol class="pipeline-steps" aria-label="Personal site publishing pipeline">
+                <li class="pipeline-step">
+                  <span class="pipeline-index">01</span>
+                  <div>
+                    <h3>Write locally</h3>
+                    <p>文章可以从站内编辑器生成静态 HTML，保持 GitHub Pages 可部署。</p>
+                    <a href="./editor.html">Open editor</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">02</span>
+                  <div>
+                    <h3>Import notes</h3>
+                    <p>小红书笔记先转成本地 JSON，再生成本地文章和图片引用，避免热链和账号依赖。</p>
+                    <a href="./scripts/import-xhs-notes.js">Inspect importer</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">03</span>
+                  <div>
+                    <h3>Build the manifest</h3>
+                    <p>脚本扫描 <code>posts/</code>，生成归档和搜索共用的文章清单。</p>
+                    <a href="./posts/posts.json">View manifest</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">04</span>
+                  <div>
+                    <h3>Browse and search</h3>
+                    <p>首页归档和本地搜索共享同一份数据，读者不用离开静态站点也能找到内容。</p>
+                    <a href="#site-search-input">Try search</a>
+                  </div>
+                </li>
+                <li class="pipeline-step">
+                  <span class="pipeline-index">05</span>
+                  <div>
+                    <h3>Respond and publish</h3>
+                    <p>留言板独立于静态页面，站点主体仍保持轻量；迭代记录写入文档并随分支发布。</p>
+                    <a href="./docs/ai_team/feature_decision.md">Read decisions</a>
+                  </div>
+                </li>
+              </ol>
+
+              <div class="pipeline-proof" aria-label="Site pipeline proof points">
+                <div>
+                  <span>Constraint</span>
+                  <strong>No build framework required; plain HTML/CSS/JS stays deployable.</strong>
+                </div>
+                <div>
+                  <span>Trust</span>
+                  <strong>Content is local, generated artifacts are inspectable, and external accounts are optional.</strong>
+                </div>
+                <div>
+                  <span>Next review</span>
+                  <strong><a href="./README.md">maintenance notes</a> · <a href="./projects/code-tour.html#site">site code route</a></strong>
+                </div>
+              </div>
+            </section>
+
+            <section id="featured-reading" class="featured-reading" aria-labelledby="featured-reading-title">
+              <div class="section-heading-row">
+                <div>
+                  <p class="proof-kicker">First reads</p>
+                  <h2 id="featured-reading-title">不知道从哪篇开始，就按这几条线读。</h2>
+                </div>
+                <p>不是完整索引，而是给第一次来的人准备的入口：先看代表性内容，再去下方归档继续翻。</p>
+              </div>
+
+              <div class="reading-path-grid">
+                <article class="reading-path-card">
+                  <div class="reading-path-head">
+                    <span>Career / direction</span>
+                    <h3>看我如何处理求职、方向和试错成本。</h3>
+                  </div>
+                  <p>这条线最能体现当时的压力、判断和自我修正，也解释了为什么这个网站需要保留学习轨迹。</p>
+                  <ol class="reading-link-list">
+                    <li>
+                      <a href="./posts/2025-12-19-xhs-川大的銀杏很美我想我還可以再看幾年.html">川大的銀杏很美，我想我還可以再看幾年</a>
+                      <span>2025-12-19 · 求职 · 技术 · 生活</span>
+                    </li>
+                    <li>
+                      <a href="./posts/2025-09-12-xhs-有點喘不過氣來了.html">有點喘不過氣來了</a>
+                      <span>2025-09-12 · 求职 · 生活</span>
+                    </li>
+                  </ol>
+                </article>
+
+                <article class="reading-path-card">
+                  <div class="reading-path-head">
+                    <span>Tools / workflow</span>
+                    <h3>看一篇偏操作流的工具记录。</h3>
+                  </div>
+                  <p>这类文章不追求宏大叙事，重点是把踩过的流程写清楚，和站点的归档/导入逻辑一致。</p>
+                  <ol class="reading-link-list">
+                    <li>
+                      <a href="./posts/2026-05-13-xhs-apple土区礼品卡充值流程订阅gpt-plus.html">Apple土区礼品卡充值流程（订阅GPT Plus）</a>
+                      <span>2026-05-13 · 工具 · 小红书同步</span>
+                    </li>
+                  </ol>
+                </article>
+
+                <article class="reading-path-card">
+                  <div class="reading-path-head">
+                    <span>Life archive</span>
+                    <h3>看个人归档里更生活化的一面。</h3>
+                  </div>
+                  <p>个人网站不只放项目证明，也保留和朋友、校园、阶段选择有关的真实片段。</p>
+                  <ol class="reading-link-list">
+                    <li>
+                      <a href="./posts/2026-01-18-xhs-大家好像突然都長大了.html">大家好像突然都長大了</a>
+                      <span>2026-01-18 · 生活 · 小红书同步</span>
+                    </li>
+                  </ol>
+                </article>
+
+                <article class="reading-path-card">
+                  <div class="reading-path-head">
+                    <span>ACGN longform</span>
+                    <h3>看长文分析和情绪记录如何混在一起。</h3>
+                  </div>
+                  <p>这类长文更接近个人兴趣档案，展示我会怎样拆解作品、争议和自己的观看经验。</p>
+                  <ol class="reading-link-list">
+                    <li>
+                      <a href="./posts/2026-04-28-134123-火在烧-京吹3完结随笔.html">火在烧 —— 京吹3完结随笔</a>
+                      <span>2026-04-28 · ACGN · 生活</span>
+                    </li>
+                  </ol>
+                </article>
+              </div>
+            </section>
 
             <h2 id="blog">近期更新</h2>
             <div class="blog-toolbar">
               <a class="btn" href="./editor.html">编写 / 保存文章</a>
             </div>
-            <p id="blog-auto-status" class="meta" hidden></p>
-            <ul id="blog-auto-list" class="blog-list"></ul>
+            <p id="blog-auto-status" class="meta" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+            <ul id="blog-auto-list" class="blog-list">
+              <!-- ARCHIVE:START -->
+              <li class="archive-year-group">
+                <h3 class="archive-year">2026</h3>
+                <ol class="archive-timeline">
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2026-05-13">2026-05-13</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2026-05-13-xhs-apple%E5%9C%9F%E5%8C%BA%E7%A4%BC%E5%93%81%E5%8D%A1%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B%E8%AE%A2%E9%98%85gpt-plus.html">Apple土区礼品卡充值流程（订阅GPT Plus）</a>
+                      <p class="archive-entry-excerpt">小红书同步 · 2026-05-13 · 原文链接 前置条件： 日期：26.5.13 设备：iphone➕mac 支付：工行visa星座卡 1.新建（建议新建不要转区）土区apple account：我用的outlook邮箱注册，region选土耳其，手机号是国区手机号，全程在safari里icloud.com注册，没</p>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">工具</span></div>
+                    </div>
+                  </li>
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2026-04-28">2026-04-28</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2026-04-28-134123-%E7%81%AB%E5%9C%A8%E7%83%A7-%E4%BA%AC%E5%90%B93%E5%AE%8C%E7%BB%93%E9%9A%8F%E7%AC%94.html">火在烧 —— 京吹3完结随笔</a>
+                      <p class="archive-entry-excerpt">2026-04-28 从京吹Ep12播出到周日完结，不是忙于考试就是被琐事拖累。但一直在思考这一季京吹的问题，Ep12播出后的一天还没忍住写了点简要看法，还是抽空断断续续总结一下看法。 首先解释一下标题，这个词是京阿尼语料7.1晚京吹杂谈回直播谈到的，本人认为所言极是。此词可以全面概括京吹这一季的所有，无论是脚本、制作</p>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">ACGN</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2026-01-18">2026-01-18</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2026-01-18-xhs-%E5%A4%A7%E5%AE%B6%E5%A5%BD%E5%83%8F%E7%AA%81%E7%84%B6%E9%83%BD%E9%95%B7%E5%A4%A7%E4%BA%86.html">大家好像突然都長大了</a>
+                      <p class="archive-entry-excerpt">小红书同步 · 2026-01-18 · 原文链接 前幾日和高中玩的最好的四個朋友在杭州聚了兩日。 起因是杭電的朋友還沒放假，海大的朋友正好飛蕭山，我和🐟休假中已經躺了數日，朋友說作為東道主請我們吃飯，索性在杭州耍兩天。 四人學校真是天南地北，成都西安海南杭州，平日打遊戲都會掉線網卡。上了大學一年就三個月可以見面，過</p>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                </ol>
+              </li>
+              <li class="archive-year-group">
+                <h3 class="archive-year">2025</h3>
+                <ol class="archive-timeline">
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2025-12-19">2025-12-19</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2025-12-19-xhs-%E5%B7%9D%E5%A4%A7%E7%9A%84%E9%8A%80%E6%9D%8F%E5%BE%88%E7%BE%8E%E6%88%91%E6%83%B3%E6%88%91%E9%82%84%E5%8F%AF%E4%BB%A5%E5%86%8D%E7%9C%8B%E5%B9%BE%E5%B9%B4.html">川大的銀杏很美，我想我還可以再看幾年</a>
+                      <p class="archive-entry-excerpt">小红书同步 · 2025-12-19 · 原文链接 其實很久很久沒有失眠了.. 求職受挫，離職半個月海投大廠一個約面都沒有，唯一約面的度子前一天打電話說項目上線不面了。以至於目前的狀態，不是自己努力所能改變的了，而是連機會都沒有，深深的無力感讓人只想逃離 這幾天嘗試focus自身，發現自己就是一個只會做貪心算法嘴硬頭鐵</p>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">求职</span><span class="archive-entry-tag">技术</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2025-09-12">2025-09-12</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2025-09-12-xhs-%E6%9C%89%E9%BB%9E%E5%96%98%E4%B8%8D%E9%81%8E%E6%B0%A3%E4%BE%86%E4%BA%86.html">有點喘不過氣來了</a>
+                      <p class="archive-entry-excerpt">小红书同步 · 2025-09-12 · 原文链接 這週的心情有點跌宕起伏 起因是暑期打完4C之後一直擺爛，擺到現在總覺得錯過了八月底九月初的黃金投遞時間，所以一開學一直很焦慮。之後學院發了上一屆的保研細則，跟朋友算了一下應該正好可以保研，但估計不能保很好的外。其實自己沒想過要保研什麼的，但也算是有條後路。再加上群裡好</p>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">求职</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                </ol>
+              </li>
+              <!-- ARCHIVE:END -->
+            </ul>
+            <noscript><p class="meta">完整文章归档已显示；标签筛选需要启用 JavaScript。</p></noscript>
 
             <h2 id="contact">联系我</h2>
             <section class="guestbook" data-guestbook aria-label="访客留言">
@@ -148,6 +566,37 @@
           </div>
         </article>
       </div>
+
+      <aside class="sidebar" aria-label="Site overview">
+        <div class="sidebar-inner sidebar-overview-active">
+          <div class="site-overview-wrap sidebar-panel">
+            <div class="site-author">
+              <p class="site-author-name">Alex</p>
+              <p class="site-description">JavaBoy 转行引擎开发中</p>
+            </div>
+
+            <nav class="site-state" aria-label="Site stats">
+              <a class="site-state-item" href="#blog">
+                <span class="site-state-item-count" id="post-count">0</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+              <a class="site-state-item" href="#projects">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">projects</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </aside>
+
+      <nav class="account-links-card" aria-label="Third-party accounts">
+        <a class="account-link account-link-bilibili" href="https://space.bilibili.com/436931264" target="_blank" rel="noreferrer">Bilibili</a>
+        <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/user/profile/60c21d80000000000101de0a" target="_blank" rel="noreferrer">小红书</a>
+        <a class="account-link account-link-github" href="https://github.com/EmaireLi" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="account-link account-link-steam" href="https://steamcommunity.com/id/Muwii" target="_blank" rel="noreferrer">Steam</a>
+        <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
+        <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
+      </nav>
     </main>
 
     <footer class="footer">
@@ -164,10 +613,11 @@
       </div>
     </footer>
 
-    <a class="back-to-top" href="#top" aria-label="Back to top">↑</a>
+    <a class="back-to-top is-visible" href="#top" aria-label="Back to top">↑</a>
 
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
     <script src="./guestbook-config.js?v=20260630"></script>
-    <script src="./script.js?v=20260708b"></script>
+    <script src="./archive-filter-state.js?v=20260712a"></script>
+    <script src="./script.js?v=20260712b"></script>
   </body>
 </html>
