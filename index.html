@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
     <title>Alex Emaire's Blog</title>
-    <link rel="stylesheet" href="./styles.css?v=20260727a" />
+    <link rel="stylesheet" href="./styles.css?v=20260727b" />
   </head>
   <body id="top" class="home-page">
     <div class="headband"></div>
@@ -26,7 +26,6 @@
         <nav class="site-nav" aria-label="Main navigation">
           <ul class="main-menu menu">
             <li class="menu-item"><a href="#about">About</a></li>
-            <li class="menu-item"><a href="#featured-reading">Reading</a></li>
             <li class="menu-item"><a href="#projects">Projects</a></li>
             <li class="menu-item"><a href="#blog">Archives</a></li>
             <li class="menu-item"><a href="./editor.html">Editor</a></li>
@@ -51,7 +50,7 @@
         <p id="site-search-status" class="site-search-status" data-search-status role="status" aria-live="polite" aria-atomic="true">输入关键词搜索全站文章</p>
         <div id="site-search-results" class="site-search-results" data-search-results role="list"></div>
         <noscript>
-          <p class="site-search-status">搜索需要 JavaScript，可从 <a href="#featured-reading">First reads</a> 进入文章。</p>
+          <p class="site-search-status">搜索需要 JavaScript，可从 <a href="#blog">Archives</a> 进入文章。</p>
         </noscript>
       </section>
 
@@ -68,14 +67,13 @@
                 <p class="identity-kicker">A personal archive, kept in public</p>
                 <h2 id="welcome">记录技术学习、项目实践和日常写作</h2>
                 <p>
-                  我是 Alex，SCU 软件工程本科在读，从 JavaBoy 慢慢转向引擎开发。
+                  SCU 软件工程本科在读，从 JavaBoy 慢慢转向引擎开发。
                   这里放下正在学习的东西、做过的项目，也保留校园、生活和喜欢的作品。
                 </p>
               </div>
               <div class="identity-actions" aria-label="Primary routes">
-                <a class="btn" href="#featured-reading">从这里开始读</a>
-                <a class="btn btn-quiet" href="#projects">看看做过的项目</a>
-                <a href="#blog">沿时间线慢慢翻</a>
+                <a class="btn" href="#projects">看看做过的项目</a>
+                <a class="btn btn-quiet" href="#blog">沿时间线慢慢翻</a>
               </div>
             </section>
 
@@ -85,11 +83,6 @@
                 <p>不必按固定顺序浏览，从此刻最想看的地方进入就好。</p>
               </div>
               <div class="route-grid">
-                <a class="route-card" href="#featured-reading">
-                  <span>Reading</span>
-                  <strong>从几篇代表性的文章开始</strong>
-                  <em>工具记录、项目实践、生活与 ACGN</em>
-                </a>
                 <a class="route-card" href="#projects">
                   <span>Projects</span>
                   <strong>看看做过和正在做的东西</strong>
@@ -110,80 +103,8 @@
               <p>喜欢把正在学习的东西整理成可回看的材料。这个站点会更像一个长期归档：不追求精装修，但希望每一篇都能留下当时真正关心的问题。</p>
             </div>
 
-            <section id="featured-reading" class="featured-reading" aria-labelledby="featured-reading-title">
-              <div class="section-heading-row">
-                <div>
-                  <p class="section-kicker">Selected notes</p>
-                  <h2 id="featured-reading-title">从几条不同的线开始读</h2>
-                </div>
-                <p>这里不是完整索引，只是几扇入口。更多内容都留在下方的时间线里。</p>
-              </div>
-
-              <div class="reading-path-grid">
-                <article class="reading-path-card">
-                  <div class="reading-path-head">
-                    <span>Tools / workflow</span>
-                    <h3>把走过一遍的操作流程写清楚</h3>
-                  </div>
-                  <p>工具记录不追求宏大叙事，只希望下次再遇到时，不必从头摸索。</p>
-                  <ol class="reading-link-list">
-                    <li>
-                      <a href="./posts/2026-05-13-xhs-apple土区礼品卡充值流程订阅gpt-plus.html">Apple 土区礼品卡充值流程（订阅 GPT Plus）</a>
-                      <span>2026-05-13 · 工具 · 小红书同步</span>
-                    </li>
-                  </ol>
-                </article>
-
-                <article class="reading-path-card">
-                  <div class="reading-path-head">
-                    <span>Projects / practice</span>
-                    <h3>从项目里回看问题和实现过程</h3>
-                  </div>
-                  <p>项目页记录的不只是结果，也包括为什么开始、系统怎么拆，以及现在还有哪些不足。</p>
-                  <ol class="reading-link-list">
-                    <li>
-                      <a href="./projects/smartlabeling.html">SmartLabeling：AI 辅助图像标注</a>
-                      <span>Vue · Electron · FastAPI · SAM</span>
-                    </li>
-                    <li>
-                      <a href="./projects/yomii.html">Yomii：日语学习助手</a>
-                      <span>Vue · Electron · FastAPI · SQLModel</span>
-                    </li>
-                  </ol>
-                </article>
-
-                <article class="reading-path-card">
-                  <div class="reading-path-head">
-                    <span>Life archive</span>
-                    <h3>保留校园、朋友和阶段性的心情</h3>
-                  </div>
-                  <p>这些文字不需要得出结论，只是把当时真正发生和在意的事情留下来。</p>
-                  <ol class="reading-link-list">
-                    <li>
-                      <a href="./posts/2026-01-18-xhs-大家好像突然都長大了.html">大家好像突然都長大了</a>
-                      <span>2026-01-18 · 生活 · 小红书同步</span>
-                    </li>
-                  </ol>
-                </article>
-
-                <article class="reading-path-card">
-                  <div class="reading-path-head">
-                    <span>ACGN longform</span>
-                    <h3>写喜欢的作品，也写观看时的自己</h3>
-                  </div>
-                  <p>长文分析和情绪记录会混在一起，构成这份个人归档里很重要的一部分。</p>
-                  <ol class="reading-link-list">
-                    <li>
-                      <a href="./posts/2026-04-28-134123-火在烧-京吹3完结随笔.html">火在烧 —— 京吹3完结随笔</a>
-                      <span>2026-04-28 · ACGN · 生活</span>
-                    </li>
-                  </ol>
-                </article>
-              </div>
-            </section>
-
             <h2 id="projects">项目记录</h2>
-            <p class="section-intro">做过的东西会慢慢变化。这里记录它们为何开始、我参与了什么，以及过程中留下的经验。</p>
+            <p class="section-intro">做过的东西会慢慢变化。这里记录它们为何开始、如何实现，以及过程中留下的经验。</p>
             <ul class="project-list project-case-list">
               <li class="project-card">
                 <div class="project-card-head">
@@ -195,10 +116,6 @@
                 </div>
                 <p class="project-card-summary">一个结合 Segment Anything 与 CLIP 分类流程的 AI 辅助图像标注工具。</p>
                 <dl class="project-card-meta">
-                  <div>
-                    <dt>我参与的部分</dt>
-                    <dd>前端交互、标注流程梳理，以及模型服务接口的理解与整理</dd>
-                  </div>
                   <div>
                     <dt>技术栈</dt>
                     <dd>Vue 3, TypeScript, Electron, FastAPI, SAM, CLIP</dd>
@@ -224,10 +141,6 @@
                 <p class="project-card-summary">一个桌面化日语学习应用，覆盖查词、背单词、分级测试和作文评测四条主链路。</p>
                 <dl class="project-card-meta">
                   <div>
-                    <dt>我参与的部分</dt>
-                    <dd>全栈结构、学习流程、本地数据模型与作文评测链路</dd>
-                  </div>
-                  <div>
                     <dt>技术栈</dt>
                     <dd>Vue 3, TypeScript, Electron, FastAPI, SQLModel, SQLite, MySQL</dd>
                   </div>
@@ -242,38 +155,6 @@
                 </div>
               </li>
             </ul>
-
-            <section id="site-notes" class="site-notes" aria-labelledby="site-notes-title">
-              <div class="section-heading-row">
-                <div>
-                  <p class="section-kicker">About this site</p>
-                  <h2 id="site-notes-title">这个归档是怎么长出来的</h2>
-                </div>
-                <p>没有复杂的内容系统，文章、图片和索引都尽量留在仓库里。</p>
-              </div>
-              <div class="site-note-grid">
-                <article>
-                  <span>01</span>
-                  <h3>本地写作</h3>
-                  <p>站内编辑器可以生成静态 HTML，普通文章直接放进 <code>posts/</code>。</p>
-                </article>
-                <article>
-                  <span>02</span>
-                  <h3>同步旧笔记</h3>
-                  <p>小红书内容先转成本地数据，图片也保存到站点，不依赖外部热链。</p>
-                </article>
-                <article>
-                  <span>03</span>
-                  <h3>整理与寻找</h3>
-                  <p>同一份文章清单同时驱动时间线、标签筛选和站内搜索。</p>
-                </article>
-                <article>
-                  <span>04</span>
-                  <h3>静态发布</h3>
-                  <p>页面保持为原生 HTML、CSS 和 JavaScript，由 GitHub Pages 直接发布。</p>
-                </article>
-              </div>
-            </section>
 
             <h2 id="blog">近期更新</h2>
             <div class="blog-toolbar">
