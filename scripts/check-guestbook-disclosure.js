@@ -7,7 +7,7 @@ const worker = fs.readFileSync("guestbook/worker.mjs", "utf8");
 const styles = fs.readFileSync("styles.css", "utf8");
 
 const disclosureId = "guestbook-public-note";
-const expectedCopy = "署名和留言会公开显示在本页；请勿填写手机号、邮箱或其他隐私信息。留言最多 100 字。";
+const expectedCopy = "署名和留言会公开显示在本页；最多 100 字。";
 const idMatches = index.match(new RegExp(`id="${disclosureId}"`, "g")) || [];
 assert.equal(idMatches.length, 1, "public disclosure id must exist exactly once");
 
