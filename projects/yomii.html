@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
-    <title>Yomii Case Study | Alex</title>
-    <link rel="stylesheet" href="../styles.css?v=20260711b" />
+    <title>Yomii 项目记录 | Alex</title>
+    <link rel="stylesheet" href="../styles.css?v=20260727a" />
   </head>
   <body id="top">
     <div class="headband"></div>
@@ -27,6 +27,7 @@
           <nav class="site-nav" aria-label="Main navigation">
             <ul class="main-menu menu">
               <li class="menu-item"><a href="../index.html#about">About</a></li>
+              <li class="menu-item"><a href="../index.html#featured-reading">Reading</a></li>
               <li class="menu-item"><a href="../index.html#projects">Projects</a></li>
               <li class="menu-item"><a href="../index.html#blog">Archives</a></li>
               <li class="menu-item"><a href="../editor.html">Editor</a></li>
@@ -40,12 +41,11 @@
               <p class="site-author-name">Yomii</p>
               <p class="site-description">Japanese learning desktop app</p>
             </div>
-            <nav class="case-study-nav" aria-label="Case study sections">
-              <a href="#problem">Problem</a>
-              <a href="#architecture">Architecture</a>
-              <a href="#implementation">Implementation</a>
-              <a href="#code-reading">Code reading</a>
-              <a href="./code-tour.html#yomii">Code tour</a>
+            <nav class="case-study-nav" aria-label="项目记录章节">
+              <a href="#problem">项目背景</a>
+              <a href="#architecture">系统结构</a>
+              <a href="#implementation">实现笔记</a>
+              <a href="#code-reading">相关入口</a>
             </nav>
           </div>
         </aside>
@@ -65,7 +65,7 @@
         <article class="post-block">
           <header class="post-header">
             <h1 class="post-title">Yomii - 日语学习助手</h1>
-            <div class="post-meta-container">case study · language learning · Vue / Electron / FastAPI</div>
+            <div class="post-meta-container">项目记录 · language learning · Vue / Electron / FastAPI</div>
           </header>
 
           <div class="post-body article-content case-study">
@@ -75,25 +75,25 @@
 
             <div class="case-facts" aria-label="Project facts">
               <div>
-                <span>Role</span>
-                <strong>Full-stack learning workflow and AI evaluation pipeline</strong>
+                <span>我参与的部分</span>
+                <strong>全栈学习流程与作文评测链路</strong>
               </div>
               <div>
-                <span>Stack</span>
+                <span>技术栈</span>
                 <strong>Vue 3, TypeScript, Electron, FastAPI, SQLModel, SQLite, MySQL</strong>
               </div>
               <div>
-                <span>Proof</span>
+                <span>记录重点</span>
                 <strong>Search, review, quiz, essay evaluation, tests and docs</strong>
               </div>
             </div>
 
-            <h2 id="problem">Problem</h2>
+            <h2 id="problem">项目背景</h2>
             <p>
               语言学习工具常常把查词、收藏、复习、测试和作文反馈拆散。Yomii 的目标是把这些链路连起来，让学习记录能够回流到下一次复习和测试中。
             </p>
 
-            <h2 id="architecture">Architecture</h2>
+            <h2 id="architecture">系统结构</h2>
             <div class="case-flow" aria-label="Yomii architecture flow">
               <div>
                 <span>01</span>
@@ -122,33 +122,32 @@
               </div>
             </div>
 
-            <h2 id="implementation">Implementation Highlights</h2>
+            <h2 id="implementation">实现笔记</h2>
             <ul class="case-points">
               <li><strong>Learning loop:</strong> search history, favorites, review state and quiz reports form a closed path instead of isolated pages.</li>
               <li><strong>Data boundary:</strong> static dictionary assets and user behavior data are split across SQLite and MySQL responsibilities.</li>
               <li><strong>AI orchestration:</strong> essay evaluation supports mock/lightweight mode, local model services, and optional online fallback.</li>
               <li><strong>Delivery modes:</strong> the app can run as web front-end/back-end development mode or packaged Electron desktop app.</li>
-              <li><strong>Test evidence:</strong> backend tests cover auth, quiz, review, progress, essay evaluation and training-data preparation paths.</li>
+              <li><strong>Tests:</strong> backend tests cover auth, quiz, review, progress, essay evaluation and training-data preparation paths.</li>
             </ul>
 
-            <h2>Tradeoffs</h2>
+            <h2>过程中的取舍</h2>
             <ul class="case-points">
               <li>Full local model evaluation is stronger for control and privacy, but requires heavier runtime dependencies.</li>
               <li>Two database roles make data ownership clearer, but increase setup complexity for new contributors.</li>
               <li>Electron packaging improves desktop availability, while still requiring the web/API path to stay testable.</li>
             </ul>
 
-            <h2>Current Evidence</h2>
+            <h2>当前状态</h2>
             <ul class="case-points">
               <li>The repository includes frontend, Electron, FastAPI backend, database design docs, training scripts, and backend tests.</li>
               <li>The documented workflows cover search, review, quiz, essay evaluation, local model serving, and desktop build commands.</li>
-              <li>The next missing proof is visual: application screenshots and a short request-to-result sequence would make the learning loop easier to inspect.</li>
+              <li>目前还缺少应用截图和一段从作文请求到评测结果的完整流程记录。</li>
             </ul>
 
-            <h2 id="code-reading">Code Reading Guide</h2>
-            <p>这些入口最能说明系统边界和工程取舍：</p>
+            <h2 id="code-reading">相关入口</h2>
+            <p>想继续了解实现时，可以从这些目录和文档开始：</p>
             <ul class="case-link-list">
-              <li><a href="./code-tour.html#yomii">Guided Code Tour</a> - 如果只有 10-15 分钟，按 reviewer 路线先看关键代码区域。</li>
               <li><a href="https://github.com/EmaireLi/Yomii/tree/main/src/views" target="_blank" rel="noreferrer">Vue views</a> - 查词、背词、测试、作文和收藏的前端页面组织。</li>
               <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/app" target="_blank" rel="noreferrer">FastAPI app</a> - API、配置、数据库会话和业务服务边界。</li>
               <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/training" target="_blank" rel="noreferrer">Training and model service scripts</a> - 作文评分/修订模型的训练、合并、量化和服务脚本。</li>
@@ -156,9 +155,9 @@
               <li><a href="https://github.com/EmaireLi/Yomii/blob/main/docs/DATABASE_DESIGN.md" target="_blank" rel="noreferrer">Database design</a> - 静态词库和用户行为数据拆分的设计依据。</li>
             </ul>
 
-            <h2>Next Proof To Add</h2>
+            <h2>后续记录</h2>
             <p>
-              下一步适合补应用截图、学习流程图和一个简短的“作文评测请求到结果”序列图，让访客不用启动项目也能看清完整链路。
+              后续会补应用截图、学习流程图和一个简短的“作文评测请求到结果”序列图，把实际使用过程和当前完成度记录得更清楚。
             </p>
           </div>
         </article>
