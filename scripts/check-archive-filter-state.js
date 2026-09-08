@@ -43,7 +43,9 @@ assert.ok(popstateBlock, "popstate handler must exist");
 assert.doesNotMatch(popstateBlock[1], /pushState|replaceState|\.focus\(|scrollTo|scrollIntoView/, "popstate must not mutate URL, focus, or scroll");
 assert.equal((scriptSource.match(/window\.history\.pushState/g) || []).length, 1, "one guarded pushState call expected");
 assert.equal((scriptSource.match(/window\.history\.replaceState/g) || []).length, 1, "one initial replaceState call expected");
-assert.ok(indexSource.indexOf("archive-filter-state.js?v=20260712a") < indexSource.indexOf("script.js?v=20260712b"), "state helper must load before the shared script");
+const helperIndex = indexSource.search(/<script\b[^>]*src="\.\/archive-filter-state\.js(?:\?[^"\s]*)?"/);
+const runtimeIndex = indexSource.search(/<script\b[^>]*src="\.\/script\.js(?:\?[^"\s]*)?"/);
+assert.ok(helperIndex >= 0 && runtimeIndex > helperIndex, "state helper must load before the shared script");
 assert.match(indexSource, /id="blog-auto-status"[^>]*role="status"[^>]*aria-live="polite"[^>]*aria-atomic="true"/, "archive status must be a restrained polite live region");
 
 console.log("Archive filter state contract: pass (Unicode, encoding, invalid state, parameter preservation, history decisions)");

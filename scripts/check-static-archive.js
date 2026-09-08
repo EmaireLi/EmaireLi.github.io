@@ -32,7 +32,7 @@ const renderedFixture = renderArchive([
 ]);
 assert(!renderedFixture.includes("<script>"), "title HTML must be escaped");
 assert(renderedFixture.includes("&lt;script&gt;alert(&#39;x&#39;)&lt;/script&gt;"), "escaped title must be preserved as text");
-assert(renderedFixture.includes("A &amp; B"), "excerpt HTML must be escaped");
+assert(!renderedFixture.includes("archive-entry-excerpt") && !renderedFixture.includes("A &amp; B"), "archive must omit excerpts");
 assert(renderedFixture.includes("&lt;tag&gt;"), "tag HTML must be escaped");
 assert(renderedFixture.includes("safe&amp;a.html"), "href HTML must be escaped");
 

@@ -214,14 +214,12 @@ function renderTimelineArchive(listEl, posts, activeTag) {
         .map((post) => {
           const title = escapeHtml(post.title || post.file || "Untitled");
           const date = escapeHtml(post.date || "");
-          const excerpt = escapeHtml(post.excerpt || "");
           const href = `./posts/${encodeURI(post.file)}`;
           const tags = normalizePostTags(post);
           return `<li class="archive-entry blog-item">
             <time class="archive-entry-date" datetime="${date}">${date || "未注明日期"}</time>
             <div class="archive-entry-main">
               <a class="item-title archive-entry-title" href="${href}">${title}</a>
-              ${excerpt ? `<p class="archive-entry-excerpt">${excerpt}</p>` : ""}
               ${renderPostTags(tags)}
             </div>
           </li>`;
@@ -264,10 +262,9 @@ function renderPostHtml({ title, date, markdownHtml }) {
 
           <nav class="site-nav" aria-label="Main navigation">
             <ul class="main-menu menu">
-              <li class="menu-item"><a href="../index.html#about">About</a></li>
-              <li class="menu-item"><a href="../index.html#projects">Projects</a></li>
-              <li class="menu-item"><a href="../index.html#blog">Archives</a></li>
-              <li class="menu-item"><a href="../editor.html">Editor</a></li>
+              <li class="menu-item"><a href="../index.html#blog">文章</a></li>
+              <li class="menu-item"><a href="../index.html#projects">项目</a></li>
+              <li class="menu-item"><a href="../index.html#about">关于</a></li>
             </ul>
           </nav>
         </header>
@@ -282,7 +279,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
         </aside>
 
         <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
-          <label class="site-search-label" for="site-search-input">Search</label>
+          <label class="site-search-label" for="site-search-input">搜索</label>
           <div class="site-search-control">
             <span class="site-search-icon" aria-hidden="true"></span>
             <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
@@ -319,12 +316,12 @@ function renderPostHtml({ title, date, markdownHtml }) {
       <div class="footer-inner">
         <span>© <span id="year"></span> Alex</span>
         <span class="footer-dot">•</span>
-        <span><a href="../index.html#blog">Back to archive</a></span>
+        <span><a href="../index.html#blog">返回文章</a></span>
       </div>
     </footer>
 
-    <a class="back-to-top is-visible" href="#top" aria-label="Back to top">↑</a>
-    <script src="../script.js?v=20260711b"></script>
+    <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
+    <script src="../script.js?v=20260908a"></script>
   </body>
 </html>`;
 }

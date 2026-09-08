@@ -25,16 +25,15 @@
 
         <nav class="site-nav" aria-label="Main navigation">
           <ul class="main-menu menu">
-            <li class="menu-item"><a href="#about">About</a></li>
-            <li class="menu-item"><a href="#projects">Projects</a></li>
-            <li class="menu-item"><a href="#blog">Archives</a></li>
-            <li class="menu-item"><a href="./editor.html">Editor</a></li>
+            <li class="menu-item"><a href="#blog">文章</a></li>
+            <li class="menu-item"><a href="#projects">项目</a></li>
+            <li class="menu-item"><a href="#about">关于</a></li>
           </ul>
         </nav>
       </header>
 
       <section id="site-search" class="site-search-card" data-site-search data-posts-src="./posts/posts.json" data-post-base="./posts/" aria-label="Site search">
-        <label class="site-search-label" for="site-search-input">Search</label>
+        <label class="site-search-label" for="site-search-input">搜索</label>
         <div class="site-search-control">
           <span class="site-search-icon" aria-hidden="true"></span>
           <input
@@ -50,7 +49,7 @@
         <p id="site-search-status" class="site-search-status" data-search-status role="status" aria-live="polite" aria-atomic="true">输入关键词搜索全站文章</p>
         <div id="site-search-results" class="site-search-results" data-search-results role="list"></div>
         <noscript>
-          <p class="site-search-status">搜索需要 JavaScript，可从 <a href="#blog">Archives</a> 进入文章。</p>
+          <p class="site-search-status">搜索需要 JavaScript，可从 <a href="#blog">文章</a> 进入文章。</p>
         </noscript>
       </section>
 
@@ -77,34 +76,67 @@
               </div>
             </section>
 
-            <section class="start-routes" aria-labelledby="start-here-title">
-              <div class="section-heading-row">
-                <h2 id="start-here-title">站内路标</h2>
-                <p>不必按固定顺序浏览，从此刻最想看的地方进入就好。</p>
-              </div>
-              <div class="route-grid">
-                <a class="route-card" href="#projects">
-                  <span>Projects</span>
-                  <strong>看看做过和正在做的东西</strong>
-                  <em>项目背景、实现过程与阶段复盘</em>
-                </a>
-                <a class="route-card" href="#blog">
-                  <span>Archives</span>
-                  <strong>沿时间线浏览全部记录</strong>
-                  <em>按年份归档，也可以用标签筛选</em>
-                </a>
-              </div>
-            </section>
-
-            <h2 id="about">About</h2>
+            <h2 id="about">关于</h2>
             <div class="about">
               <p>SCU 软件工程本科在读 | B.Eng. candidate in Software Engineering</p>
               <p>ACGN 爱好者</p>
               <p>喜欢把正在学习的东西整理成可回看的材料。这个站点会更像一个长期归档：不追求精装修，但希望每一篇都能留下当时真正关心的问题。</p>
             </div>
 
+            <h2 id="blog">近期更新</h2>
+            <p id="blog-auto-status" class="meta" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+            <ul id="blog-auto-list" class="blog-list">
+              <!-- ARCHIVE:START -->
+              <li class="archive-year-group">
+                <h3 class="archive-year">2026</h3>
+                <ol class="archive-timeline">
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2026-05-13">2026-05-13</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2026-05-13-xhs-apple%E5%9C%9F%E5%8C%BA%E7%A4%BC%E5%93%81%E5%8D%A1%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B%E8%AE%A2%E9%98%85gpt-plus.html">Apple土区礼品卡充值流程（订阅GPT Plus）</a>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">工具</span></div>
+                    </div>
+                  </li>
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2026-04-28">2026-04-28</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2026-04-28-134123-%E7%81%AB%E5%9C%A8%E7%83%A7-%E4%BA%AC%E5%90%B93%E5%AE%8C%E7%BB%93%E9%9A%8F%E7%AC%94.html">火在烧 —— 京吹3完结随笔</a>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">ACGN</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2026-01-18">2026-01-18</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2026-01-18-xhs-%E5%A4%A7%E5%AE%B6%E5%A5%BD%E5%83%8F%E7%AA%81%E7%84%B6%E9%83%BD%E9%95%B7%E5%A4%A7%E4%BA%86.html">大家好像突然都長大了</a>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                </ol>
+              </li>
+              <li class="archive-year-group">
+                <h3 class="archive-year">2025</h3>
+                <ol class="archive-timeline">
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2025-12-19">2025-12-19</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2025-12-19-xhs-%E5%B7%9D%E5%A4%A7%E7%9A%84%E9%8A%80%E6%9D%8F%E5%BE%88%E7%BE%8E%E6%88%91%E6%83%B3%E6%88%91%E9%82%84%E5%8F%AF%E4%BB%A5%E5%86%8D%E7%9C%8B%E5%B9%BE%E5%B9%B4.html">川大的銀杏很美，我想我還可以再看幾年</a>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">求职</span><span class="archive-entry-tag">技术</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2025-09-12">2025-09-12</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/2025-09-12-xhs-%E6%9C%89%E9%BB%9E%E5%96%98%E4%B8%8D%E9%81%8E%E6%B0%A3%E4%BE%86%E4%BA%86.html">有點喘不過氣來了</a>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">求职</span><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
+                </ol>
+              </li>
+              <!-- ARCHIVE:END -->
+            </ul>
+            <noscript><p class="meta">完整文章归档已显示；标签筛选需要启用 JavaScript。</p></noscript>
+
             <h2 id="projects">项目记录</h2>
-            <p class="section-intro">做过的东西会慢慢变化。这里记录它们为何开始、如何实现，以及过程中留下的经验。</p>
             <ul class="project-list project-case-list">
               <li class="project-card">
                 <div class="project-card-head">
@@ -156,71 +188,9 @@
               </li>
             </ul>
 
-            <h2 id="blog">近期更新</h2>
-            <div class="blog-toolbar">
-              <a class="btn" href="./editor.html">编写 / 保存文章</a>
-            </div>
-            <p id="blog-auto-status" class="meta" role="status" aria-live="polite" aria-atomic="true" hidden></p>
-            <ul id="blog-auto-list" class="blog-list">
-              <!-- ARCHIVE:START -->
-              <li class="archive-year-group">
-                <h3 class="archive-year">2026</h3>
-                <ol class="archive-timeline">
-                  <li class="archive-entry blog-item">
-                    <time class="archive-entry-date" datetime="2026-05-13">2026-05-13</time>
-                    <div class="archive-entry-main">
-                      <a class="item-title archive-entry-title" href="./posts/2026-05-13-xhs-apple%E5%9C%9F%E5%8C%BA%E7%A4%BC%E5%93%81%E5%8D%A1%E5%85%85%E5%80%BC%E6%B5%81%E7%A8%8B%E8%AE%A2%E9%98%85gpt-plus.html">Apple土区礼品卡充值流程（订阅GPT Plus）</a>
-                      <p class="archive-entry-excerpt">小红书同步 · 2026-05-13 · 原文链接 前置条件： 日期：26.5.13 设备：iphone➕mac 支付：工行visa星座卡 1.新建（建议新建不要转区）土区apple account：我用的outlook邮箱注册，region选土耳其，手机号是国区手机号，全程在safari里icloud.com注册，没</p>
-                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">工具</span></div>
-                    </div>
-                  </li>
-                  <li class="archive-entry blog-item">
-                    <time class="archive-entry-date" datetime="2026-04-28">2026-04-28</time>
-                    <div class="archive-entry-main">
-                      <a class="item-title archive-entry-title" href="./posts/2026-04-28-134123-%E7%81%AB%E5%9C%A8%E7%83%A7-%E4%BA%AC%E5%90%B93%E5%AE%8C%E7%BB%93%E9%9A%8F%E7%AC%94.html">火在烧 —— 京吹3完结随笔</a>
-                      <p class="archive-entry-excerpt">2026-04-28 从京吹Ep12播出到周日完结，不是忙于考试就是被琐事拖累。但一直在思考这一季京吹的问题，Ep12播出后的一天还没忍住写了点简要看法，还是抽空断断续续总结一下看法。 首先解释一下标题，这个词是京阿尼语料7.1晚京吹杂谈回直播谈到的，本人认为所言极是。此词可以全面概括京吹这一季的所有，无论是脚本、制作</p>
-                      <div class="archive-entry-tags"><span class="archive-entry-tag">ACGN</span><span class="archive-entry-tag">生活</span></div>
-                    </div>
-                  </li>
-                  <li class="archive-entry blog-item">
-                    <time class="archive-entry-date" datetime="2026-01-18">2026-01-18</time>
-                    <div class="archive-entry-main">
-                      <a class="item-title archive-entry-title" href="./posts/2026-01-18-xhs-%E5%A4%A7%E5%AE%B6%E5%A5%BD%E5%83%8F%E7%AA%81%E7%84%B6%E9%83%BD%E9%95%B7%E5%A4%A7%E4%BA%86.html">大家好像突然都長大了</a>
-                      <p class="archive-entry-excerpt">小红书同步 · 2026-01-18 · 原文链接 前幾日和高中玩的最好的四個朋友在杭州聚了兩日。 起因是杭電的朋友還沒放假，海大的朋友正好飛蕭山，我和🐟休假中已經躺了數日，朋友說作為東道主請我們吃飯，索性在杭州耍兩天。 四人學校真是天南地北，成都西安海南杭州，平日打遊戲都會掉線網卡。上了大學一年就三個月可以見面，過</p>
-                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">生活</span></div>
-                    </div>
-                  </li>
-                </ol>
-              </li>
-              <li class="archive-year-group">
-                <h3 class="archive-year">2025</h3>
-                <ol class="archive-timeline">
-                  <li class="archive-entry blog-item">
-                    <time class="archive-entry-date" datetime="2025-12-19">2025-12-19</time>
-                    <div class="archive-entry-main">
-                      <a class="item-title archive-entry-title" href="./posts/2025-12-19-xhs-%E5%B7%9D%E5%A4%A7%E7%9A%84%E9%8A%80%E6%9D%8F%E5%BE%88%E7%BE%8E%E6%88%91%E6%83%B3%E6%88%91%E9%82%84%E5%8F%AF%E4%BB%A5%E5%86%8D%E7%9C%8B%E5%B9%BE%E5%B9%B4.html">川大的銀杏很美，我想我還可以再看幾年</a>
-                      <p class="archive-entry-excerpt">小红书同步 · 2025-12-19 · 原文链接 其實很久很久沒有失眠了.. 求職受挫，離職半個月海投大廠一個約面都沒有，唯一約面的度子前一天打電話說項目上線不面了。以至於目前的狀態，不是自己努力所能改變的了，而是連機會都沒有，深深的無力感讓人只想逃離 這幾天嘗試focus自身，發現自己就是一個只會做貪心算法嘴硬頭鐵</p>
-                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">求职</span><span class="archive-entry-tag">技术</span><span class="archive-entry-tag">生活</span></div>
-                    </div>
-                  </li>
-                  <li class="archive-entry blog-item">
-                    <time class="archive-entry-date" datetime="2025-09-12">2025-09-12</time>
-                    <div class="archive-entry-main">
-                      <a class="item-title archive-entry-title" href="./posts/2025-09-12-xhs-%E6%9C%89%E9%BB%9E%E5%96%98%E4%B8%8D%E9%81%8E%E6%B0%A3%E4%BE%86%E4%BA%86.html">有點喘不過氣來了</a>
-                      <p class="archive-entry-excerpt">小红书同步 · 2025-09-12 · 原文链接 這週的心情有點跌宕起伏 起因是暑期打完4C之後一直擺爛，擺到現在總覺得錯過了八月底九月初的黃金投遞時間，所以一開學一直很焦慮。之後學院發了上一屆的保研細則，跟朋友算了一下應該正好可以保研，但估計不能保很好的外。其實自己沒想過要保研什麼的，但也算是有條後路。再加上群裡好</p>
-                      <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">求职</span><span class="archive-entry-tag">生活</span></div>
-                    </div>
-                  </li>
-                </ol>
-              </li>
-              <!-- ARCHIVE:END -->
-            </ul>
-            <noscript><p class="meta">完整文章归档已显示；标签筛选需要启用 JavaScript。</p></noscript>
-
             <h2 id="contact">联系我</h2>
             <section class="guestbook" data-guestbook aria-label="访客留言">
               <div class="guestbook-copy">
-                <p>这里是个记录旅程的地方，乐意与同行的你聊聊。</p>
                 <p id="guestbook-public-note" class="guestbook-public-note">署名和留言会公开显示在本页；最多 100 字。</p>
                 <button class="btn guestbook-compose-button" type="button" data-guestbook-compose aria-expanded="false" aria-controls="guestbook-form" aria-describedby="guestbook-public-note">写公开留言</button>
               </div>
@@ -260,11 +230,11 @@
             <nav class="site-state" aria-label="Site stats">
               <a class="site-state-item" href="#blog">
                 <span class="site-state-item-count" id="post-count">0</span>
-                <span class="site-state-item-name">posts</span>
+                <span class="site-state-item-name">文章</span>
               </a>
               <a class="site-state-item" href="#projects">
                 <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">projects</span>
+                <span class="site-state-item-name">项目</span>
               </a>
             </nav>
           </div>
@@ -286,7 +256,7 @@
         <div class="footer-line">
           <span>© <span id="year"></span> Alex</span>
           <span class="footer-dot">•</span>
-          <span>Built as a small archive</span>
+          <a href="./editor.html">编写文章</a>
         </div>
         <span class="visitor-count" data-visitor-count hidden aria-label="访客数量">
           <span class="visitor-icon" aria-hidden="true"></span>
@@ -295,11 +265,11 @@
       </div>
     </footer>
 
-    <a class="back-to-top is-visible" href="#top" aria-label="Back to top">↑</a>
+    <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
 
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
     <script src="./guestbook-config.js?v=20260630"></script>
     <script src="./archive-filter-state.js?v=20260712a"></script>
-    <script src="./script.js?v=20260712b"></script>
+    <script src="./script.js?v=20260908a"></script>
   </body>
 </html>

@@ -155,13 +155,11 @@ function renderArchive(posts) {
         .map((post) => {
           const title = escapeHtml(post.title || post.file || "Untitled");
           const date = escapeHtml(post.date || "");
-          const excerpt = escapeHtml(post.excerpt || "");
           const href = escapeHtml(`./posts/${encodeURI(post.file)}`);
           return `                  <li class="archive-entry blog-item">
                     <time class="archive-entry-date" datetime="${date}">${date || "未注明日期"}</time>
                     <div class="archive-entry-main">
                       <a class="item-title archive-entry-title" href="${href}">${title}</a>
-                      ${excerpt ? `<p class="archive-entry-excerpt">${excerpt}</p>` : ""}
                       ${renderPostTags(post.tags)}
                     </div>
                   </li>`;
