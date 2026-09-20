@@ -71,6 +71,37 @@
 .home-page .archive-filter.is-active { box-shadow: none; }
 .home-page .archive-year { margin-top: 12px; }
 .home-page .archive-timeline { gap: 0; }
+.home-page .archive-year-disclosure { border-bottom: 1px solid var(--line-color); }
+.home-page .archive-year-toggle {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 68px;
+  padding: 12px 4px;
+  color: var(--text-strong-color);
+  cursor: pointer;
+  list-style: none;
+  border-radius: 8px;
+  transition: background-color 120ms ease-out;
+}
+.home-page .archive-year-toggle::-webkit-details-marker { display: none; }
+.home-page .archive-year-label { font-size: 1.4rem; font-weight: 700; line-height: 1.4; }
+.home-page .archive-year-count { margin-left: auto; color: var(--muted-color); font-size: 0.875rem; }
+.home-page .archive-year-chevron {
+  width: 8px;
+  height: 8px;
+  margin: 0 8px 0 2px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 160ms ease-out;
+}
+.home-page .archive-year-disclosure[open] > .archive-year-toggle .archive-year-chevron { transform: rotate(45deg); }
+.home-page .archive-year-toggle:is(:hover, :focus-visible) { background: #edf3f6; }
+.home-page .archive-year-toggle:active { background: #e0eaf0; }
+.home-page .archive-year-toggle:focus-visible .archive-year-chevron { transition: none; }
+.home-page .archive-year-disclosure > .archive-timeline { margin: 0; }
+.home-page .archive-year-disclosure .archive-entry:last-child { border-bottom: 0; }
 .home-page .blog-list .blog-item {
   border: 0;
   border-bottom: 1px solid var(--soft-line-color);

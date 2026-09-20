@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#222222" />
     <title>Alex Emaire's Blog</title>
     <link rel="stylesheet" href="./styles.css?v=20260727b" />
-    <link rel="stylesheet" href="./reading-layout.css?v=20260920b" />
+    <link rel="stylesheet" href="./reading-layout.css?v=20260920c" />
   </head>
   <body id="top" class="home-page">
     <div class="headband"></div>
@@ -74,8 +74,9 @@
             <ul id="blog-auto-list" class="blog-list">
               <!-- ARCHIVE:START -->
               <li class="archive-year-group">
-                <h3 class="archive-year">2026</h3>
-                <ol class="archive-timeline">
+                <details class="archive-year-disclosure" name="archive-years">
+                  <summary class="archive-year-toggle"><span class="archive-year-label">2026</span><span class="archive-year-count">3 篇</span><span class="archive-year-chevron" aria-hidden="true"></span></summary>
+                  <ol class="archive-timeline">
                   <li class="archive-entry blog-item">
                     <time class="archive-entry-date" datetime="2026-05-13">2026-05-13</time>
                     <div class="archive-entry-main">
@@ -97,11 +98,13 @@
                       <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">生活</span></div>
                     </div>
                   </li>
-                </ol>
+                  </ol>
+                </details>
               </li>
               <li class="archive-year-group">
-                <h3 class="archive-year">2025</h3>
-                <ol class="archive-timeline">
+                <details class="archive-year-disclosure" name="archive-years">
+                  <summary class="archive-year-toggle"><span class="archive-year-label">2025</span><span class="archive-year-count">2 篇</span><span class="archive-year-chevron" aria-hidden="true"></span></summary>
+                  <ol class="archive-timeline">
                   <li class="archive-entry blog-item">
                     <time class="archive-entry-date" datetime="2025-12-19">2025-12-19</time>
                     <div class="archive-entry-main">
@@ -116,11 +119,12 @@
                       <div class="archive-entry-tags"><span class="archive-entry-tag">小红书</span><span class="archive-entry-tag">求职</span><span class="archive-entry-tag">生活</span></div>
                     </div>
                   </li>
-                </ol>
+                  </ol>
+                </details>
               </li>
               <!-- ARCHIVE:END -->
             </ul>
-            <noscript><p class="meta">完整文章归档已显示；标签筛选需要启用 JavaScript。</p></noscript>
+            <noscript><p class="meta">点击年份查看完整文章归档；标签筛选需要启用 JavaScript。</p></noscript>
 
             <h2 id="projects">项目记录</h2>
             <ul class="project-list project-case-list">
@@ -256,6 +260,6 @@
     <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
     <script src="./guestbook-config.js?v=20260630"></script>
     <script src="./archive-filter-state.js?v=20260712a"></script>
-    <script src="./script.js?v=20260920b"></script>
+    <script src="./script.js?v=20260920c"></script>
   </body>
 </html>

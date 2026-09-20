@@ -166,10 +166,12 @@ function renderArchive(posts) {
         })
         .join("\n");
       return `              <li class="archive-year-group">
-                <h3 class="archive-year">${escapeHtml(year)}</h3>
-                <ol class="archive-timeline">
+                <details class="archive-year-disclosure" name="archive-years">
+                  <summary class="archive-year-toggle"><span class="archive-year-label">${escapeHtml(year)}</span><span class="archive-year-count">${yearPosts.length} 篇</span><span class="archive-year-chevron" aria-hidden="true"></span></summary>
+                  <ol class="archive-timeline">
 ${entries}
-                </ol>
+                  </ol>
+                </details>
               </li>`;
     })
     .join("\n");

@@ -226,8 +226,10 @@ function renderTimelineArchive(listEl, posts, activeTag) {
         })
         .join("");
       return `<li class="archive-year-group">
-        <h3 class="archive-year">${escapeHtml(year)}</h3>
-        <ol class="archive-timeline">${entries}</ol>
+        <details class="archive-year-disclosure" name="archive-years">
+          <summary class="archive-year-toggle"><span class="archive-year-label">${escapeHtml(year)}</span><span class="archive-year-count">${yearPosts.length} 篇</span><span class="archive-year-chevron" aria-hidden="true"></span></summary>
+          <ol class="archive-timeline">${entries}</ol>
+        </details>
       </li>`;
     })
     .join("");
@@ -311,11 +313,46 @@ function renderPostHtml({ title, date, markdownHtml }) {
 </html>`;
 }
 
+function initArchiveDisclosure(listEl) {
+  const hoverQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  let lastPointerYear = null;
+
+  const closeOtherYears = (current) => {
+    listEl.querySelectorAll(".archive-year-disclosure[open]").forEach((year) => {
+      if (year !== current) year.open = false;
+    });
+  };
+
+  // Use real movement, not pointerenter: opening a year moves the rows below it.
+  listEl.addEventListener("pointermove", (event) => {
+    if (!hoverQuery.matches || event.pointerType === "touch") return;
+    const summary = event.target.closest(".archive-year-toggle");
+    if (!summary || !listEl.contains(summary)) {
+      lastPointerYear = null;
+      return;
+    }
+    const year = summary.closest(".archive-year-disclosure");
+    if (lastPointerYear === year) return;
+    lastPointerYear = year;
+    closeOtherYears(year);
+    year.open = true;
+  });
+  listEl.addEventListener("pointerleave", () => { lastPointerYear = null; });
+
+  // Native summary click/keyboard behavior remains available without JavaScript.
+  // Capture toggle for engines that do not yet implement details[name] grouping.
+  listEl.addEventListener("toggle", (event) => {
+    const year = event.target;
+    if (year.matches(".archive-year-disclosure") && year.open) closeOtherYears(year);
+  }, true);
+}
+
 async function initBlogAutoList() {
   const listEl = document.getElementById("blog-auto-list");
   const statusEl = document.getElementById("blog-auto-status");
   if (!listEl || !statusEl) return;
 
+  initArchiveDisclosure(listEl);
   statusEl.hidden = true;
   statusEl.textContent = "";
   const filterEl = createArchiveFilters(listEl);
