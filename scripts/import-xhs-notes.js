@@ -297,7 +297,7 @@ function renderPostHtml(note, localImages = []) {
     <meta name="theme-color" content="#222222" />
     <title>${title} | Alex</title>
     <link rel="stylesheet" href="../styles.css?v=20260711b" />
-    <link rel="stylesheet" href="../reading-layout.css?v=20260920a" />
+    <link rel="stylesheet" href="../reading-layout.css?v=20260920b" />
   </head>
   <body id="top" class="reading-page">
     <div class="headband"></div>
@@ -343,10 +343,10 @@ function renderPostHtml(note, localImages = []) {
             </div>
           </aside>
           <nav class="account-links-card" aria-label="Third-party accounts">
-            <a class="account-link account-link-bilibili" href="https://www.bilibili.com/" target="_blank" rel="noreferrer">Bilibili</a>
-            <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/" target="_blank" rel="noreferrer">小红书</a>
-            <a class="account-link account-link-github" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
-            <a class="account-link account-link-steam" href="https://store.steampowered.com/" target="_blank" rel="noreferrer">Steam</a>
+            <a class="account-link account-link-bilibili" href="https://space.bilibili.com/436931264" target="_blank" rel="noreferrer">Bilibili</a>
+            <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/user/profile/60c21d80000000000101de0a" target="_blank" rel="noreferrer">小红书</a>
+            <a class="account-link account-link-github" href="https://github.com/EmaireLi" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="account-link account-link-steam" href="https://steamcommunity.com/id/Muwii" target="_blank" rel="noreferrer">Steam</a>
             <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
             <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
           </nav>
@@ -363,7 +363,7 @@ function renderPostHtml(note, localImages = []) {
     </footer>
 
     <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
-    <script src="../script.js?v=20260908a"></script>
+    <script src="../script.js?v=20260920b"></script>
   </body>
 </html>`;
 }
