@@ -6,61 +6,28 @@
     <meta name="theme-color" content="#222222" />
     <title>Apple土区礼品卡充值流程（订阅GPT Plus） | Alex</title>
     <link rel="stylesheet" href="../styles.css?v=20260711b" />
+    <link rel="stylesheet" href="../reading-layout.css?v=20260920a" />
   </head>
-  <body id="top">
+  <body id="top" class="reading-page">
     <div class="headband"></div>
 
     <main class="main">
-      <div class="column">
-        <header class="header" aria-label="Site header">
-          <div class="site-brand-container">
-            <div class="site-meta">
-              <a class="brand" href="../index.html" rel="start">
-                <i class="logo-line" aria-hidden="true"></i>
-                <p class="site-title">Alex Emaire's Blog</p>
-                <i class="logo-line" aria-hidden="true"></i>
-              </a>
-              <p class="site-subtitle">个人归档站</p>
+      <header class="reading-header" aria-label="Site header">
+        <a class="reading-brand" href="../index.html">Alex Emaire<span> / 个人归档</span></a>
+        <nav aria-label="文章导航"><a href="../index.html#blog">← 返回文章</a></nav>
+        <details class="reading-search">
+          <summary>搜索文章</summary>
+          <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+            <label class="site-search-label" for="site-search-input">搜索</label>
+            <div class="site-search-control">
+              <span class="site-search-icon" aria-hidden="true"></span>
+              <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
             </div>
-          </div>
-
-          <nav class="site-nav" aria-label="Main navigation">
-            <ul class="main-menu menu">
-              <li class="menu-item"><a href="../index.html#blog">文章</a></li>
-              <li class="menu-item"><a href="../index.html#projects">项目</a></li>
-              <li class="menu-item"><a href="../index.html#about">关于</a></li>
-            </ul>
-          </nav>
-        </header>
-
-        <aside class="sidebar" aria-label="Site overview">
-          <div class="sidebar-inner">
-            <div class="site-author">
-              <p class="site-author-name">Alex</p>
-              <p class="site-description">JavaBoy 转行引擎开发中</p>
-            </div>
-          </div>
-        </aside>
-
-        <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
-          <label class="site-search-label" for="site-search-input">搜索</label>
-          <div class="site-search-control">
-            <span class="site-search-icon" aria-hidden="true"></span>
-            <input id="site-search-input" class="site-search-input" type="search" placeholder="搜索文章" autocomplete="off" />
-          </div>
-          <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
-          <div class="site-search-results" data-search-results role="list"></div>
-        </section>
-
-        <nav class="account-links-card" aria-label="Third-party accounts">
-          <a class="account-link account-link-bilibili" href="https://www.bilibili.com/" target="_blank" rel="noreferrer">Bilibili</a>
-          <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/" target="_blank" rel="noreferrer">小红书</a>
-          <a class="account-link account-link-github" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
-          <a class="account-link account-link-steam" href="https://store.steampowered.com/" target="_blank" rel="noreferrer">Steam</a>
-          <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
-          <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
-        </nav>
-      </div>
+            <p class="site-search-status" data-search-status>输入关键词搜索全站文章</p>
+            <div class="site-search-results" data-search-results role="list"></div>
+          </section>
+        </details>
+      </header>
 
       <div class="main-inner page posts-expand">
         <article class="post-block">
@@ -90,6 +57,24 @@
             
           </div>
         </article>
+        <div class="reading-end">
+          <aside class="sidebar" aria-label="Site overview">
+            <div class="sidebar-inner">
+              <div class="site-author">
+                <p class="site-author-name">Alex</p>
+                <p class="site-description">JavaBoy 转行引擎开发中</p>
+              </div>
+            </div>
+          </aside>
+          <nav class="account-links-card" aria-label="Third-party accounts">
+            <a class="account-link account-link-bilibili" href="https://www.bilibili.com/" target="_blank" rel="noreferrer">Bilibili</a>
+            <a class="account-link account-link-xhs" href="https://www.xiaohongshu.com/" target="_blank" rel="noreferrer">小红书</a>
+            <a class="account-link account-link-github" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="account-link account-link-steam" href="https://store.steampowered.com/" target="_blank" rel="noreferrer">Steam</a>
+            <a class="account-link account-link-bangumi" href="https://bgm.tv/user/muwii_" target="_blank" rel="noreferrer">Bangumi</a>
+            <a class="account-link account-link-leetcode" href="https://leetcode.cn/u/emaire/" target="_blank" rel="noreferrer">LeetCode</a>
+          </nav>
+        </div>
       </div>
     </main>
 
