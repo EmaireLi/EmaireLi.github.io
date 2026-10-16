@@ -2144,6 +2144,18 @@ iframe {
   margin-top: 16px;
 }
 
+.editor-tags { margin-top: 20px; }
+.editor-tags > label { display: block; margin-bottom: 8px; font-weight: 600; }
+.editor-selected-tags, .editor-tag-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.editor-selected-tags:not(:empty) { margin-bottom: 10px; }
+.editor-tag-chip { display: inline-flex; align-items: center; gap: 8px; padding: 3px 10px; border: 1px solid var(--line-color); border-radius: 999px; background: var(--card-bg-color); }
+.editor-tag-chip button { width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.editor-tag-controls input, .editor-tag-controls select { min-width: 0; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line-color); border-radius: 12px; background: rgba(255,255,255,.8); color: var(--text-color); font: inherit; }
+.editor-tag-controls input { flex: 1 1 200px; }
+.editor-tag-controls select { flex: 1 1 200px; max-width: 100%; }
+.editor-tags p { margin: 8px 0 0; color: var(--muted-color); font-size: .8125em; }
+.editor-tags :is(input, select, button):focus-visible { outline: 2px solid var(--link-color); outline-offset: 2px; }
+
 .publish-status {
   margin-top: 10px;
   color: var(--muted-color);

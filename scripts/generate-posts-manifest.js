@@ -219,6 +219,16 @@ function run() {
   const nextIndexHtml = replaceArchiveBlock(indexHtml, renderArchive(manifest));
   fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   fs.writeFileSync(indexPath, nextIndexHtml, "utf8");
+  const tagCounts = new Map();
+  manifest.forEach(post => post.tags.forEach(tag => {
+    const key = tag.toLowerCase();
+    const entry = tagCounts.get(key) || { tag, count: 0 };
+    entry.count += 1;
+    tagCounts.set(key, entry);
+  }));
+  const tags = [...tagCounts.values()].sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag, "zh-CN"));
+  fs.mkdirSync(path.join(repoRoot, "assets"), { recursive: true });
+  fs.writeFileSync(path.join(repoRoot, "assets", "tags.json"), `${JSON.stringify(tags, null, 2)}\n`, "utf8");
   console.log(`Generated ${path.relative(repoRoot, manifestPath)} (${manifest.length} posts)`);
   console.log(`Updated static archive in ${path.relative(repoRoot, indexPath)}`);
 }

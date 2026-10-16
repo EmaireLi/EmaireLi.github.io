@@ -130,7 +130,7 @@ function normalizePostTags(post) {
   if (!post || !Array.isArray(post.tags)) return [];
   const seen = new Set();
   return post.tags
-    .map((tag) => String(tag || "").replace(/^#/, "").replace(/\s+/g, " ").trim())
+    .map((tag) => String(tag || "").trim().replace(/^#+/, "").replace(/\s+/g, " ").trim())
     .filter((tag) => {
       const key = tag.toLowerCase();
       if (!tag || seen.has(key)) return false;
@@ -552,6 +552,11 @@ function initSiteSearch() {
   });
 }
 
+function renderEditorTags(tags) {
+  const normalized = normalizePostTags({ tags });
+  return normalized.length ? `<p class="xhs-tags">${normalized.map(tag => `<span class="xhs-tag">#${escapeHtml(tag)}</span>`).join(" ")}</p>` : "";
+}
+
 function initEditorPage() {
   const mdInput = document.getElementById("md-input");
   const mdPreview = document.getElementById("md-preview");
@@ -562,9 +567,78 @@ function initEditorPage() {
 
   if (!mdInput || !mdPreview || !mdTitleInput || !saveLocalBtn || !cancelEditorBtn) return;
 
+  const selectedTags = [];
+  const tagInput = document.getElementById("editor-tag-input");
+  const tagList = document.getElementById("editor-selected-tags");
+  const tagHistory = document.getElementById("editor-tag-history");
+  const tagStatus = document.getElementById("editor-tags-status");
   const renderPreview = () => {
-    mdPreview.innerHTML = renderMarkdownToHtml(mdInput.value);
+    mdPreview.innerHTML = renderMarkdownToHtml(mdInput.value) + renderEditorTags(selectedTags);
   };
+  const renderSelectedTags = () => {
+    tagList.replaceChildren();
+    selectedTags.forEach((tag, index) => {
+      const chip = document.createElement("span");
+      chip.className = "editor-tag-chip";
+      chip.append(document.createTextNode(`#${tag}`));
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "×";
+      remove.setAttribute("aria-label", `移除标签 ${tag}`);
+      remove.addEventListener("click", () => {
+        selectedTags.splice(index, 1);
+        renderSelectedTags();
+        tagStatus.textContent = `已移除 ${tag}`;
+        tagInput.focus();
+      });
+      chip.append(remove);
+      tagList.append(chip);
+    });
+    renderPreview();
+  };
+  const addTag = (value) => {
+    const tag = normalizePostTags({ tags: [value] })[0];
+    if (!tag) { tagInput.value = ""; return; }
+    if (selectedTags.some(item => item.toLowerCase() === tag.toLowerCase())) {
+      tagStatus.textContent = `标签 ${tag} 已添加`;
+    } else {
+      selectedTags.push(tag);
+      renderSelectedTags();
+      tagStatus.textContent = `已添加 ${tag}`;
+    }
+    tagInput.value = "";
+  };
+  tagInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.isComposing && event.keyCode !== 229) {
+      event.preventDefault();
+      addTag(tagInput.value);
+    }
+  });
+  document.getElementById("editor-tag-add").addEventListener("click", () => {
+    addTag(tagInput.value);
+    tagInput.focus();
+  });
+  tagHistory.addEventListener("change", () => {
+    if (tagHistory.value) addTag(tagHistory.value);
+    tagHistory.value = "";
+  });
+  fetch("./assets/tags.json", { cache: "no-cache" })
+    .then(response => {
+      if (!response.ok) throw new Error("Tag history unavailable");
+      return response.json();
+    })
+    .then(history => {
+      if (!Array.isArray(history)) throw new Error("Invalid tag history");
+      tagHistory.replaceChildren(new Option(history.length ? "选择历史标签" : "暂无历史标签", ""));
+      history.forEach(({ tag, count }) => {
+        if (typeof tag === "string" && tag.trim()) tagHistory.add(new Option(`${tag}（${count} 篇）`, tag));
+      });
+      tagHistory.disabled = history.length === 0;
+    })
+    .catch(() => {
+      tagHistory.replaceChildren(new Option("历史标签暂不可用", ""));
+      tagStatus.textContent = "历史标签读取失败，仍可手动添加标签。";
+    });
   mdInput.addEventListener("input", renderPreview);
   renderPreview();
 
@@ -577,12 +651,13 @@ function initEditorPage() {
     }
 
     const date = new Date().toISOString().slice(0, 10);
+    addTag(tagInput.value);
     const slug = slugify(title);
     const baseName = `${date}-${slug}`;
     const html = renderPostHtml({
       title,
       date,
-      markdownHtml: renderMarkdownToHtml(markdown),
+      markdownHtml: renderMarkdownToHtml(markdown) + renderEditorTags(selectedTags),
     });
 
     downloadTextFile(`${baseName}.html`, html, "text/html;charset=utf-8");
