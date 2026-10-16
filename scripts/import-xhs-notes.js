@@ -272,9 +272,9 @@ function renderTags(tags) {
   if (!Array.isArray(tags) || tags.length === 0) return "";
   const items = tags
     .filter(Boolean)
-    .map((tag) => `<span class="xhs-tag">#${escapeHtml(String(tag).replace(/^#/, ""))}</span>`)
+    .map((tag) => `<span class="post-tag">#${escapeHtml(String(tag).replace(/^#/, ""))}</span>`)
     .join(" ");
-  return `<p class="xhs-tags">${items}</p>`;
+  return `<p class="post-tags">${items}</p>`;
 }
 
 function renderPostHtml(note, localImages = []) {

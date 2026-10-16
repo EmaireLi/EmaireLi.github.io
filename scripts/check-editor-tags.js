@@ -11,7 +11,7 @@ for (const name of ['escapeHtml', 'normalizePostTags', 'renderEditorTags']) {
 }
 const render = tags => context.renderEditorTags(tags);
 assert.equal(render([]), '');
-assert.equal((render([' #摄影 ', '摄影', 'JAVA', 'java']).match(/class="xhs-tag"/g) || []).length, 2);
+assert.equal((render([' #摄影 ', '摄影', 'JAVA', 'java']).match(/class="post-tag"/g) || []).length, 2);
 const escaped = render(['<img src=x onerror=alert(1)>', 'A&B']);
 assert(!escaped.includes('<img'));
 assert(escaped.includes('&lt;img'));

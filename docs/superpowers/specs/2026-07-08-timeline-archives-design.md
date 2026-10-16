@@ -67,10 +67,10 @@ The manifest generator should extract tags from post HTML.
 For XHS imports, `scripts/import-xhs-notes.js` already renders tags as:
 
 ```html
-<p class="xhs-tags"><span class="xhs-tag">#工具</span></p>
+<p class="post-tags"><span class="post-tag">#工具</span></p>
 ```
 
-`scripts/generate-posts-manifest.js` should read `.xhs-tag` text, remove a leading `#`, normalize whitespace, deduplicate tags, and store them in the manifest.
+`scripts/generate-posts-manifest.js` should read `.post-tag` text, remove a leading `#`, normalize whitespace, deduplicate tags, and store them in the manifest.
 
 For manually written posts, the first version can support the same rendered class pattern if a post contains tag markup. The editor does not need new controls in the first version.
 

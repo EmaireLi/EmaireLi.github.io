@@ -39,7 +39,8 @@ function extractFirst(regex, text) {
 function extractTags(html) {
   const tags = [];
   const seen = new Set();
-  const tagRegex = /<span[^>]*class=["'][^"']*\bxhs-tag\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi;
+  // Accept legacy exports; all new exports use post-tag.
+  const tagRegex = /<span[^>]*class=["'][^"']*\b(?:post|xhs)-tag\b[^"']*["'][^>]*>([\s\S]*?)<\/span>/gi;
   let match = tagRegex.exec(html);
 
   while (match) {
