@@ -243,7 +243,8 @@ function renderPostHtml({ title, date, markdownHtml }) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${safeTitle} | Alex</title>
+    <title>${safeTitle} · Alex</title>
+    <link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="stylesheet" href="../styles.css?v=20260711b" />
     <link rel="stylesheet" href="../reading-layout.css?v=20260920b" />
   </head>
