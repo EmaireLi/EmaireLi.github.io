@@ -4,7 +4,7 @@ const childProcess = require("node:child_process");
 
 const repoRoot = process.cwd();
 const inputPath = path.resolve(repoRoot, process.argv[2] || "imports/xhs-notes.json");
-const postsDir = path.join(repoRoot, "posts");
+const postsDir = path.join(repoRoot, "posts", "xhs");
 const assetsDir = path.join(repoRoot, "assets", "xhs");
 
 function escapeHtml(value) {
@@ -296,20 +296,20 @@ function renderPostHtml(note, localImages = []) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#222222" />
     <title>${title} · Alex</title>
-    <link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="stylesheet" href="../styles.css?v=20260711b" />
-    <link rel="stylesheet" href="../reading-layout.css?v=20260920b" />
+    <link rel="icon" href="../../favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="stylesheet" href="../../styles.css?v=20260711b" />
+    <link rel="stylesheet" href="../../reading-layout.css?v=20260920b" />
   </head>
   <body id="top" class="reading-page">
     <div class="headband"></div>
 
     <main class="main">
       <header class="reading-header" aria-label="Site header">
-        <a class="reading-brand" href="../index.html">Alex Emaire<span> / 个人归档</span></a>
-        <nav aria-label="文章导航"><a href="../index.html#blog">← 返回文章</a></nav>
+        <a class="reading-brand" href="../../index.html">Alex Emaire<span> / 个人归档</span></a>
+        <nav aria-label="文章导航"><a href="../../index.html#blog">← 返回文章</a></nav>
         <details class="reading-search">
           <summary>搜索文章</summary>
-          <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+          <section class="site-search-card" data-site-search data-posts-src="../../posts/posts.json" data-post-base="../../posts/" aria-label="Site search">
             <label class="site-search-label" for="site-search-input">搜索</label>
             <div class="site-search-control">
               <span class="site-search-icon" aria-hidden="true"></span>
@@ -359,12 +359,12 @@ function renderPostHtml(note, localImages = []) {
       <div class="footer-inner">
         <span>© <span id="year"></span> Alex</span>
         <span class="footer-dot">•</span>
-        <span><a href="../index.html#blog">返回文章</a></span>
+        <span><a href="../../index.html#blog">返回文章</a></span>
       </div>
     </footer>
 
     <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
-    <script src="../script.js?v=20260920b"></script>
+    <script src="../../script.js?v=20260920b"></script>
   </body>
 </html>`;
 }
@@ -400,9 +400,11 @@ function run() {
   const written = validNotes.map((note, index) => {
     const date = normalizeDate(extractEditedDate(note.content) || note.date || note.createdAt || note.publishedAt);
     const slug = slugify(note.slug || note.title || `xhs-note-${index + 1}`);
-    const baseName = `${date}-xhs-${slug}`;
+    const baseName = `${date}-${slug}`;
     const file = `${baseName}.html`;
-    const fileBaseName = file.replace(/\.html$/i, "");
+    // Reuse existing downloaded images while keeping post names source-neutral.
+    const legacyAssets = `${date}-xhs-${slug}`;
+    const fileBaseName = fs.existsSync(path.join(assetsDir, legacyAssets)) ? legacyAssets : baseName;
     const localImages = syncImages(note, fileBaseName);
     fs.writeFileSync(path.join(postsDir, file), renderPostHtml(note, localImages), "utf8");
     return file;
@@ -415,7 +417,7 @@ function run() {
 
   const skipped = notes.length - validNotes.length;
   console.log(`Imported ${written.length} Xiaohongshu notes${skipped ? `, skipped ${skipped} notes without usable detail text` : ""}:`);
-  written.forEach((file) => console.log(`- posts/${file}`));
+  written.forEach((file) => console.log(`- posts/xhs/${file}`));
 }
 
 run();

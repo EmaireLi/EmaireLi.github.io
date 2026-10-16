@@ -66,7 +66,7 @@ function inferTags({ file, title, text }) {
   const haystack = [file, title, text].join(" ").toLowerCase();
   const tags = [];
 
-  if (/xhs-|小红书/.test(haystack)) addTag(tags, "小红书");
+  if (file.startsWith("xhs/")) addTag(tags, "小红书");
   if (/京吹|上低音号|京阿尼|动画|acgn|bangumi/.test(haystack)) addTag(tags, "ACGN");
   if (/求职|实习|保研|就业|面试|转正|牛客|大厂|读研|java/.test(haystack)) addTag(tags, "求职");
   if (/java|fastapi|算法|代码|编程|开发/.test(haystack)) addTag(tags, "技术");
@@ -90,7 +90,7 @@ function mergeTags(primary, fallback) {
 }
 
 function inferDateFromFilename(file) {
-  const m = file.match(/^(\d{4}-\d{2}-\d{2})/);
+  const m = path.basename(file).match(/^(\d{4}-\d{2}-\d{2})/);
   return m ? m[1] : "";
 }
 
@@ -200,9 +200,14 @@ function run() {
     throw new Error(`posts directory not found: ${postsDir}`);
   }
 
-  const files = fs
-    .readdirSync(postsDir)
-    .filter((name) => name.endsWith(".html") && name !== "new-post-template.html")
+  const files = ["xhs", "articles"]
+    .flatMap((folder) => {
+      const dir = path.join(postsDir, folder);
+      if (!fs.existsSync(dir)) return [];
+      return fs.readdirSync(dir, { withFileTypes: true })
+        .filter((entry) => entry.isFile() && entry.name.endsWith(".html") && entry.name !== "new-post-template.html")
+        .map((entry) => `${folder}/${entry.name}`);
+    })
     .sort((a, b) => b.localeCompare(a));
 
   const manifest = files.map(buildManifestEntry).sort((a, b) => {

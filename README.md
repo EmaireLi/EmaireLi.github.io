@@ -10,8 +10,20 @@
 
 1. 在首页页脚点击 **编写文章** 进入 `editor.html`。
 2. 写标题和正文，点击 **保存到本地**（会下载 `.html` 文件）。
-3. 把下载的 `.html` 文件放入项目 `posts/` 目录。
+3. 把下载的 `.html` 文件放入项目 `posts/articles/` 目录。
 4. `git add . && git commit -m "add new post" && git push`，GitHub Pages 部署流程会自动更新 `posts/posts.json` 并显示到 blog 列表。
+
+## 文章目录与识别规则
+
+- 小红书同步文章：`posts/xhs/日期-标题.html`。
+- 其他文章：`posts/articles/日期-标题.html`。
+- 两类文章使用相同命名习惯，例如 `2026-10-16-川大随拍.html`，不需要 `xhs-` 前缀。
+- 扫描这两个目录第一层的 `.html` 文件；标题读取正文第一个 `<h1>`，没有时读取 `<title>`。日期建议使用文件名开头的 `YYYY-MM-DD`。
+- “小红书”来源标签由 `posts/xhs/` 目录判断，不再根据标题、正文或文件名中的关键词推断。其他主题标签继续按正文推断。
+- 图片仍放在 `assets/` 下。文章多了一层目录，图片引用应写成 `../../assets/posts/文章名称/01.jpg`，Markdown 示例：`![说明](../../assets/posts/文章名称/01.jpg)`。
+- 小红书导入器自动维护本地图片路径，图片继续保存在 `assets/xhs/`。
+- `posts/articles/new-post-template.html` 是模板，不被收录。`posts/` 根目录仅保留旧文章跳转页和清单，跳转页不重复收录。
+- 放入文件后运行 `node scripts/generate-posts-manifest.js` 可本地更新列表；提交并推送到 `main` 后，部署流程会自动生成清单并发布。
 
 ## 站点定位
 
@@ -74,7 +86,7 @@
 
 ## 导入小红书笔记
 
-当前浏览器安全策略不允许 Codex 直接自动读取 `xiaohongshu.com` 页面。可以把自己的笔记内容复制到本地 JSON，再导入到 `posts/`。
+当前浏览器安全策略不允许 Codex 直接自动读取 `xiaohongshu.com` 页面。可以把自己的笔记内容复制到本地 JSON，再导入到 `posts/xhs/`。
 
 ### 手动填写 JSON
 
@@ -86,7 +98,7 @@
    node scripts/import-xhs-notes.js imports/xhs-notes.json
    ```
 
-脚本会生成 `posts/*.html`，并自动更新 `posts/posts.json`。
+脚本会生成 `posts/xhs/*.html`，并自动更新 `posts/posts.json`。
 
 ## 访客留言板
 

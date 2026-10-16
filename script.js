@@ -244,19 +244,19 @@ function renderPostHtml({ title, date, markdownHtml }) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${safeTitle} · Alex</title>
-    <link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="stylesheet" href="../styles.css?v=20260711b" />
-    <link rel="stylesheet" href="../reading-layout.css?v=20260920b" />
+    <link rel="icon" href="../../favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="stylesheet" href="../../styles.css?v=20260711b" />
+    <link rel="stylesheet" href="../../reading-layout.css?v=20260920b" />
   </head>
   <body id="top" class="reading-page">
     <div class="headband"></div>
     <main class="main">
       <header class="reading-header" aria-label="Site header">
-        <a class="reading-brand" href="../index.html">Alex Emaire<span> / 个人归档</span></a>
-        <nav aria-label="文章导航"><a href="../index.html#blog">← 返回文章</a></nav>
+        <a class="reading-brand" href="../../index.html">Alex Emaire<span> / 个人归档</span></a>
+        <nav aria-label="文章导航"><a href="../../index.html#blog">← 返回文章</a></nav>
         <details class="reading-search">
           <summary>搜索文章</summary>
-          <section class="site-search-card" data-site-search data-posts-src="../posts/posts.json" data-post-base="../posts/" aria-label="Site search">
+          <section class="site-search-card" data-site-search data-posts-src="../../posts/posts.json" data-post-base="../../posts/" aria-label="Site search">
             <label class="site-search-label" for="site-search-input">搜索</label>
             <div class="site-search-control">
               <span class="site-search-icon" aria-hidden="true"></span>
@@ -304,12 +304,12 @@ function renderPostHtml({ title, date, markdownHtml }) {
       <div class="footer-inner">
         <span>© <span id="year"></span> Alex</span>
         <span class="footer-dot">•</span>
-        <span><a href="../index.html#blog">返回文章</a></span>
+        <span><a href="../../index.html#blog">返回文章</a></span>
       </div>
     </footer>
 
     <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
-    <script src="../script.js?v=20260920b"></script>
+    <script src="../../script.js?v=20260920b"></script>
   </body>
 </html>`;
 }
@@ -577,9 +577,8 @@ function initEditorPage() {
     }
 
     const date = new Date().toISOString().slice(0, 10);
-    const time = new Date().toISOString().slice(11, 19).replace(/:/g, "");
     const slug = slugify(title);
-    const baseName = `${date}-${time}-${slug}`;
+    const baseName = `${date}-${slug}`;
     const html = renderPostHtml({
       title,
       date,
@@ -589,7 +588,7 @@ function initEditorPage() {
     downloadTextFile(`${baseName}.html`, html, "text/html;charset=utf-8");
 
     if (statusEl) {
-      statusEl.textContent = `已保存 ${baseName}.html。`;
+      statusEl.textContent = `已保存 ${baseName}.html，请放入 posts/articles/ 后提交发布。`;
     }
   });
 
