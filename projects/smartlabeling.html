@@ -38,13 +38,13 @@
           <div class="sidebar-inner">
             <div class="site-author">
               <p class="site-author-name">SmartLabeling</p>
-              <p class="site-description">AI-assisted annotation workflow</p>
+              <p class="site-description">医学图像标注工具</p>
             </div>
             <nav class="case-study-nav" aria-label="项目记录章节">
               <a href="#problem">项目背景</a>
-              <a href="#architecture">系统结构</a>
-              <a href="#implementation">实现笔记</a>
-              <a href="#code-reading">相关入口</a>
+              <a href="#architecture">标注流程</a>
+              <a href="#implementation">我负责的工作</a>
+              <a href="#code-reading">代码入口</a>
             </nav>
           </div>
         </aside>
@@ -64,94 +64,79 @@
         <article class="post-block">
           <header class="post-header">
             <h1 class="post-title">SmartLabeling</h1>
-            <div class="post-meta-container">项目记录 · AI labeling · Vue / Electron / FastAPI</div>
+            <div class="post-meta-container">科研训练 · 医学图像标注</div>
           </header>
 
           <div class="post-body article-content case-study">
             <p class="case-lead">
-              SmartLabeling 是一个 AI 辅助数据标注工具。它把桌面端交互、Python 推理服务和标注导出流程连在一起，用于降低基于图像 mask 的标注成本。
+              SmartLabeling 是我们在科研训练中做的医学图像标注工具。用户在图像上点选前景、背景或框出区域，SAM 根据提示生成分割掩码，CLIP 给出候选类别；用户确认、修正后，再把结果保存到项目中。我负责其中的医学模型应用服务，也就是把模型推理接入标注软件的这部分工作。
             </p>
 
-            <div class="case-facts" aria-label="Project facts">
+            <div class="case-facts" aria-label="项目概况">
               <div>
-                <span>技术栈</span>
-                <strong>Vue 3, TypeScript, Electron, FastAPI, SAM, CLIP</strong>
+                <span>我的工作</span>
+                <strong>FastAPI 服务、ONNX 推理接入、交互状态、特征缓存与项目导出</strong>
               </div>
               <div>
-                <span>记录重点</span>
-                <strong>Prompt tools, mask generation, export pipeline</strong>
+                <span>团队成果</span>
+                <strong>2025 年中国大学生计算机设计大赛国家级二等奖</strong>
               </div>
             </div>
 
-            <h2 id="problem">项目背景</h2>
+            <h2 id="problem">为什么做这个项目</h2>
             <p>
-              传统图像标注需要大量手工描边。SmartLabeling 的核心问题是：如何让标注员用更少的点击表达意图，同时保留可撤销、可导出、可继续修正的工程流程。
+              医学图像中的器官和病灶需要专业判断，逐张手工勾画边界又很耗时间，不同人的标注结果也可能有差异。我们希望让模型先生成一个可修改的结果，减少重复描边的操作。最终标注仍由用户确认，模型给出的类别建议不会直接写入正式标注。
             </p>
 
-            <h2 id="architecture">系统结构</h2>
-            <div class="case-flow" aria-label="SmartLabeling data flow">
-              <div>
-                <span>01</span>
-                <strong>Desktop shell</strong>
-                <p>Electron 承载 Vue 前端，并把桌面分发与本地服务流程放进同一个产品形态。</p>
-              </div>
-              <div>
-                <span>02</span>
-                <strong>Annotation UI</strong>
-                <p>前端管理点、框、类别、mask 叠加和工具状态，让标注行为保持可解释。</p>
-              </div>
-              <div>
-                <span>03</span>
-                <strong>FastAPI service</strong>
-                <p>Python 服务暴露 prompt、upload、switch image、export 等路由，承接模型和文件操作。</p>
-              </div>
-              <div>
-                <span>04</span>
-                <strong>Model pipeline</strong>
-                <p>SAM 生成候选 mask，CLIP-style 分类流程辅助把视觉结果映射到类别语义。</p>
-              </div>
-              <div>
-                <span>05</span>
-                <strong>Export</strong>
-                <p>导出 mask、YAML label 映射和 cache，方便后续训练或检查。</p>
-              </div>
-            </div>
+            <h2 id="architecture">一次标注是怎么完成的</h2>
+            <p>
+              创建项目后，用户导入图像并定义类别。服务端在导入时计算 SAM 的图像特征和 CLIP 的整图预特征，按图像缓存；类别名称则转换为文本特征，供后续识别使用。
+            </p>
+            <p>
+              用户在前端点选或画框后，FastAPI 接收提示，同时调用 SAM 和 CLIP：SAM 返回区域掩码，CLIP 返回候选类别。用户可以继续补点、撤销或重做，满意后确认标注，再切换到下一张图。导出时，系统保存掩码、YAML 类别映射和继续编辑所需的 cache.json。
+            </p>
+            <p>
+              前端使用 Vue 和 Electron，由团队成员负责；模型与数据也由团队协作完成。我负责中间的 Python 应用服务，主要使用 FastAPI 和 ONNX Runtime。
+            </p>
 
-            <h2 id="implementation">实现笔记</h2>
-            <ul class="case-points">
-              <li><strong>Prompt operation state:</strong> foreground/background points and boxes are tracked with undo/redo history before regenerating masks.</li>
-              <li><strong>Async model orchestration:</strong> mask generation and class inference can run through Python service boundaries instead of blocking UI logic.</li>
-              <li><strong>Export discipline:</strong> generated masks and YAML label names are written as explicit project artifacts, not hidden UI state.</li>
-              <li><strong>Desktop packaging path:</strong> the repository includes Electron build configuration and keeps the Python `core/` service as part of the packaged file set.</li>
-            </ul>
+            <h2 id="implementation">我负责的工作</h2>
+            <h3>让分割结果能连续修改</h3>
+            <p>
+              我接入了 SAM 的编码器和解码器，处理图像预处理、提示坐标及推理结果。图像导入时计算一次较耗时的 Embedding，后续点选和画框复用它，只运行解码器。前景点、背景点和框统一管理，同时保存上一轮的低分辨率 logits，让新提示能接着上一轮结果修正。撤销和重做时，提示与对应的推理状态也要一起恢复。
+            </p>
 
-            <h2>过程中的取舍</h2>
-            <ul class="case-points">
-              <li>Local inference gives privacy and control, but increases installation and GPU-runtime complexity.</li>
-              <li>Electron lowers desktop delivery cost, but requires clear separation between renderer interaction and Python service responsibilities.</li>
-              <li>Mask quality should be presented honestly: the browser demo should show saved/static artifacts unless live inference is actually running.</li>
-            </ul>
+            <h3>给选中的区域推荐类别</h3>
+            <p>
+              CLIP 接收点或框指定的区域，将区域特征与项目类别的文本特征比较，返回 Top-K 候选类别。这里除了接通推理，还要维护类别字典：用户新增、修改或删除类别后，文本特征矩阵必须同步更新，避免返回的类别名称与实际向量对不上。
+            </p>
 
-            <h2>当前状态</h2>
-            <ul class="case-points">
-              <li>The repository contains a Vue/Electron frontend, Python FastAPI service, SAM/CLIP model integration files, and desktop packaging configuration.</li>
-              <li>The service layer includes prompt, project, image, mask, CLIP, and export modules, connecting the annotation path from interaction to saved artifacts.</li>
-              <li>目前还缺少有代表性的界面截图和 mask 示例，现阶段页面主要记录代码结构与流程。</li>
-            </ul>
+            <h3>把一次推理接到完整的项目里</h3>
+            <p>
+              标注软件需要同时管理多张图像。我按图像保存特征和掩码，切换时恢复对应状态，并把临时推理结果、撤销重做历史和已确认的正式标注分开管理。这样用户试着补一个点、撤销一步时，不会直接覆盖已经确认的结果。
+            </p>
+            <p>
+              我还完成了项目创建与读取、图像导入、标注导出，以及日志、异常处理和服务状态相关功能。应用代码主要在 core/routers、core/services、core/schemas 和模型封装、缓存模块中。
+            </p>
 
-            <h2 id="code-reading">相关入口</h2>
-            <p>想继续了解实现时，可以从这些目录开始：</p>
+            <h2>完成情况</h2>
+            <p>
+              科研训练汇报中演示了两段实际操作：一段是用前景点驱动 SAM 生成分割掩码；另一段是管理 lung、kidney 两个类别的标注并导出，导出的灰度掩码可以独立查看。项目已经覆盖从交互提示、结果确认到项目保存和导出的过程。
+            </p>
+            <p>
+              对我来说，工作量比较集中的地方是推理之外的状态管理：补点后要能继续修改，切换图像时要能恢复，保存项目后还要能重新打开。个人分支中还实现过 WebSocket 状态通知，这部分尚未在汇报中展示实机效果。
+            </p>
+            <p>
+              团队作品“基于视觉基础模型的智能化多模态医学图像标注系统”获得了 2025 年（第 18 届）中国大学生计算机设计大赛国家级二等奖，参赛类别为“人工智能应用—人工智能实践赛”。团队成员为彭嘉辉、李昊屹、张志友、李政杭、刘鑫。
+            </p>
+
+            <h2 id="code-reading">代码入口</h2>
+            <p>下面几个目录对应我在汇报中介绍的应用服务部分：</p>
             <ul class="case-link-list">
-              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/src/components" target="_blank" rel="noreferrer">Vue annotation components</a> - 标注工具、内容区和提示输入的交互边界。</li>
-              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/routers" target="_blank" rel="noreferrer">FastAPI routers</a> - prompt、upload、export、project switching 等服务入口。</li>
-              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/services" target="_blank" rel="noreferrer">Python services</a> - mask、CLIP、project 和 export 的业务实现。</li>
-              <li><a href="https://github.com/sumikkys/SmartLabeling/blob/main/package.json" target="_blank" rel="noreferrer">Desktop build config</a> - Electron 打包和前端构建脚本。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/routers" target="_blank" rel="noreferrer">接口路由</a>：图像上传、提示输入、标注工具与导出等接口。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/services" target="_blank" rel="noreferrer">业务服务</a>：分割、类别识别、项目管理和结果导出。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/blob/main/core/sam_model.py" target="_blank" rel="noreferrer">SAM 模型封装</a>：图像编码、提示解码与推理输入输出。</li>
+              <li><a href="https://github.com/sumikkys/SmartLabeling/blob/main/core/clip_model.py" target="_blank" rel="noreferrer">CLIP 模型封装</a>：图像、区域与文本特征的处理。</li>
             </ul>
-
-            <h2>后续记录</h2>
-            <p>
-              后续会补本地截图或 mask 示例到 `assets/projects/smartlabeling/`，再在本页加入静态 before/after 对比，把标注结果与使用过程记录得更完整。
-            </p>
           </div>
         </article>
       </div>
