@@ -2069,6 +2069,10 @@ iframe {
   border-left: 0;
 }
 
+.editor-tools { display: flex; flex-direction: column; gap: 12px; padding: 12px; }
+.editor-tool-hint { margin: 0; color: var(--muted-color); font-size: .8125em; line-height: 1.6; }
+.editor-tools button:focus-visible { outline: 2px solid var(--link-color); outline-offset: 2px; }
+
 .editor-pane-head {
   padding: 10px 12px;
   border-bottom: 1px solid var(--line-color);
@@ -2621,7 +2625,7 @@ iframe {
   }
 
   .editor-pane-left {
-    display: none;
+    display: flex;
   }
 
   .editor-pane {

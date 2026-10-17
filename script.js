@@ -642,6 +642,14 @@ function initEditorPage() {
   mdInput.addEventListener("input", renderPreview);
   renderPreview();
 
+  document.getElementById("insert-image-btn").addEventListener("click", () => {
+    const start = mdInput.selectionStart;
+    const end = mdInput.selectionEnd;
+    mdInput.setRangeText("![](../../assets/posts/文章标题/01.jpg)", start, end, "end");
+    mdInput.focus();
+    mdInput.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+
   saveLocalBtn.addEventListener("click", () => {
     const title = mdTitleInput.value.trim();
     const markdown = mdInput.value.trim();
