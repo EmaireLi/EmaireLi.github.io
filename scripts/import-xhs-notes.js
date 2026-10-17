@@ -297,7 +297,7 @@ function renderPostHtml(note, localImages = []) {
     <meta name="theme-color" content="#222222" />
     <title>${title} · Alex</title>
     <link rel="icon" href="../../favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="stylesheet" href="../../styles.css?v=20260711b" />
+    <link rel="stylesheet" href="../../styles.css?v=20261017-gallery-arrows" />
     <link rel="stylesheet" href="../../reading-layout.css?v=20260920b" />
   </head>
   <body id="top" class="reading-page">

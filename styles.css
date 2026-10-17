@@ -785,6 +785,9 @@ iframe {
 
 .xhs-gallery-button::before {
   content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: block;
   width: 12px;
   height: 12px;
@@ -793,11 +796,11 @@ iframe {
 }
 
 .xhs-gallery-prev::before {
-  transform: rotate(-135deg);
+  transform: translate(-50%, -50%) rotate(-135deg);
 }
 
 .xhs-gallery-next::before {
-  transform: rotate(45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .xhs-gallery:hover .xhs-gallery-button,
