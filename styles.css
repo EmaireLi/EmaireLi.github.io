@@ -2051,6 +2051,12 @@ iframe {
   padding-left: 12px;
 }
 
+.editor-layout-wide .editor-main {
+  width: 100%;
+  min-width: 0;
+  padding-left: 0;
+}
+
 .editor-page-shell {
   position: relative;
   overflow: hidden;
