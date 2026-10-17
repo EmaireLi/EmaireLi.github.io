@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#222222" />
     <title>SmartLabeling 项目记录 · Alex</title>
     <link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="stylesheet" href="../styles.css?v=20260727b" />
+    <link rel="stylesheet" href="../styles.css?v=20261017-image-caption" />
   </head>
   <body id="top">
     <div class="headband"></div>
@@ -99,44 +99,44 @@
               前端使用 Vue 和 Electron，由团队成员负责；模型与数据也由团队协作完成。我负责中间的 Python 应用服务，主要使用 FastAPI 和 ONNX Runtime。
             </p>
 
-            <h2 id="implementation">我负责的工作</h2>
-            <h3>让分割结果能连续修改</h3>
-            <p>
-              我接入了 SAM 的编码器和解码器，处理图像预处理、提示坐标及推理结果。图像导入时计算一次较耗时的 Embedding，后续点选和画框复用它，只运行解码器。前景点、背景点和框统一管理，同时保存上一轮的低分辨率 logits，让新提示能接着上一轮结果修正。撤销和重做时，提示与对应的推理状态也要一起恢复。
-            </p>
+            <h2>系统展示</h2>
+            <p>下面是系统的实际操作录屏与截图。点选和导出动图来自科研训练汇报 PPT，框选和类别截图来自同一套演示素材。点击图片可打开原尺寸查看。</p>
 
-            <h3>给选中的区域推荐类别</h3>
-            <p>
-              CLIP 接收点或框指定的区域，将区域特征与项目类别的文本特征比较，返回 Top-K 候选类别。这里除了接通推理，还要维护类别字典：用户新增、修改或删除类别后，文本特征矩阵必须同步更新，避免返回的类别名称与实际向量对不上。
-            </p>
+            <h3>1. 点一下，生成候选掩码</h3>
+            <p>左侧是点选、框选和撤销等工具，中间显示待标注图像，右侧管理类别与已确认的标注。这段演示中，用户选择 Click 工具并点击目标位置，图像上随即出现半透明的分割结果。</p>
+            <figure class="post-captioned-image">
+              <a href="../assets/projects/smartlabeling/demo-sam-point.gif" target="_blank" rel="noopener" aria-label="查看原图：1. 点一下，生成候选掩码">
+                <img src="../assets/projects/smartlabeling/demo-sam-point.gif" alt="点提示分割演示：点击目标位置后，图像上出现候选掩码。" width="1280" height="720" loading="lazy" decoding="async" />
+              </a>
+              <figcaption class="post-image-caption">PPT 原始动图：点选目标，查看 SAM 返回的分割结果。</figcaption>
+            </figure>
 
-            <h3>把一次推理接到完整的项目里</h3>
-            <p>
-              标注软件需要同时管理多张图像。我按图像保存特征和掩码，切换时恢复对应状态，并把临时推理结果、撤销重做历史和已确认的正式标注分开管理。这样用户试着补一个点、撤销一步时，不会直接覆盖已经确认的结果。
-            </p>
-            <p>
-              我还完成了项目创建与读取、图像导入、标注导出，以及日志、异常处理和服务状态相关功能。应用代码主要在 core/routers、core/services、core/schemas 和模型封装、缓存模块中。
-            </p>
+            <h3>2. 框出目标范围</h3>
+            <p>也可以切换到 Box 工具，用矩形框限定目标的大致范围。紫色框是用户给出的提示，框内的半透明区域是模型返回的掩码；最终保存的是分割区域，而不是这个矩形框。</p>
+            <figure class="post-captioned-image">
+              <a href="../assets/projects/smartlabeling/demo-sam-box.gif" target="_blank" rel="noopener" aria-label="查看原图：2. 框出目标范围">
+                <img src="../assets/projects/smartlabeling/demo-sam-box.gif" alt="框提示分割演示：画出矩形提示框后生成目标区域掩码。" width="1280" height="720" loading="lazy" decoding="async" />
+              </a>
+              <figcaption class="post-image-caption">框选演示：用一个范围提示，生成贴合目标轮廓的掩码。</figcaption>
+            </figure>
 
-            <h2>完成情况</h2>
-            <p>
-              科研训练汇报中演示了两段实际操作：一段是用前景点驱动 SAM 生成分割掩码；另一段是管理 lung、kidney 两个类别的标注并导出，导出的灰度掩码可以独立查看。项目已经覆盖从交互提示、结果确认到项目保存和导出的过程。
-            </p>
-            <p>
-              对我来说，工作量比较集中的地方是推理之外的状态管理：补点后要能继续修改，切换图像时要能恢复，保存项目后还要能重新打开。个人分支中还实现过 WebSocket 状态通知，这部分尚未在汇报中展示实机效果。
-            </p>
-            <p>
-              团队作品“基于视觉基础模型的智能化多模态医学图像标注系统”获得了 2025 年（第 18 届）中国大学生计算机设计大赛国家级二等奖，参赛类别为“人工智能应用—人工智能实践赛”。团队成员为彭嘉辉、李昊屹、张志友、李政杭、刘鑫。
-            </p>
+            <h3>3. 选择类别，确认标注</h3>
+            <p>分割完成后，还需要给结果选择类别并确认。截图右侧可以看到项目中的 lung、kidney、liver 类别，以及已经提交的 lung_1 标注；中间仍显示当前正在操作的候选区域。类别名称是演示项目中的设置，这里展示的是类别管理与提交过程。</p>
+            <figure class="post-captioned-image">
+              <a href="../assets/projects/smartlabeling/annotation-classes.png" target="_blank" rel="noopener" aria-label="查看原图：3. 选择类别，确认标注">
+                <img src="../assets/projects/smartlabeling/annotation-classes.png" alt="多类别标注界面：右侧显示项目类别、已提交的 lung_1 标注和新建标注入口。" width="1920" height="1080" loading="lazy" decoding="async" />
+              </a>
+              <figcaption class="post-image-caption">候选结果和已确认标注分别管理，便于继续标注同一张图中的其他目标。</figcaption>
+            </figure>
 
-            <h2 id="code-reading">代码入口</h2>
-            <p>下面几个目录对应我在汇报中介绍的应用服务部分：</p>
-            <ul class="case-link-list">
-              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/routers" target="_blank" rel="noreferrer">接口路由</a>：图像上传、提示输入、标注工具与导出等接口。</li>
-              <li><a href="https://github.com/sumikkys/SmartLabeling/tree/main/core/services" target="_blank" rel="noreferrer">业务服务</a>：分割、类别识别、项目管理和结果导出。</li>
-              <li><a href="https://github.com/sumikkys/SmartLabeling/blob/main/core/sam_model.py" target="_blank" rel="noreferrer">SAM 模型封装</a>：图像编码、提示解码与推理输入输出。</li>
-              <li><a href="https://github.com/sumikkys/SmartLabeling/blob/main/core/clip_model.py" target="_blank" rel="noreferrer">CLIP 模型封装</a>：图像、区域与文本特征的处理。</li>
-            </ul>
+            <h3>4. 导出并查看结果</h3>
+            <p>最后点击导出，打开输出目录，就能查看保存下来的掩码。动图末尾的黑底灰色区域是导出的灰度掩码，可以脱离软件单独打开。这样，界面上的标注就成为了后续可以继续处理的文件。</p>
+            <figure class="post-captioned-image">
+              <a href="../assets/projects/smartlabeling/demo-export-mask.gif" target="_blank" rel="noopener" aria-label="查看原图：4. 导出并查看结果">
+                <img src="../assets/projects/smartlabeling/demo-export-mask.gif" alt="导出演示：导出标注、打开结果目录并查看黑底灰色的掩码图像。" width="1280" height="720" loading="lazy" decoding="async" />
+              </a>
+              <figcaption class="post-image-caption">PPT 原始动图：从软件中的标注列表，到文件夹中的灰度掩码。</figcaption>
+            </figure>
           </div>
         </article>
       </div>
