@@ -642,10 +642,21 @@ function initEditorPage() {
   mdInput.addEventListener("input", renderPreview);
   renderPreview();
 
+  let imageNumber = 0;
   document.getElementById("insert-image-btn").addEventListener("click", () => {
     const start = mdInput.selectionStart;
     const end = mdInput.selectionEnd;
-    mdInput.setRangeText("![](../../assets/posts/文章标题/01.jpg)", start, end, "end");
+    const folder = (mdTitleInput.value.trim() || "文章标题")
+      .replace(/[\\/]/g, "-")
+      .replace(/[\s%?#()[\]<>]/g, character => encodeURIComponent(character).replace(/[()]/g, c => `%${c.charCodeAt(0).toString(16).toUpperCase()}`));
+    // Continue after numbered images already present in a pasted or edited draft.
+    for (const match of mdInput.value.matchAll(/\.\.\/\.\.\/assets\/posts\/[^\n]*?\/(\d+)\.jpg/g)) {
+      const number = Number(match[1]);
+      if (Number.isSafeInteger(number)) imageNumber = Math.max(imageNumber, number);
+    }
+    imageNumber += 1;
+    const filename = `${String(imageNumber).padStart(2, "0")}.jpg`;
+    mdInput.setRangeText(`![](../../assets/posts/${folder}/${filename})`, start, end, "end");
     mdInput.focus();
     mdInput.dispatchEvent(new Event("input", { bubbles: true }));
   });
