@@ -1351,6 +1351,34 @@ function initAdminGuestbook() {
   });
 }
 
+function initArticleOutline() {
+  const article = document.querySelector(".article-content");
+  if (!article) return;
+  document.querySelectorAll(".case-study-nav").forEach((nav) => {
+    const links = [];
+    article.querySelectorAll("h2").forEach((heading, index) => {
+      const title = heading.textContent.trim();
+      if (!title) return;
+      if (!heading.id || document.getElementById(heading.id) !== heading) {
+        const base = `section-${index + 1}`;
+        let id = base;
+        let suffix = 2;
+        while (document.getElementById(id)) id = `${base}-${suffix++}`;
+        heading.id = id;
+      }
+      const link = document.createElement("a");
+      link.setAttribute("href", `#${encodeURIComponent(heading.id)}`);
+      link.textContent = title;
+      links.push(link);
+    });
+    nav.replaceChildren(...links);
+    nav.hidden = links.length === 0;
+    const name = nav.closest(".sidebar")?.querySelector(".site-author-name");
+    const title = document.querySelector(".post-title");
+    if (name && title) name.textContent = title.textContent.trim();
+  });
+}
+
 function initVisitorCount() {
   const root = document.querySelector("[data-visitor-count]");
   if (!root) return;
@@ -1370,6 +1398,7 @@ function initVisitorCount() {
 }
 
 decodeEscapedSpanTagsInDocument();
+initArticleOutline();
 initBlogAutoList();
 initEditorPage();
 initSiteSearch();
