@@ -751,6 +751,27 @@ iframe {
   scroll-snap-stop: always;
 }
 
+.post-captioned-image {
+  display: block;
+  margin: 1em 0;
+  text-align: center;
+}
+
+.post-captioned-image img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.post-image-caption {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted, #697586);
+  font-size: 0.85em;
+  line-height: 1.5;
+}
+
 .xhs-image img {
   width: auto;
   max-width: 100%;

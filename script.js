@@ -32,6 +32,15 @@ if (panelLinks.length > 0 && panels.length > 0) {
 }
 
 const md = typeof window.markdownit === "function" ? window.markdownit({ html: true, linkify: true, breaks: true }) : null;
+if (md) {
+  const renderImage = md.renderer.rules.image;
+  md.renderer.rules.image = (tokens, index, options, env, renderer) => {
+    const image = renderImage(tokens, index, options, env, renderer);
+    const caption = (tokens[index].attrGet("alt") || "").trim();
+    if (!caption) return image;
+    return `<span class="post-captioned-image">${image}<span class="post-image-caption">${escapeHtml(caption)}</span></span>`;
+  };
+}
 const postsCache = new Map();
 let revealObserver = null;
 const guestbookMaxLength = 100;
@@ -245,7 +254,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${safeTitle} · Alex</title>
     <link rel="icon" href="../../favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="stylesheet" href="../../styles.css?v=20261017-gallery-arrows" />
+    <link rel="stylesheet" href="../../styles.css?v=20261017-image-caption" />
     <link rel="stylesheet" href="../../reading-layout.css?v=20260920b" />
   </head>
   <body id="top" class="reading-page">
