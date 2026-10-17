@@ -402,10 +402,7 @@ function run() {
     const slug = slugify(note.slug || note.title || `xhs-note-${index + 1}`);
     const baseName = `${date}-${slug}`;
     const file = `${baseName}.html`;
-    // Reuse existing downloaded images while keeping post names source-neutral.
-    const legacyAssets = `${date}-xhs-${slug}`;
-    const fileBaseName = fs.existsSync(path.join(assetsDir, legacyAssets)) ? legacyAssets : baseName;
-    const localImages = syncImages(note, fileBaseName);
+    const localImages = syncImages(note, baseName);
     fs.writeFileSync(path.join(postsDir, file), renderPostHtml(note, localImages), "utf8");
     return file;
   });
