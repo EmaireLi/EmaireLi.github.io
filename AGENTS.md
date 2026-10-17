@@ -9,7 +9,7 @@ This is a static GitHub Pages personal site. Keep changes simple, local, and com
 - Use `rg` or `rg --files` for code search.
 - Follow the existing visual style in `styles.css`.
 - Keep generated blog posts under `posts/`.
-- Keep XHS image assets under `assets/xhs/`.
+- Keep inline article images under `assets/posts/` and top-of-article gallery images under `assets/gallery/`.
 - Do not commit secrets, browser cookies, or account session data.
 
 ## XHS Import

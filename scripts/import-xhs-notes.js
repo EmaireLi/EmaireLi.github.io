@@ -5,7 +5,7 @@ const childProcess = require("node:child_process");
 const repoRoot = process.cwd();
 const inputPath = path.resolve(repoRoot, process.argv[2] || "imports/xhs-notes.json");
 const postsDir = path.join(repoRoot, "posts", "xhs");
-const assetsDir = path.join(repoRoot, "assets", "xhs");
+const assetsDir = path.join(repoRoot, "assets", "gallery");
 
 function escapeHtml(value) {
   return String(value || "")

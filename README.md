@@ -31,7 +31,8 @@
 - 扫描这两个目录第一层的 `.html` 文件；标题读取正文第一个 `<h1>`，没有时读取 `<title>`。日期建议使用文件名开头的 `YYYY-MM-DD`。
 - “小红书”来源标签由 `posts/xhs/` 目录判断，不再根据标题、正文或文件名中的关键词推断。其他主题标签继续按正文推断。
 - 图片仍放在 `assets/` 下。文章多了一层目录，图片引用应写成 `../../assets/posts/文章名称/01.jpg`，Markdown 示例：`![说明](../../assets/posts/文章名称/01.jpg)`。
-- 小红书导入器自动维护本地图片路径，图片保存在 `assets/xhs/日期-标题/`，文件夹名不再重复包含 `xhs-`。
+- 图片资源按展示方式分为两个目录：正文插图放在 `assets/posts/文章标题/`，顶部多图轮播放在 `assets/gallery/日期-标题/`。
+- 小红书导入器使用 `assets/gallery/`，自动维护本地图片路径；编辑器插图按钮仍使用 `assets/posts/`。目录名不决定展示方式，正文图片或轮播组件的 HTML 决定实际布局。
 - `posts/articles/new-post-template.html` 是模板，不被收录。`posts/` 根目录仅保留旧文章跳转页和清单，跳转页不重复收录。
 - 放入文件后运行 `node scripts/generate-posts-manifest.js` 可本地更新列表；提交并推送到 `main` 后，部署流程会自动生成清单并发布。
 
