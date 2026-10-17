@@ -48,7 +48,7 @@
           <div class="sidebar-inner">
             <div class="site-author">
               <p class="site-author-name">Yomii</p>
-              <p class="site-description">Japanese learning desktop app</p>
+              <p class="site-description">日语学习桌面应用</p>
             </div>
             <nav class="case-study-nav" aria-label="项目记录章节"></nav>
           </div>
@@ -60,96 +60,145 @@
         <article class="post-block">
           <header class="post-header">
             <h1 class="post-title">Yomii - 日语学习助手</h1>
-            <div class="post-meta-container">项目记录 · language learning · Vue / Electron / FastAPI</div>
+            <div class="post-meta-container">项目说明 · GitHub README</div>
           </header>
 
           <div class="post-body article-content case-study">
-            <p class="case-lead">
-              Yomii 是一个面向日语学习场景的桌面化应用，把查词、背单词、分级测试和 AI 作文评测放进同一套学习系统。
-            </p>
+            <p>来源：<a href="https://github.com/EmaireLi/Yomii/blob/main/README.md">Yomii GitHub README</a></p>
+<p>Yomii 是一个面向日语学习场景的桌面化应用，覆盖查词、背单词、分级测试和 AI 作文评测四条主链路。项目采用前后端分离架构，并支持 Electron 打包为本地桌面应用。</p>
+<h2>功能概览</h2>
+<ul>
+<li>搜索：多字段查词，联动搜索历史和收藏</li>
+<li>背单词：基于间隔重复和薄弱项强化的复习流程</li>
+<li>测试：按词级与难度出题，生成能力报告</li>
+<li>作文评测：本地双模型评测，DeepSeek API 作为补充候选和兜底</li>
+</ul>
+<h2>技术架构</h2>
+<ul>
+<li>前端：Vue 3 + TypeScript + Element Plus + Vite</li>
+<li>桌面端：Electron</li>
+<li>后端：FastAPI + SQLModel</li>
+<li>数据库：
+<ul>
+<li>SQLite：词典、题库等静态数据</li>
+<li>MySQL：用户、进度、收藏、作文、测试记录等行为数据</li>
+</ul>
+</li>
+<li>AI：
+<ul>
+<li>本地模型：<code>Qwen/Qwen3-1.7B</code> 双 LoRA 路线（评分 / 修订）</li>
+<li>在线兜底：DeepSeek API</li>
+</ul>
+</li>
+</ul>
+<h2>目录结构</h2>
+<pre><code class="language-text">yomii/
+├── backend/                 # FastAPI 后端、训练脚本、测试
+├── docs/                    # 项目文档
+│   ├── 00-PROJECT/          # 项目总览
+│   ├── 01-GETTING_STARTED/  # 快速开始
+│   ├── 02-REFERENCE/        # API 和参考资料
+│   ├── 03-DEVELOPMENT/      # 开发说明
+│   └── 90-ARCHIVE/          # 历史归档
+├── electron/                # Electron 主进程与预加载脚本
+├── public/                  # 静态资源
+├── src/                     # Vue 前端代码
+├── .env.example             # 环境变量模板
+├── package.json             # 前端与 Electron 脚本
+└── README.md                # 仓库入口文档
+</code></pre>
+<h2>环境要求</h2>
+<ul>
+<li>Node.js 20+</li>
+<li>npm 10+</li>
+<li>Python 3.11+</li>
+<li>MySQL 8+</li>
+<li>可选：支持 CUDA 的显卡环境，用于本地作文模型推理</li>
+</ul>
+<h2>快速开始</h2>
+<h3>1. 安装依赖</h3>
+<p>前端：</p>
+<pre><code class="language-powershell">npm install
+</code></pre>
+<p>后端：</p>
+<pre><code class="language-powershell">cd backend
+pip install -r requirements.runtime.txt
+</code></pre>
+<p>如果需要本地作文模型推理或训练，改为安装完整依赖：</p>
+<pre><code class="language-powershell">cd backend
+pip install -r requirements.txt
+</code></pre>
+<h3>2. 配置环境变量</h3>
+<pre><code class="language-powershell">Copy-Item .env.example .env
+</code></pre>
+<p>至少需要确认：</p>
+<pre><code class="language-env">VITE_API_URL=http://127.0.0.1:8000/api
+VITE_USE_MOCK=false
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=password
+MYSQL_DATABASE=yomii
+</code></pre>
+<h3>3. 运行模式</h3>
+<h4>模式 A：前后端开发联调</h4>
+<p>终端 1：</p>
+<pre><code class="language-powershell">npm run dev
+</code></pre>
+<p>终端 2：</p>
+<pre><code class="language-powershell">cd backend
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+</code></pre>
+<h4>模式 B：Electron 桌面开发</h4>
+<pre><code class="language-powershell">npm run electron
+</code></pre>
+<h4>模式 C：完整作文评测链路</h4>
+<p>终端 1：前端或 Electron<br>
+终端 2：后端<br>
+终端 3：评分模型<br>
+终端 4：修订模型</p>
+<p>评分模型：</p>
+<pre><code class="language-powershell">cd backend
+python training\serve_qwen_adapter.py --task score --model models\qwen3-1.7b-score-merged --model-version qwen3-1.7b-score-merged --port 8011 --device-map auto --quantize bnb-nf4
+</code></pre>
+<p>修订模型：</p>
+<pre><code class="language-powershell">cd backend
+python training\serve_qwen_adapter.py --task revision --model models\qwen3-1.7b-revision-merged --model-version qwen3-1.7b-revision-merged --port 8012 --device-map auto --quantize bnb-nf4
+</code></pre>
+<p>如果只演示前后端链路，可以将 <code>.env</code> 中的模型 URL 留空，后端会走 mock 结果。</p>
+<h2>常用命令</h2>
+<pre><code class="language-powershell"># 前端开发
+npm run dev
 
-            <div class="case-facts" aria-label="Project facts">
-              <div>
-                <span>技术栈</span>
-                <strong>Vue 3, TypeScript, Electron, FastAPI, SQLModel, SQLite, MySQL</strong>
-              </div>
-              <div>
-                <span>记录重点</span>
-                <strong>Search, review, quiz, essay evaluation, tests and docs</strong>
-              </div>
-            </div>
+# Electron 开发
+npm run electron
 
-            <h2 id="problem">项目背景</h2>
-            <p>
-              语言学习工具常常把查词、收藏、复习、测试和作文反馈拆散。Yomii 的目标是把这些链路连起来，让学习记录能够回流到下一次复习和测试中。
-            </p>
+# 类型检查
+npm run type-check
 
-            <h2 id="architecture">系统结构</h2>
-            <div class="case-flow" aria-label="Yomii architecture flow">
-              <div>
-                <span>01</span>
-                <strong>Vue learning UI</strong>
-                <p>查词、背词、测试、作文等页面保持统一入口，降低学习时切换工具的成本。</p>
-              </div>
-              <div>
-                <span>02</span>
-                <strong>Electron desktop</strong>
-                <p>支持本地桌面运行和打包，让学习工具能脱离浏览器标签页长期使用。</p>
-              </div>
-              <div>
-                <span>03</span>
-                <strong>FastAPI backend</strong>
-                <p>后端负责账号、进度、测试报告、作文评测编排和 API 文档。</p>
-              </div>
-              <div>
-                <span>04</span>
-                <strong>Split storage</strong>
-                <p>SQLite 存词典、词级和题库等静态数据，MySQL 存用户、收藏、进度和作文记录。</p>
-              </div>
-              <div>
-                <span>05</span>
-                <strong>AI essay loop</strong>
-                <p>本地 Qwen 评分/修订 LoRA 路线优先，在线模型作为补充候选和兜底。</p>
-              </div>
-            </div>
+# 前端生产构建
+npm run build
 
-            <h2 id="implementation">实现笔记</h2>
-            <ul class="case-points">
-              <li><strong>Learning loop:</strong> search history, favorites, review state and quiz reports form a closed path instead of isolated pages.</li>
-              <li><strong>Data boundary:</strong> static dictionary assets and user behavior data are split across SQLite and MySQL responsibilities.</li>
-              <li><strong>AI orchestration:</strong> essay evaluation supports mock/lightweight mode, local model services, and optional online fallback.</li>
-              <li><strong>Delivery modes:</strong> the app can run as web front-end/back-end development mode or packaged Electron desktop app.</li>
-              <li><strong>Tests:</strong> backend tests cover auth, quiz, review, progress, essay evaluation and training-data preparation paths.</li>
-            </ul>
+# Windows 打包
+npm run build:win
+</code></pre>
+<h2>文档入口</h2>
+<ul>
+<li><a href="https://github.com/EmaireLi/Yomii/blob/main/docs/README.md">文档索引</a></li>
+<li><a href="https://github.com/EmaireLi/Yomii/blob/main/backend/README.md">后端说明</a></li>
+<li><a href="https://github.com/EmaireLi/Yomii/blob/main/backend/training/README.md">训练与模型服务说明</a></li>
+<li><a href="https://github.com/EmaireLi/Yomii/blob/main/docs/00-PROJECT/PROJECT_OVERVIEW.md">项目总览</a></li>
+<li><a href="https://github.com/EmaireLi/Yomii/blob/main/docs/02-REFERENCE/API_REFERENCE.md">API 参考</a></li>
+</ul>
+<h2>说明</h2>
+<ul>
+<li><code>backend/requirements.runtime.txt</code> 用于纯后端运行</li>
+<li><code>backend/requirements.txt</code> 包含本地模型推理和训练依赖，体积明显更大</li>
+<li><code>release/</code>、<code>backend/build/</code>、模型目录和数据库文件都视为本地产物，不作为源码目录的一部分提交</li>
+</ul>
+<h2>许可证</h2>
+<p>MIT</p>
 
-            <h2>过程中的取舍</h2>
-            <ul class="case-points">
-              <li>Full local model evaluation is stronger for control and privacy, but requires heavier runtime dependencies.</li>
-              <li>Two database roles make data ownership clearer, but increase setup complexity for new contributors.</li>
-              <li>Electron packaging improves desktop availability, while still requiring the web/API path to stay testable.</li>
-            </ul>
-
-            <h2>当前状态</h2>
-            <ul class="case-points">
-              <li>The repository includes frontend, Electron, FastAPI backend, database design docs, training scripts, and backend tests.</li>
-              <li>The documented workflows cover search, review, quiz, essay evaluation, local model serving, and desktop build commands.</li>
-              <li>目前还缺少应用截图和一段从作文请求到评测结果的完整流程记录。</li>
-            </ul>
-
-            <h2 id="code-reading">相关入口</h2>
-            <p>想继续了解实现时，可以从这些目录和文档开始：</p>
-            <ul class="case-link-list">
-              <li><a href="https://github.com/EmaireLi/Yomii/tree/main/src/views" target="_blank" rel="noreferrer">Vue views</a> - 查词、背词、测试、作文和收藏的前端页面组织。</li>
-              <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/app" target="_blank" rel="noreferrer">FastAPI app</a> - API、配置、数据库会话和业务服务边界。</li>
-              <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/training" target="_blank" rel="noreferrer">Training and model service scripts</a> - 作文评分/修订模型的训练、合并、量化和服务脚本。</li>
-              <li><a href="https://github.com/EmaireLi/Yomii/tree/main/backend/tests" target="_blank" rel="noreferrer">Backend tests</a> - 认证、复习、测试、作文评测等关键链路验证。</li>
-              <li><a href="https://github.com/EmaireLi/Yomii/blob/main/docs/DATABASE_DESIGN.md" target="_blank" rel="noreferrer">Database design</a> - 静态词库和用户行为数据拆分的设计依据。</li>
-            </ul>
-
-            <h2>后续记录</h2>
-            <p>
-              后续会补应用截图、学习流程图和一个简短的“作文评测请求到结果”序列图，把实际使用过程和当前完成度记录得更清楚。
-            </p>
           </div>
         </article>
       </div>
