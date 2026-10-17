@@ -118,7 +118,11 @@ function buildManifestEntry(file) {
   );
   const text = decodeHtmlEntities(stripTags(searchableHtml));
   const excerpt = text.replace(title, "").trim().slice(0, 160);
-  const tags = mergeTags(extractTags(html), inferTags({ file, title, text }));
+  const explicitTags = extractTags(html);
+  const hasExplicitTags = explicitTags.length > 0 || /class=["'][^"']*\b(?:post|xhs)-tags\b[^"']*["']/i.test(html);
+  const tags = hasExplicitTags
+    ? mergeTags(explicitTags, file.startsWith("xhs/") ? ["小红书"] : [])
+    : inferTags({ file, title, text });
   const searchText = [title, date, tags.join(" "), text].filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
 
   return { file, title, date, excerpt, searchText, tags };

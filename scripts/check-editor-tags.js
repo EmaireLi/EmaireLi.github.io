@@ -10,7 +10,8 @@ for (const name of ['escapeHtml', 'normalizePostTags', 'renderEditorTags']) {
   vm.runInContext(source.slice(start, end), context);
 }
 const render = tags => context.renderEditorTags(tags);
-assert.equal(render([]), '');
+assert.equal(render([]), '<p class="post-tags" hidden></p>');
+assert(render(['生活']).includes('class="post-tags" hidden'));
 assert.equal((render([' #摄影 ', '摄影', 'JAVA', 'java']).match(/class="post-tag"/g) || []).length, 2);
 const escaped = render(['<img src=x onerror=alert(1)>', 'A&B']);
 assert(!escaped.includes('<img'));

@@ -274,7 +274,7 @@ function renderTags(tags) {
     .filter(Boolean)
     .map((tag) => `<span class="post-tag">#${escapeHtml(String(tag).replace(/^#/, ""))}</span>`)
     .join(" ");
-  return `<p class="post-tags">${items}</p>`;
+  return `<p class="post-tags" hidden>${items}</p>`;
 }
 
 function renderPostHtml(note, localImages = []) {

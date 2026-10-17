@@ -554,7 +554,7 @@ function initSiteSearch() {
 
 function renderEditorTags(tags) {
   const normalized = normalizePostTags({ tags });
-  return normalized.length ? `<p class="post-tags">${normalized.map(tag => `<span class="post-tag">#${escapeHtml(tag)}</span>`).join(" ")}</p>` : "";
+  return `<p class="post-tags" hidden>${normalized.map(tag => `<span class="post-tag">#${escapeHtml(tag)}</span>`).join(" ")}</p>`;
 }
 
 function initEditorPage() {
