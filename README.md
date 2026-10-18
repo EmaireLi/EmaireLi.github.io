@@ -8,10 +8,10 @@
 
 ## 写文章（博客模式）
 
-1. 在首页页脚点击 **编写文章** 进入 `editor.html`。
+1. 在首页页脚点击圆点入口（提示为“编写文章”）进入 `editor.html`。
 2. 写标题和正文，点击 **保存到本地**（会下载 `.html` 文件）。
 3. 把下载的 `.html` 文件放入项目 `posts/articles/` 目录。
-4. `git add . && git commit -m "add new post" && git push`，GitHub Pages 部署流程会自动更新 `posts/posts.json` 并显示到 blog 列表。
+4. 按文末“维护验证”更新并检查归档，只提交本次文章、图片和相关生成文件，然后推送。GitHub Actions 部署时也会重新生成归档。
 
 ## 编辑器图片工具
 
@@ -57,7 +57,8 @@
 维护原则：
 
 - 首页记录项目用途、技术栈和阶段性收获。
-- 项目页写清楚背景、结构、实现笔记、取舍、当前状态和后续记录。
+- 项目页按实际资料组织内容，不强制固定章节；以用户提供的汇报或 README 为依据，区分个人贡献、团队成果与尚未验证的计划。
+- 项目侧栏搜索位于说明卡片上方；卡片标题和章节链接由 `initArticleOutline()` 从 `.post-title` 与 `.article-content h2` 自动生成，不手写第二份目录。
 - 如果后续补项目截图或流程图，放在 `assets/projects/<project-name>/`，避免热链外部图片。
 - 不写夸张结论，也不把项目页包装成面试评审材料。
 
@@ -72,17 +73,12 @@
 - 不添加站内路标或泛化板块导语，个人介绍与文章原文保持原样。
 - 静态和动态归档仅显示日期、标题和标签；清单中的摘要和全文数据继续供搜索使用。
 
-## 维护响应式搜索入口
+## 维护搜索入口
 
-首页搜索在桌面端位于左侧栏，在窄屏端紧跟站点页头，方便移动访客在进入长页面前直接检索文章。
-
-维护原则：
-
-- 首页只保留一个带有 `data-site-search` 的搜索区、一个 `#site-search-input` 和一套结果节点，不要为桌面端和移动端复制两套搜索。
-- 在 `index.html` 中让搜索区保持在 `.main-inner` 之前；桌面位置由 CSS Grid 指定，窄屏顺序保持“页头 → 搜索 → 正文 → 站点概览 → 外部账号”。
-- 搜索增强继续复用 `script.js` 里的清单缓存和结果渲染，不要新增第二条请求或筛选链路。
-- JavaScript 不可用时，保留指向静态文章归档的本地阅读入口。
-- 修改首页搜索的响应式样式后，同步更新 `index.html` 中 `styles.css` 的版本参数，避免部署后继续命中旧缓存。
+- 首页搜索位于“近期更新”标题下方；项目详情页搜索在左侧说明卡片上方；文章阅读页保留顶部搜索入口。不要将不同页面强制改成同一种布局。
+- 每个页面只保留一套搜索输入与结果节点，复用 `script.js` 的清单缓存和结果渲染。
+- JavaScript 不可用时，保留静态文章归档与阅读链接。
+- 改动搜索样式或交互时检查桌面和窄屏布局，并更新受影响页面的资源版本参数。
 
 ## 维护移动端返回顶部
 
@@ -97,7 +93,7 @@
 
 ## 导入小红书笔记
 
-当前浏览器安全策略不允许 Codex 直接自动读取 `xiaohongshu.com` 页面。可以把自己的笔记内容复制到本地 JSON，再导入到 `posts/xhs/`。
+导入器读取本地 JSON，不依赖浏览器登录态。可手动整理自己的笔记，或使用下方的页面导出脚本，再导入到 `posts/xhs/`。
 
 ### 手动填写 JSON
 
@@ -181,23 +177,39 @@
 ## 维护静态文章归档
 
 - `index.html` 中 `ARCHIVE:START` 与 `ARCHIVE:END` 之间由 `scripts/generate-posts-manifest.js` 自动生成，不要手动编辑。
-- 运行 `node scripts/generate-posts-manifest.js` 会从同一份已排序文章数据同时更新 `posts/posts.json` 与首页静态归档。
+- 运行 `node scripts/generate-posts-manifest.js` 会从同一份已排序文章数据同时更新 `posts/posts.json`、首页静态归档与 `assets/tags.json`。
 - 生成器要求恰好一对且顺序正确的标记；标记缺失、重复或颠倒时会在写文件前失败。
 - JavaScript 只增强静态归档的标签筛选。manifest 请求失败时必须保留静态文章链接，不能清空列表。
-- 提交前连续运行两次生成命令；第二次应保持工作树不变。
-- 运行 `node scripts/check-static-archive.js` 校验条目一致性、链接、转义、标记失败保护与运行时降级契约。
+- 仅在修改生成器时检查幂等性：连续生成两次，第二次输出应保持不变。普通文章更新生成一次即可。
 
 ## 维护归档筛选 URL
 
 - 精确标签筛选使用 `?tag=<manifest 中的标签>#blog`；“全部”用缺少 `tag` 表示，不维护第二份标签词表。
 - 修改筛选状态时只删除/写入 `tag`，必须保留其他参数（包括重复值）与它们的顺序。
 - 只有真实的用户筛选变化可以 `pushState`；初始规范化最多 `replaceState` 一次，`popstate` 只重绘且不能移动焦点或滚动。
-- 空、未知、重复或值为“全部”的 `tag` 都降级到完整归档。无 JavaScript 或 manifest 失败时仍显示 Round 09 静态基线。
-- 运行 `node scripts/check-archive-filter-state.js` 验证 Unicode、编码、参数保留和 history 决策契约。
+- 空、未知、重复或值为“全部”的 `tag` 都降级到完整归档。无 JavaScript 或 manifest 失败时仍显示已生成的静态归档。
 
 ## 维护公开留言说明
 
 - 公开说明必须在留言按钮之前始终可见，并由按钮和表单共同通过 `aria-describedby` 引用。
 - 文案只能陈述当前事实：署名和留言公开显示、不要填写私密信息、留言最多 100 字；不要承诺审核、隐私保护、删除、保留期限、回复或私密联系。
 - 修改长度限制时，同步更新说明、textarea `maxlength`、`script.js` 的 `guestbookMaxLength` 与 Worker 的 `MESSAGE_MAX_LENGTH`。
-- 运行 `node scripts/check-guestbook-disclosure.js` 验证顺序、语义引用、事实文案与四处长度一致性。
+
+## 维护验证
+
+按改动选择检查；无需每次执行整套。授权与提交规则统一见 [AGENTS.md](AGENTS.md)。
+
+| 受影响内容 | 检查 |
+| --- | --- |
+| JavaScript | 对修改的文件运行 `node --check <文件路径>` |
+| 文章或清单生成规则 | `node scripts/generate-posts-manifest.js`，然后 `node scripts/check-static-archive.js` |
+| XHS 导入、文章目录识别 | `node --check scripts/import-xhs-notes.js`、`node scripts/check-post-directories.js`；发布说明见“导入小红书笔记” |
+| 编辑器标签 | `node scripts/check-editor-tags.js` |
+| 归档标签 URL、年份展开 | 分别运行 `node scripts/check-archive-filter-state.js`、`node scripts/check-archive-disclosure.js` |
+| 公开留言说明 | `node scripts/check-guestbook-disclosure.js`；这不代替 Worker/API 行为验证 |
+| 页面样式与交互 | 本地预览受影响页面，检查相关交互、链接、图片及窄屏溢出 |
+| 仅文档 | 核对文档涉及的路径与命令，运行 `git diff --check` |
+
+生成命令会写入三个归档产物；不要把它作为无关修改的例行检查。现有 `check-*.js` 使用本地文件或临时测试目录，不访问线上留言数据库。新增或修改测试时重新确认其副作用。
+
+部署配置以 `.github/workflows/deploy.yml` 为准：推送 `main` 会生成归档并发布 `_site/`。增加发布资源时核对复制列表；推送成功不等于部署成功，只有观察到 Actions 或线上结果后才能声称已上线。

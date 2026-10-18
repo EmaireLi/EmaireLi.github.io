@@ -1,6 +1,6 @@
 # Archive-First Homepage Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> 历史实施计划：以下清单保留当时的设计与执行记录，不作为当前任务的执行要求；当前维护规则见根目录 AGENTS.md。
 
 **Goal:** Reframe the public site as a long-term archive for technical learning, project practice, and daily writing without removing genuine career-related posts.
 
