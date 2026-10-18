@@ -27,8 +27,9 @@ jobs:
       - name: Prepare deployment files
         shell: bash
         run: |
-          mkdir -p _site
-          cp -r assets posts projects photos scripts docs _site/
+          mkdir -p _site/assets
+          rsync -a --exclude='/local-image/' assets/ _site/assets/
+          cp -r posts projects photos scripts docs _site/
           cp index.html editor.html admin-guestbook.html styles.css reading-layout.css script.js archive-filter-state.js guestbook-config.js favicon.ico .nojekyll _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

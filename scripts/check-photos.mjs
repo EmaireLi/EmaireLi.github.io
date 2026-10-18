@@ -71,5 +71,7 @@ test('no persistence or third party scripts in admin; deployed files included', 
   }
   const html = fs.readFileSync('photos/admin/index.html', 'utf8'); assert(html.includes('Content-Security-Policy')); assert(!/<script[^>]+src="https?:/.test(html));
   assert(fs.readFileSync('.github/workflows/deploy.yml', 'utf8').includes('projects photos scripts'));
+  assert(fs.readFileSync('.gitignore', 'utf8').split('\n').includes('/assets/local-image/'));
+  assert(fs.readFileSync('.github/workflows/deploy.yml', 'utf8').includes("--exclude='/local-image/'"));
   validateData(JSON.parse(fs.readFileSync('photos/data.json', 'utf8')));
 });

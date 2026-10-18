@@ -1,3 +1,6 @@
 .DS_Store
 .wrangler/
 *.log
+
+# Camera originals: local testing only; never publish.
+/assets/local-image/
