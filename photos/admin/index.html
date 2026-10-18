@@ -1,0 +1,24 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'self' https://api.github.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>管理摄影 · Alex Emaire</title><link rel="icon" href="../../favicon.ico"><link rel="stylesheet" href="../photos.css"><script type="module" src="./admin.mjs"></script>
+</head><body>
+<header class="site-header"><a class="brand" href="../../index.html">Alex Emaire<span>个人归档</span></a><nav aria-label="管理导航"><a href="../">浏览摄影</a><a href="../../index.html">返回主站</a></nav></header>
+<main class="admin"><div class="page-heading"><div><p class="eyebrow">Photography · Workspace</p><h1>管理摄影</h1></div></div>
+<section class="panel" aria-labelledby="auth-heading"><h2 id="auth-heading">连接 GitHub</h2>
+<p class="notice">目标：EmaireLi/EmaireLi.github.io · main。使用仅授权该仓库的细粒度 Token，Contents 设为 Read and write（Metadata 自动只读），无需 Workflows 权限。凭证持有者可以在授权范围内写入仓库；Token 权限不是相册目录级限制。</p>
+<p class="notice">Token 仅在当前页面内存中使用，不保存到浏览器存储。刷新、关闭或主动清除后需重新输入。不要将 Token 发给聊天助手。页面可公开访问，能否写入由 GitHub 权限决定。</p>
+<label for="token">GitHub Token<input id="token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="手动输入 Token"></label>
+<div class="toolbar"><button id="connect">读取远端资料</button><button id="clear-token">清除 Token</button></div></section>
+<p id="admin-status" role="status" aria-live="polite">正在读取本地相册资料…</p>
+<button id="reload-local" hidden>重试读取资料</button>
+<fieldset id="workspace" disabled><legend class="muted">草稿仅保留在当前页面</legend>
+<section class="panel"><h2>相册</h2><div id="albums"></div><button id="add-album">新建相册</button></section>
+<section class="panel"><h2>添加照片</h2><p class="notice">只上传生成的缩略图与查看图，原图不进入仓库，也不作备份。支持 JPEG / PNG / WebP，不支持 RAW。每批最多 20 张，逐张处理；暂存展示图总量最多 100 MiB。一亿像素图片仍可能超出设备解码内存。</p>
+<details class="compression"><summary>压缩参数（暂定，待真实 S5M2 样片比较）</summary><p class="notice">先处理少量样片，点击预览链接检查构图、细节与输出体积后再发布。调整只影响之后添加的照片；需要重新选择照片才能重新生成。</p>
+<div class="fields"><label>缩略图最长边（px）<input id="thumb-edge" type="number" min="320" max="1600" value="960"></label><label>查看图最长边（px）<input id="view-edge" type="number" min="1600" max="4800" value="3200"></label><label>缩略图 JPEG 质量<input id="thumb-quality" type="number" min="0.6" max="0.98" step="0.01" value="0.86"></label><label>查看图 JPEG 质量<input id="view-quality" type="number" min="0.6" max="0.98" step="0.01" value="0.90"></label></div></details>
+<label>新照片归属相册<select id="new-album"></select></label><label>选择本地照片<input id="files" type="file" accept="image/jpeg,image/png,image/webp" multiple></label><ul id="processing-results" class="notice"></ul></section>
+<section class="panel"><h2>照片与顺序</h2><p class="notice">列表顺序即全部作品的展示顺序，相册筛选保留此顺序。</p><div id="photos"></div></section>
+<section class="panel"><h2>发布变更</h2><p>新增、修改与删除会合并为一次提交。请先检查摘要，再明确点击发布。</p><button id="review">查看待提交摘要</button><div id="review-panel" hidden><ul id="summary"></ul><p id="upload-size" class="notice"></p><button id="publish" class="primary">确认发布到 GitHub</button></div><p class="notice">提交成功不等于部署完成。发布后请等待 Pages，并在本地仓库使用 git pull --ff-only 同步远端；若有未提交修改，先妥善保存。</p></section>
+</fieldset></main><footer><a href="../">返回摄影页 ↗</a></footer></body></html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141718">
+  <title>摄影 · Alex Emaire</title>
+  <link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="./photos.css">
+  <script type="module" src="./gallery.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#collection">跳到作品</a>
+  <header class="site-header"><a class="brand" href="../index.html">Alex Emaire<span>个人归档</span></a>
+    <nav aria-label="主导航"><a href="../index.html#blog">文章</a><a href="../index.html#projects">项目</a><a href="./" aria-current="page">摄影</a><a href="../index.html#about">关于</a></nav>
+  </header>
+  <main id="collection">
+    <div class="page-heading"><div><p class="eyebrow">Alex · Photography</p><h1>摄影</h1></div><p id="count" class="muted"></p></div>
+    <div id="filters" class="filters" role="group" aria-label="筛选相册"></div>
+    <p id="status" role="status">正在读取作品…</p><button id="reload" hidden>重新加载</button>
+    <div id="wall" class="wall" aria-label="摄影作品"></div>
+    <noscript><p>请启用 JavaScript 浏览相册。你也可以<a href="../index.html">返回主站</a>阅读文章。</p></noscript>
+  </main>
+  <footer><span>Alex Emaire</span><a href="../index.html">返回主站 ↗</a><a href="./admin/">管理相册</a></footer>
+  <dialog id="viewer" aria-labelledby="photo-title" aria-describedby="photo-description">
+    <div class="viewer-bar"><span id="position" aria-live="polite"></span><button id="close" autofocus aria-label="关闭大图">关闭 ×</button></div>
+    <div id="stage" class="stage"><img id="full-image" alt=""><div class="image-state"><p id="image-status" role="status"></p><button id="retry" hidden>重试加载</button></div></div>
+    <div class="viewer-bottom"><button id="previous" aria-label="上一张">←</button><div class="caption"><h2 id="photo-title"></h2><p id="photo-description"></p><a id="original" hidden target="_blank" rel="noopener noreferrer">查看原图 ↗</a></div><button id="next" aria-label="下一张">→</button></div>
+  </dialog>
+</body></html>

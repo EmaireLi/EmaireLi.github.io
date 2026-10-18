@@ -68,7 +68,7 @@
 
 维护原则：
 
-- 公共导航使用“文章 / 项目 / 关于”，沿用 `#blog`、`#projects`、`#about`。
+- 原有导航使用“文章 / 项目 / 关于”，沿用 `#blog`、`#projects`、`#about`；首页另有独立“摄影”入口 `photos/`，文章模板保持原导航。
 - 编辑器入口放在首页页脚；修改导航时同步现有页面、编辑器导出模板和小红书导入模板。
 - 不添加站内路标或泛化板块导语，个人介绍与文章原文保持原样。
 - 静态和动态归档仅显示日期、标题和标签；清单中的摘要和全文数据继续供搜索使用。
@@ -213,3 +213,32 @@
 生成命令会写入三个归档产物；不要把它作为无关修改的例行检查。现有 `check-*.js` 使用本地文件或临时测试目录，不访问线上留言数据库。新增或修改测试时重新确认其副作用。
 
 部署配置以 `.github/workflows/deploy.yml` 为准：推送 `main` 会生成归档并发布 `_site/`。增加发布资源时核对复制列表；推送成功不等于部署成功，只有观察到 Actions 或线上结果后才能声称已上线。
+
+
+## 独立摄影相册
+
+- 首页“摄影”进入 `photos/index.html`；默认全部作品，相册按钮筛选，数组顺序即展示顺序。
+- `photos/data.json` 独立于文章清单与标签；普通相册更新不需要运行文章生成器。
+- `assets/photos/<id>/thumb.jpg` 和 `view.jpg` 为两级展示图。`assets/posts/` 和 `assets/gallery/` 用途不变。
+- 本地预览：`python3 -m http.server 8000`，打开 `http://localhost:8000/photos/` 与 `/photos/admin/`。
+
+### 管理与发布
+
+1. 打开摄影页底部“管理相册”。先选择少量本地 JPEG/PNG/WebP，检查生成结果。新建/重命名相册，编辑标题、说明和归属，使用上移/下移排序。删除需要确认；刷新会丢失未发布草稿。
+2. 图像逐张处理，每批最多 20 张、单张输入最多 100 MiB，待发布展示图最多 100 MiB。浏览器按图像方向解码并重绘为 JPEG，不上传原文件；大尺寸解码仍可能耗尽设备内存。RAW/HEIC 需要先在本地导出 JPEG。
+3. 暂定缩略长边 960 px / JPEG 0.86，查看长边 3200 px / JPEG 0.90；不放大小图。参数可调整，仅影响之后添加的照片。真实 S5M2 普通及高像素样片尚未提供，尺寸与质量尚未定稿，不能把合成测试当作画质验收。生成图预览链接及大小用于本地比较；透明像素转白底。
+4. 自行创建细粒度 GitHub Token，只授权 `EmaireLi/EmaireLi.github.io`，Contents: Read and write；Metadata 自动只读，不需要 Workflows 权限。只在管理页手动输入，不发给助手。Token 仅存在页面内存，刷新/关闭/主动清除后重新输入；不写入任何浏览器持久存储、日志或仓库。Token 权限并非目录级，持有者可在授权范围内写仓库。管理页不加载第三方脚本。
+5. 点击“读取远端资料”，核对草稿。点击“查看待提交摘要”，检查新增、编辑、顺序、删除与上传体积，再明确点击“确认发布到 GitHub”。展示图与 JSON 通过 Git Database API 合并为一次提交，更新 `main`，触发现有 Pages 工作流。
+6. 远端基线变化会停止发布，不自动覆盖或强推；草稿保留在当前页。可在另一窗口查看远端，记录草稿后刷新重新整理。网络/权限/限流错误会提示；收到结果不明提示时先在 GitHub 提交记录核对给出的 SHA，避免重复提交。上传失败可能留下不可达 Git 对象，但不会逐图触发部署。
+7. 提交成功后等待 Actions；本地仓库另行 `git pull --ff-only` 同步。未提交修改先妥善保存，分支分歧需人工核对。提交成功、部署成功与线上验证是不同状态。
+
+数据格式为 `schemaVersion: 1`、`albums: [{id,name}]`、`photos: [{id,albumId,title,description,thumb,view,width,height}]`。空 `albumId` 表示未归类。可手工保留 `originalUrl`（真实 HTTPS 地址）及 `originalBytes`；无地址不显示原图链接。第一版管理页不配置原图存储、下载服务或 RAW，也不提供原图备份。
+
+### 相册验证
+
+- `node scripts/check-photos.mjs`：数据与 GitHub 发布模拟；不访问线上写接口，不需要 Token。
+- 对 `photos/*.mjs`、`photos/admin/*.mjs` 运行 `node --check`。
+- 本地桌面/窄屏检查筛选、顺序、比例、大图、键盘/焦点、单指横滑、加载失败重试、管理编辑及清除 Token。
+- 发布工作流复制整个 `photos/` 和 `assets/` 到 `_site/`。相册更新无需无关地重写文章产物。
+
+实现交互参考 [PhotographyWebsite](https://github.com/aatmaj28/PhotographyWebsite)；检查时未找到可复用许可证，本站代码独立编写，不使用其照片、文案或源码。Git API 语义依据 [GitHub refs 文档](https://docs.github.com/en/rest/git/refs#update-a-reference)。
