@@ -217,7 +217,7 @@
 
 ## 独立摄影相册
 
-- 首页“摄影”进入 `photos/index.html`；默认全部作品，相册按钮筛选，数组顺序即展示顺序。
+- 首页“摄影”进入 `photos/index.html`；默认全部作品，相册按钮筛选，数组顺序即展示顺序。照片首次进入视口时轻微上浮淡入，看过的照片筛选后不重复播放；减少动态效果、键盘聚焦或不支持 IntersectionObserver 时直接显示。
 - `photos/data.json` 独立于文章清单与标签；普通相册更新不需要运行文章生成器。
 - `assets/photos/<id>/thumb.jpg` 和 `view.jpg` 为两级展示图。`assets/posts/` 和 `assets/gallery/` 用途不变。
 - `assets/local-image/` 仅用于本地原图测试，已加入 Git 忽略及部署排除规则，不提交、不上传。

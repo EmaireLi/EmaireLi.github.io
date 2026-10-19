@@ -1,10 +1,13 @@
 import { validateData, visiblePhotos } from './model.mjs';
+import { createPhotoReveal } from './reveal.mjs';
 const $ = id => document.getElementById(id);
 const root = new URL('../', import.meta.url);
 let data, filtered = [], selected = '', current = 0, opener, generation = 0, loadTimer;
 const viewer = $('viewer');
+const reveal = createPhotoReveal($('wall'));
 const src = path => new URL(path, root).href;
-function render() {
+function render(animate = true) {
+  reveal.reset();
   filtered = visiblePhotos(data, selected);
   $('wall').replaceChildren();
   $('count').textContent = `${filtered.length} 张作品`;
@@ -13,7 +16,7 @@ function render() {
   $('status').classList.toggle('empty', !filtered.length);
   for (const b of $('filters').children) b.setAttribute('aria-pressed', String(b.dataset.album === selected));
   filtered.forEach((p, index) => {
-    const item = document.createElement('article'); item.className = 'photo';
+    const item = document.createElement('article'); item.className = 'photo'; item.dataset.photoId = p.id;
     const button = document.createElement('button'); button.className = 'photo-open'; button.setAttribute('aria-label', `查看 ${p.title || '未命名照片'}`);
     const img = document.createElement('img'); img.width = p.width; img.height = p.height; img.alt = p.title; img.loading = 'lazy'; img.decoding = 'async'; img.src = src(p.thumb);
     const error = document.createElement('span'); error.className = 'thumb-error'; error.hidden = true; error.textContent = '缩略图加载失败，仍可点击查看大图。';
@@ -27,6 +30,7 @@ function render() {
     const number = document.createElement('span'); number.textContent = String(index + 1).padStart(2, '0');
     label.append(title, number); item.append(button, label, retry); $('wall').append(item);
   });
+  reveal.observe(animate);
 }
 function showPhoto(retry = false) {
   clearTimeout(loadTimer);
@@ -86,7 +90,7 @@ async function load() {
     $('filters').replaceChildren();
     for (const a of [{ id: '', name: '全部作品' }, ...data.albums]) {
       const b = document.createElement('button'); b.textContent = a.name; b.dataset.album = a.id;
-      b.onclick = () => { selected = a.id; render(); }; $('filters').append(b);
+      b.onclick = event => { selected = a.id; render(event.detail !== 0); }; $('filters').append(b);
     }
     selected = ''; render();
   } catch { $('status').textContent = '暂时无法读取相册，请稍后重试。'; $('reload').hidden = false; }
