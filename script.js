@@ -570,6 +570,7 @@ function initEditorPage() {
   const mdInput = document.getElementById("md-input");
   const mdPreview = document.getElementById("md-preview");
   const mdTitleInput = document.getElementById("md-title-input");
+  const saveDraftBtn = document.getElementById("save-draft-btn");
   const saveLocalBtn = document.getElementById("save-local-btn");
   const cancelEditorBtn = document.getElementById("cancel-editor-btn");
   const statusEl = document.getElementById("save-status");
@@ -668,6 +669,17 @@ function initEditorPage() {
     mdInput.setRangeText(`![](../../assets/posts/${folder}/${filename})`, start, end, "end");
     mdInput.focus();
     mdInput.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+
+  saveDraftBtn?.addEventListener("click", () => {
+    const title = mdTitleInput.value.trim()
+      .replace(/[\\/:*?"<>|\u0000-\u001f\u007f]/g, "-")
+      .replace(/[. ]+$/g, "") || "无标题";
+    const filename = `${title}.md`;
+    downloadTextFile(filename, mdInput.value, "text/markdown;charset=utf-8");
+    if (statusEl) {
+      statusEl.textContent = `已下载草稿 ${filename}（Markdown 原文）。`;
+    }
   });
 
   saveLocalBtn.addEventListener("click", () => {
