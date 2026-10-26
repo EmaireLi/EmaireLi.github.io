@@ -15,6 +15,8 @@
 
 编写过程中可点击 **保存草稿**，下载当前正文的 Markdown 原文（`.md`），保留空行、缩进和 Markdown 标记，不附加标题、日期或标签。文件名使用文章标题，未填写或只有空白时默认为 `无标题.md`，文件名中的不合法字符会替换为短横线。草稿允许正文为空；此操作不会清空编辑区，也不会发布文章。**保存到本地** 仍用于导出可发布的 `.html` 文件。
 
+编辑器的预览和 HTML 导出使用随站发布的 DOMPurify（`assets/vendor/dompurify/`）过滤可执行内容，保留普通 Markdown、图片、表格及行内字号/颜色。转义的 HTML 示例保持文字；清理库加载失败时按纯文本显示。Markdown 草稿保存原文，不代表已经过滤。手工编辑或外部导入的完整 HTML 文件仍须在发布前检查，不能依靠运行时脚本清理已经执行的 HTML。
+
 ## 编辑器图片工具
 
 左侧工具栏的“插入图片”会在正文光标位置插入 `![](../../assets/posts/文章标题/01.jpg)`；如果选中了正文，则替换选中的部分。插入后继续在正文编辑，预览同步更新。已填写标题时，路径自动使用该标题（路径分隔符替换为短横线，空格等特殊字符转义）；未填写时使用“文章标题”。文件名按 `01.jpg`、`02.jpg` 递增，已有编号图片也会被计入。标题修改不会改写已插入的路径。请把图片按对应名称放到 `assets/posts/` 文件夹；按钮只插入引用，不上传图片。
@@ -141,6 +143,8 @@
 - 访客端没有编辑和删除入口。
 - 仓库管理者可以访问 `admin-guestbook.html`，输入 Worker secret 中的 `ADMIN_TOKEN` 后编辑或删除留言。
 - 管理页也会展示 D1 中记录的访客 IP、User-Agent、访问次数、首次访问时间和最近访问时间。
+- 留言限流与写入在同一个 D1 事务批次执行；署名冲突等写入失败不会消耗发送额度。
+- 访客统计按 IP 复用记录，User-Agent 只作为展示信息。同一 IP 的 60 秒内访问合并计数，共享出口 IP 会合并；保留历史记录及累计总数，不追溯重算。此措施限制重复写入和 UA 刷量，不替代边缘层对分布式请求洪泛的防护。
 - 仓库管理者也可以用 API 调用：
 
    ```bash
@@ -152,6 +156,26 @@
    curl -X DELETE "$GUESTBOOK_API/messages/<id>" \
      -H "Authorization: Bearer $ADMIN_TOKEN"
    ```
+
+### 安全更新部署与验证
+
+2026-10-26 更新不清空或重算留言、访客数据。已有数据库先添加查询索引，再部署 Worker（静态站的 Pages 部署不会部署 Worker）：
+
+```bash
+npx wrangler@4.108.0 login
+npx wrangler@4.108.0 d1 execute emaire-guestbook --remote --config guestbook/wrangler.toml --file guestbook/migrations/20261026-visitor-ip-index.sql
+npx wrangler@4.108.0 deploy --config guestbook/wrangler.toml
+```
+
+安全回归测试只访问本地文件、模拟浏览器 API 和临时 Miniflare 数据库。可将测试依赖安装在仓库之外；浏览器测试默认使用本机 Chrome：
+
+```bash
+npm install --prefix /tmp/personal-site-security-tests --no-save playwright@1.62.1 markdown-it@14.1.0 miniflare@4.20260706.0
+NODE_PATH=/tmp/personal-site-security-tests/node_modules node scripts/check-browser-security.cjs
+NODE_PATH=/tmp/personal-site-security-tests/node_modules node scripts/check-worker-security.cjs
+```
+
+浏览器测试可额外设置 `COMPARE_BASELINE=<修复前提交>`，比较首页、文章页及编辑器的桌面/手机完整截图。依赖清理库随 `assets/` 一同发布，不依赖第三方 CDN 才能进行安全过滤。
 
 ### 从小红书页面导出 JSON
 
@@ -209,6 +233,7 @@
 | 编辑器标签 | `node scripts/check-editor-tags.js` |
 | 归档标签 URL、年份展开 | 分别运行 `node scripts/check-archive-filter-state.js`、`node scripts/check-archive-disclosure.js` |
 | 公开留言说明 | `node scripts/check-guestbook-disclosure.js`；这不代替 Worker/API 行为验证 |
+| HTML 安全渲染、留言/访客接口 | `node scripts/check-browser-security.cjs`、`node scripts/check-worker-security.cjs`；依赖安装见“安全更新部署与验证” |
 | 页面样式与交互 | 本地预览受影响页面，检查相关交互、链接、图片及窄屏溢出 |
 | 仅文档 | 核对文档涉及的路径与命令，运行 `git diff --check` |
 

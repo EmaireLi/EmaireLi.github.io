@@ -2,6 +2,7 @@ const MESSAGE_MAX_LENGTH = 100;
 const SIGNATURE_MAX_LENGTH = 24;
 const DEFAULT_RATE_LIMIT_SECONDS = 60;
 const DEFAULT_PAGE_SIZE = 50;
+const VISIT_INTERVAL_MS = 60 * 1000;
 
 function normalizeText(value) {
   return String(value || "").normalize("NFKC").replace(/\s+/g, " ").trim();
@@ -54,6 +55,7 @@ function jsonResponse(request, env, body, status = 200) {
       ...corsHeaders(request, env),
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
     },
   });
 }
@@ -73,8 +75,8 @@ async function sha256Hex(value) {
 
 async function getVisitorHash(request, env) {
   const salt = String(env.RATE_LIMIT_SALT || env.ADMIN_TOKEN || "visitor");
-  const userAgent = request.headers.get("User-Agent") || "unknown";
-  return sha256Hex(`${salt}:${getClientIp(request)}:${userAgent}`);
+  // User-Agent is untrusted metadata, not a visitor identity.
+  return sha256Hex(`${salt}:ip:${getClientIp(request)}`);
 }
 
 async function readJson(request) {
@@ -141,53 +143,49 @@ async function listAdminMessages(request, env) {
   return listMessages(request, env);
 }
 
-async function enforceRateLimit(request, env) {
-  const limitSeconds = Number(env.GUESTBOOK_POST_INTERVAL_SECONDS || DEFAULT_RATE_LIMIT_SECONDS) || DEFAULT_RATE_LIMIT_SECONDS;
-  if (limitSeconds <= 0) return;
-
+async function messageRateClaim(request, env) {
+  const configured = Number(env.GUESTBOOK_POST_INTERVAL_SECONDS ?? DEFAULT_RATE_LIMIT_SECONDS);
+  const seconds = Number.isFinite(configured) ? Math.max(0, configured) : DEFAULT_RATE_LIMIT_SECONDS;
+  if (seconds === 0) return null;
   const salt = String(env.RATE_LIMIT_SALT || env.ADMIN_TOKEN || "guestbook");
   const ipHash = await sha256Hex(`${salt}:${getClientIp(request)}`);
   const now = Math.floor(Date.now() / 1000);
-  const current = await env.DB.prepare("SELECT last_posted_at FROM guestbook_rate_limits WHERE ip_hash = ?").bind(ipHash).first();
-
-  if (current && now - Number(current.last_posted_at) < limitSeconds) {
-    const wait = limitSeconds - (now - Number(current.last_posted_at));
-    const error = new Error(`发送太频繁，请 ${wait} 秒后再试。`);
-    error.status = 429;
-    throw error;
-  }
-
-  return { ipHash, now };
+  // A conditional UPSERT claims the interval atomically. It must be batched with
+  // the message INSERT so failed writes/duplicate signatures roll it back.
+  return {
+    seconds,
+    ipHash,
+    now,
+    statement: env.DB.prepare(
+      `INSERT INTO guestbook_rate_limits (ip_hash, last_posted_at) VALUES (?, ?)
+       ON CONFLICT(ip_hash) DO UPDATE SET last_posted_at = excluded.last_posted_at
+       WHERE guestbook_rate_limits.last_posted_at <= ?`
+    ).bind(ipHash, now, now - seconds),
+  };
 }
 
 async function createMessage(request, env) {
   const payload = validateMessagePayload(await readJson(request));
-  const rate = await enforceRateLimit(request, env);
+  const rate = await messageRateClaim(request, env);
   const now = new Date().toISOString();
   const id = crypto.randomUUID();
 
   try {
-    await env.DB.prepare(
+    const insert = env.DB.prepare(
       `INSERT INTO guestbook_messages (id, signature, signature_key, message, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?)`
-    )
-      .bind(id, payload.signature, payload.signatureKey, payload.message, now, now)
-      .run();
+       SELECT ?, ?, ?, ?, ?, ? ${rate ? "WHERE changes() > 0" : ""}`
+    ).bind(id, payload.signature, payload.signatureKey, payload.message, now, now);
+    const results = await env.DB.batch(rate ? [rate.statement, insert] : [insert]);
+    if (rate && results[0].meta.changes === 0) {
+      const current = await env.DB.prepare("SELECT last_posted_at FROM guestbook_rate_limits WHERE ip_hash = ?").bind(rate.ipHash).first();
+      const wait = Math.max(1, Math.ceil(rate.seconds - (rate.now - Number(current?.last_posted_at || rate.now))));
+      return jsonResponse(request, env, { error: `发送太频繁，请 ${wait} 秒后再试。` }, 429);
+    }
   } catch (error) {
     if (isUniqueSignatureError(error)) {
       return jsonResponse(request, env, { error: "这个署名已经留过言。" }, 409);
     }
     throw error;
-  }
-
-  if (rate) {
-    await env.DB.prepare(
-      `INSERT INTO guestbook_rate_limits (ip_hash, last_posted_at)
-        VALUES (?, ?)
-        ON CONFLICT(ip_hash) DO UPDATE SET last_posted_at = excluded.last_posted_at`
-    )
-      .bind(rate.ipHash, rate.now)
-      .run();
   }
 
   return jsonResponse(request, env, {
@@ -261,34 +259,34 @@ async function recordVisit(request, env) {
   const ipAddress = getClientIp(request).slice(0, 80);
   const userAgent = String(request.headers.get("User-Agent") || "unknown").slice(0, 300);
   const now = new Date().toISOString();
+  const cutoff = new Date(Date.now() - VISIT_INTERVAL_MS).toISOString();
 
-  const insert = await env.DB.prepare(
-    `INSERT OR IGNORE INTO site_visitors (visitor_hash, first_seen_at, last_seen_at, visit_count, user_agent, ip_address)
-      VALUES (?, ?, ?, 0, ?, ?)`
-  )
-    .bind(visitorHash, now, now, userAgent, ipAddress)
-    .run();
-
-  await env.DB.prepare(
-    `UPDATE site_visitors
-      SET last_seen_at = ?, visit_count = visit_count + 1, user_agent = ?, ip_address = ?
-      WHERE visitor_hash = ?`
-  )
-    .bind(now, userAgent, ipAddress, visitorHash)
-    .run();
-
-  if (insert.meta && insert.meta.changes > 0) {
-    await env.DB.prepare(
+  // Reuse an existing IP record (including legacy IP+UA identities). Historical
+  // rows and totals stay intact. The batch prevents concurrent visits from
+  // creating duplicate records or double-incrementing the total.
+  const results = await env.DB.batch([
+    env.DB.prepare(
+      `INSERT OR IGNORE INTO site_visitors
+         (visitor_hash, first_seen_at, last_seen_at, visit_count, user_agent, ip_address)
+       SELECT ?, ?, ?, 1, ?, ?
+       WHERE NOT EXISTS (SELECT 1 FROM site_visitors WHERE ip_address = ?)`
+    ).bind(visitorHash, now, now, userAgent, ipAddress, ipAddress),
+    env.DB.prepare(
       `INSERT INTO site_stats (key, value, updated_at)
-        VALUES ('visitors', 1, ?)
-        ON CONFLICT(key) DO UPDATE SET value = value + 1, updated_at = excluded.updated_at`
-    )
-      .bind(now)
-      .run();
-  }
-
-  const stats = await env.DB.prepare("SELECT value FROM site_stats WHERE key = 'visitors'").first();
-  return jsonResponse(request, env, { visitors: Number(stats && stats.value) || 0 });
+       SELECT 'visitors', 1, ? WHERE changes() > 0
+       ON CONFLICT(key) DO UPDATE SET value = value + 1, updated_at = excluded.updated_at`
+    ).bind(now),
+    env.DB.prepare(
+      `UPDATE site_visitors
+       SET last_seen_at = ?, visit_count = visit_count + 1, user_agent = ?
+       WHERE visitor_hash = (
+         SELECT visitor_hash FROM site_visitors WHERE ip_address = ?
+         ORDER BY first_seen_at, visitor_hash LIMIT 1
+       ) AND last_seen_at <= ?`
+    ).bind(now, userAgent, ipAddress, cutoff),
+    env.DB.prepare("SELECT value FROM site_stats WHERE key = 'visitors'"),
+  ]);
+  return jsonResponse(request, env, { visitors: Number(results[3].results[0]?.value) || 0 });
 }
 
 async function listAdminVisitors(request, env) {

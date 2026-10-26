@@ -47,40 +47,7 @@ const guestbookMaxLength = 100;
 const guestbookPostIntervalMs = 60 * 1000;
 
 function escapeHtml(text) {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function decodeHtmlEntities(text) {
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = text;
-  return textarea.value;
-}
-
-function decodeHtmlEntitiesDeep(text) {
-  let current = text;
-  for (let i = 0; i < 3; i += 1) {
-    const decoded = decodeHtmlEntities(current);
-    if (decoded === current) break;
-    current = decoded;
-  }
-  return current;
-}
-
-function decodeEscapedSpanTagsInDocument() {
-  const nodes = document.querySelectorAll(".article-content, #md-preview");
-  nodes.forEach((node) => {
-    const before = node.innerHTML;
-    const after = before
-      .replace(/&lt;span\b([\s\S]*?)&gt;/gi, (_m, attrs) => `<span${decodeHtmlEntitiesDeep(attrs)}>` )
-      .replace(/&lt;\/span&gt;/gi, "</span>");
-    if (after !== before) {
-      node.innerHTML = after;
-    }
-  });
-}
-
-function normalizeMarkdownInputForRender(text) {
-  return decodeHtmlEntitiesDeep(text);
+  return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
 function renderWithoutMarkdownIt(normalized) {
@@ -91,9 +58,15 @@ function renderWithoutMarkdownIt(normalized) {
 }
 
 function renderMarkdownToHtml(text) {
-  const normalized = normalizeMarkdownInputForRender(text);
-  if (md) return md.render(normalized);
-  return renderWithoutMarkdownIt(normalized);
+  const source = String(text || "");
+  // Do not decode entities: escaped examples must remain text, including on export.
+  const html = md ? md.render(source) : renderWithoutMarkdownIt(source);
+  if (!window.DOMPurify?.isSupported) return `<pre>${escapeHtml(source)}</pre>`;
+  return window.DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+    FORBID_TAGS: ["style", "form", "input", "button", "textarea", "select", "option"],
+    FORBID_ATTR: ["autofocus"],
+  });
 }
 
 function slugify(value) {
@@ -197,12 +170,16 @@ function createArchiveFilters(listEl) {
 
 function renderArchiveFilters(filterEl, tags, activeTag) {
   const options = ["全部"].concat(tags);
-  filterEl.innerHTML = options
-    .map((tag) => {
-      const isActive = tag === activeTag;
-      return `<button class="archive-filter${isActive ? " is-active" : ""}" type="button" data-archive-tag="${escapeHtml(tag)}" aria-pressed="${isActive ? "true" : "false"}">${escapeHtml(tag)}</button>`;
-    })
-    .join("");
+  filterEl.replaceChildren(...options.map((tag) => {
+    const isActive = tag === activeTag;
+    const button = document.createElement("button");
+    button.className = `archive-filter${isActive ? " is-active" : ""}`;
+    button.type = "button";
+    button.dataset.archiveTag = tag;
+    button.setAttribute("aria-pressed", String(isActive));
+    button.textContent = tag;
+    return button;
+  }));
 }
 
 function renderPostTags(tags) {
@@ -318,7 +295,7 @@ function renderPostHtml({ title, date, markdownHtml }) {
     </footer>
 
     <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
-    <script src="../../script.js?v=20260920b"></script>
+    <script src="../../script.js?v=20261026-security"></script>
   </body>
 </html>`;
 }
@@ -1409,7 +1386,6 @@ function initVisitorCount() {
     });
 }
 
-decodeEscapedSpanTagsInDocument();
 initArticleOutline();
 initBlogAutoList();
 initEditorPage();

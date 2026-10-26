@@ -29,3 +29,7 @@ CREATE TABLE IF NOT EXISTS site_stats (
   value INTEGER NOT NULL DEFAULT 0,
   updated_at TEXT NOT NULL
 );
+
+-- Reuse historical visitors by IP without scanning the full visitor table.
+CREATE INDEX IF NOT EXISTS idx_site_visitors_ip_first_seen
+  ON site_visitors(ip_address, first_seen_at, visitor_hash);
