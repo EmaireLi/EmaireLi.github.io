@@ -1,3 +1,5 @@
+document.documentElement.classList.add("js");
+
 const yearEl = document.getElementById("year");
 if (yearEl) {
   yearEl.textContent = String(new Date().getFullYear());
@@ -229,17 +231,19 @@ function renderPostHtml({ title, date, markdownHtml }) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${safeTitle} · Alex</title>
+    <meta name="description" content="${safeTitle}：Alex Emaire 的个人归档文章。" />
+    <meta name="theme-color" content="#edf5fc" />
+    <title>${safeTitle} · Alex Emaire</title>
     <link rel="icon" href="../../favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="stylesheet" href="../../styles.css?v=20261017-image-caption" />
-    <link rel="stylesheet" href="../../reading-layout.css?v=20260920b" />
+    <link rel="stylesheet" href="../../styles.css?v=20261128-glass" />
+    <link rel="stylesheet" href="../../reading-layout.css?v=20261128-glass" />
   </head>
   <body id="top" class="reading-page">
     <div class="headband"></div>
     <main class="main">
       <header class="reading-header" aria-label="Site header">
         <a class="reading-brand" href="../../index.html">Alex Emaire<span> / 个人归档</span></a>
-        <nav aria-label="文章导航"><a href="../../index.html#blog">← 返回文章</a></nav>
+        <nav aria-label="文章导航"><a href="../../index.html#blog">返回文章</a></nav>
         <details class="reading-search">
           <summary>搜索文章</summary>
           <section class="site-search-card" data-site-search data-posts-src="../../posts/posts.json" data-post-base="../../posts/" aria-label="Site search">
@@ -295,24 +299,124 @@ function renderPostHtml({ title, date, markdownHtml }) {
     </footer>
 
     <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
-    <script src="../../script.js?v=20261026-security"></script>
+    <script src="../../script.js?v=20261128-glass"></script>
   </body>
 </html>`;
 }
 
 function initArchiveDisclosure(listEl) {
   const hoverQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const supportsCssDetailsSize =
+    typeof CSS !== "undefined" &&
+    typeof CSS.supports === "function" &&
+    CSS.supports("interpolate-size: allow-keywords");
   let lastPointerYear = null;
+  let hoverActive = false;
+  let lastInsideY = 0;
+
+  const canUseWaapiFallback = (year) =>
+    !supportsCssDetailsSize &&
+    typeof year?.animate === "function" &&
+    !reducedMotionQuery.matches;
+
+  const setYearOpen = (year, nextOpen) => {
+    if (!canUseWaapiFallback(year)) {
+      year.open = nextOpen;
+      return;
+    }
+
+    if (typeof year.removeAttribute === "function") {
+      year.removeAttribute("name");
+    }
+    const timeline = year.querySelector?.(".archive-timeline");
+
+    if (nextOpen) {
+      if (year.open && !year._closingAnim) return;
+      const startHeight = year.getBoundingClientRect().height;
+      year._closingAnim = false;
+      year._disclosureAnim?.cancel();
+      year._timelineAnim?.cancel();
+      year.open = true;
+      const endHeight = year.getBoundingClientRect().height;
+      if (endHeight <= startHeight) return;
+      year.style.overflow = "clip";
+      const anim = year.animate(
+        [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+        { duration: 260, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+      );
+      year._disclosureAnim = anim;
+      if (timeline?.animate) {
+        year._timelineAnim = timeline.animate(
+          [
+            { opacity: 0, transform: "translateY(-6px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+        );
+      }
+      const cleanup = () => {
+        if (year._disclosureAnim === anim) {
+          year.style.overflow = "";
+          year._disclosureAnim = null;
+        }
+      };
+      anim.onfinish = cleanup;
+      anim.oncancel = cleanup;
+      return;
+    }
+
+    if (!year.open || year._closingAnim) return;
+    const startHeight = year.getBoundingClientRect().height;
+    const summaryHeight = year.querySelector?.(".archive-year-toggle")?.getBoundingClientRect().height || 0;
+    year._disclosureAnim?.cancel();
+    year._timelineAnim?.cancel();
+    if (!summaryHeight || startHeight <= summaryHeight) {
+      year.open = false;
+      return;
+    }
+    year._closingAnim = true;
+    year.style.overflow = "clip";
+    const anim = year.animate(
+      [{ height: `${startHeight}px` }, { height: `${summaryHeight}px` }],
+      { duration: 190, easing: "cubic-bezier(0.25, 1, 0.5, 1)" }
+    );
+    year._disclosureAnim = anim;
+    if (timeline?.animate) {
+      year._timelineAnim = timeline.animate(
+        [
+          { opacity: 1, transform: "translateY(0)" },
+          { opacity: 0, transform: "translateY(-4px)" },
+        ],
+        { duration: 150, easing: "ease-out" }
+      );
+    }
+    anim.onfinish = () => {
+      if (year._closingAnim && year._disclosureAnim === anim) {
+        year._closingAnim = false;
+        year.open = false;
+        year.style.overflow = "";
+        year._disclosureAnim = null;
+      }
+    };
+    anim.oncancel = () => {
+      if (year._disclosureAnim === anim) {
+        year.style.overflow = "";
+        year._disclosureAnim = null;
+      }
+    };
+  };
 
   const closeOtherYears = (current) => {
     listEl.querySelectorAll(".archive-year-disclosure[open]").forEach((year) => {
-      if (year !== current) year.open = false;
+      if (year !== current) setYearOpen(year, false);
     });
   };
 
   // Use real movement, not pointerenter: opening a year moves the rows below it.
   listEl.addEventListener("pointermove", (event) => {
     if (!hoverQuery.matches || event.pointerType === "touch") return;
+    if (typeof event.clientY === "number") lastInsideY = event.clientY;
     const summary = event.target.closest(".archive-year-toggle");
     if (!summary || !listEl.contains(summary)) {
       lastPointerYear = null;
@@ -321,10 +425,46 @@ function initArchiveDisclosure(listEl) {
     const year = summary.closest(".archive-year-disclosure");
     if (lastPointerYear === year) return;
     lastPointerYear = year;
+    hoverActive = true;
     closeOtherYears(year);
-    year.open = true;
+    setYearOpen(year, true);
   });
-  listEl.addEventListener("pointerleave", () => { lastPointerYear = null; });
+  listEl.addEventListener("pointerleave", () => {
+    lastPointerYear = null;
+  });
+
+  if (typeof document !== "undefined") {
+    document.addEventListener("pointermove", (event) => {
+      if (!hoverActive || !hoverQuery.matches || event.pointerType === "touch") return;
+      if (listEl.contains(event.target)) {
+        lastInsideY = event.clientY;
+        return;
+      }
+      const rect = listEl.getBoundingClientRect();
+      const outHorizontallyOrAbove =
+        event.clientX < rect.left - 16 ||
+        event.clientX > rect.right + 16 ||
+        event.clientY < rect.top - 16;
+      const outBelow = event.clientY > Math.max(rect.bottom, lastInsideY) + 20;
+      if (outHorizontallyOrAbove || outBelow) {
+        hoverActive = false;
+        lastPointerYear = null;
+        closeOtherYears(null);
+        return;
+      }
+      lastInsideY = Math.min(lastInsideY, event.clientY);
+    });
+  }
+
+  listEl.addEventListener("click", (event) => {
+    const summary = event.target?.closest?.(".archive-year-toggle");
+    if (!summary || !listEl.contains(summary)) return;
+    const year = summary.closest(".archive-year-disclosure");
+    if (year && canUseWaapiFallback(year) && year.open && !year._closingAnim) {
+      event.preventDefault();
+      setYearOpen(year, false);
+    }
+  });
 
   // Native summary click/keyboard behavior remains available without JavaScript.
   // Capture toggle for engines that do not yet implement details[name] grouping.
@@ -397,7 +537,7 @@ async function initBlogAutoList() {
     });
   } catch (error) {
     statusEl.hidden = false;
-    statusEl.textContent = `标签筛选暂不可用，以下为完整静态归档：${error.message}`;
+    statusEl.textContent = "标签筛选暂不可用，以下为完整静态归档。";
     filterEl.remove();
     initRevealOnScroll();
   }
@@ -521,8 +661,8 @@ function initSiteSearch() {
       posts = items;
       status.textContent = `可搜索 ${items.length} 篇文章`;
     })
-    .catch((error) => {
-      status.textContent = `搜索索引加载失败：${error.message}`;
+    .catch(() => {
+      status.textContent = "搜索索引暂不可用，可通过下方归档浏览文章";
     });
 
   input.addEventListener("input", () => {

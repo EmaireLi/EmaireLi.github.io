@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#222222" />
-    <title>Alex · 个人归档</title>
+    <meta name="description" content="Alex Emaire 的个人归档站，记录软件工程与引擎学习、项目实践、摄影与日常随笔。" />
+    <meta name="theme-color" content="#edf5fc" />
+    <title>Alex Emaire · 个人归档</title>
     <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48" />
-    <link rel="stylesheet" href="./styles.css?v=20260727b" />
-    <link rel="stylesheet" href="./reading-layout.css?v=20261016-avatar" />
+    <link rel="stylesheet" href="./styles.css?v=20261128-glass" />
+    <link rel="stylesheet" href="./reading-layout.css?v=20261128-glass" />
   </head>
   <body id="top" class="home-page">
     <div class="headband"></div>
@@ -17,9 +18,7 @@
         <div class="site-brand-container">
           <div class="site-meta">
             <a class="brand" href="./index.html" rel="start">
-              <i class="logo-line" aria-hidden="true"></i>
-              <p class="site-title">Alex Emaire's Blog</p>
-              <i class="logo-line" aria-hidden="true"></i>
+              <p class="site-title">Alex Emaire</p>
             </a>
             <p class="site-subtitle">个人归档站</p>
           </div>
@@ -80,8 +79,15 @@
               <!-- ARCHIVE:START -->
               <li class="archive-year-group">
                 <details class="archive-year-disclosure" name="archive-years">
-                  <summary class="archive-year-toggle"><span class="archive-year-label">2026</span><span class="archive-year-count">4 篇</span><span class="archive-year-chevron" aria-hidden="true"></span></summary>
+                  <summary class="archive-year-toggle"><span class="archive-year-label">2026</span><span class="archive-year-count">5 篇</span><span class="archive-year-chevron" aria-hidden="true"></span></summary>
                   <ol class="archive-timeline">
+                  <li class="archive-entry blog-item">
+                    <time class="archive-entry-date" datetime="2026-11-03">2026-11-03</time>
+                    <div class="archive-entry-main">
+                      <a class="item-title archive-entry-title" href="./posts/articles/2026-11-03-%E9%94%81%E9%AA%A8%E9%AA%A8%E6%8A%98%E8%AE%B0%E5%BD%95%E5%B8%96.html">锁骨骨折记录帖</a>
+                      <div class="archive-entry-tags"><span class="archive-entry-tag">生活</span></div>
+                    </div>
+                  </li>
                   <li class="archive-entry blog-item">
                     <time class="archive-entry-date" datetime="2026-09-30">2026-09-30</time>
                     <div class="archive-entry-main">
@@ -156,11 +162,7 @@
             <ul class="project-list project-case-list">
               <li class="project-card">
                 <div class="project-card-head">
-                  <div>
-                    <p class="project-card-kicker">AI labeling · desktop tool</p>
-                    <h3><a href="./projects/smartlabeling.html">SmartLabeling</a></h3>
-                  </div>
-                  <span class="project-status">项目记录</span>
+                  <h3><a href="./projects/smartlabeling.html">SmartLabeling</a></h3>
                 </div>
                 <p class="project-card-summary">一个结合 Segment Anything 与 CLIP 分类流程的 AI 辅助图像标注工具。</p>
                 <dl class="project-card-meta">
@@ -175,16 +177,11 @@
                 </ul>
                 <div class="project-card-actions">
                   <a class="btn" href="./projects/smartlabeling.html">查看详情</a>
-                  <a href="https://github.com/sumikkys/SmartLabeling" target="_blank" rel="noreferrer">GitHub</a>
                 </div>
               </li>
               <li class="project-card">
                 <div class="project-card-head">
-                  <div>
-                    <p class="project-card-kicker">Japanese learning · full-stack app</p>
-                    <h3><a href="./projects/yomii.html">Yomii - 日语学习助手</a></h3>
-                  </div>
-                  <span class="project-status">项目记录</span>
+                  <h3><a href="./projects/yomii.html">Yomii · 日语学习助手</a></h3>
                 </div>
                 <p class="project-card-summary">一个桌面化日语学习应用，覆盖查词、背单词、分级测试和作文评测四条主链路。</p>
                 <dl class="project-card-meta">
@@ -199,7 +196,6 @@
                 </ul>
                 <div class="project-card-actions">
                   <a class="btn" href="./projects/yomii.html">查看详情</a>
-                  <a href="https://github.com/EmaireLi/Yomii" target="_blank" rel="noreferrer">GitHub</a>
                 </div>
               </li>
             </ul>
@@ -238,14 +234,9 @@
       <aside class="sidebar" aria-label="Site overview">
         <div class="sidebar-inner sidebar-overview-active">
           <div class="site-overview-wrap sidebar-panel">
-            <div class="site-author">
-              <p class="site-author-name">Alex</p>
-              <p class="site-description">JavaBoy 转行引擎开发中</p>
-            </div>
-
             <nav class="site-state" aria-label="Site stats">
               <a class="site-state-item" href="#blog">
-                <span class="site-state-item-count" id="post-count">0</span>
+                <span class="site-state-item-count" id="post-count">8</span>
                 <span class="site-state-item-name">文章</span>
               </a>
               <a class="site-state-item" href="#projects">
@@ -270,7 +261,7 @@
     <footer class="footer">
       <div class="footer-inner">
         <div class="footer-line">
-          <span>© <span id="year"></span> Alex</span>
+          <span>© <span id="year"></span> Alex Emaire</span>
           <a class="footer-editor-link" href="./editor.html" aria-label="编写文章" title="编写文章">•</a>
         </div>
         <span class="visitor-count" data-visitor-count hidden aria-label="访客数量">
@@ -282,9 +273,8 @@
 
     <a class="back-to-top is-visible" href="#top" aria-label="返回顶部">↑</a>
 
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
     <script src="./guestbook-config.js?v=20260630"></script>
     <script src="./archive-filter-state.js?v=20260712a"></script>
-    <script src="./script.js?v=20261026-security"></script>
+    <script src="./script.js?v=20261128-glass"></script>
   </body>
 </html>

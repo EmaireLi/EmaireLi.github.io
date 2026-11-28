@@ -221,7 +221,10 @@ function run() {
   });
 
   const indexHtml = fs.readFileSync(indexPath, "utf8");
-  const nextIndexHtml = replaceArchiveBlock(indexHtml, renderArchive(manifest));
+  const nextIndexHtml = replaceArchiveBlock(indexHtml, renderArchive(manifest)).replace(
+    /(<span[^>]*\bid="post-count"[^>]*>)\d+(<\/span>)/,
+    `$1${manifest.length}$2`
+  );
   fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   fs.writeFileSync(indexPath, nextIndexHtml, "utf8");
   const tagCounts = new Map();

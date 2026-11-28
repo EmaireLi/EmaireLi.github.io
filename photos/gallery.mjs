@@ -1,5 +1,7 @@
 import { validateData, visiblePhotos } from './model.mjs';
 import { createPhotoReveal } from './reveal.mjs';
+document.documentElement.classList.add('js');
+const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 const $ = id => document.getElementById(id);
 const root = new URL('../', import.meta.url);
 let data, filtered = [], selected = '', current = 0, opener, generation = 0, loadTimer;
@@ -62,7 +64,7 @@ function showPhoto(retry = false) {
 }
 const step = delta => { current = (current + delta + filtered.length) % filtered.length; showPhoto(); };
 $('close').onclick = () => viewer.close();
-viewer.addEventListener('close', () => { generation++; clearTimeout(loadTimer); $('full-image').removeAttribute('src'); opener?.focus({ preventScroll: true }); });
+viewer.addEventListener('close', () => { generation++; clearTimeout(loadTimer); $('full-image').src = EMPTY_IMAGE; $('full-image').hidden = true; opener?.focus({ preventScroll: true }); });
 $('previous').onclick = () => step(-1); $('next').onclick = () => step(1); $('retry').onclick = () => showPhoto(true);
 viewer.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); step(e.key === 'ArrowLeft' ? -1 : 1); }
